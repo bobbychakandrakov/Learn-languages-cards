@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/bobbychakandrakov/Learn-languages-cards/issues"
   },
-  "homepage": "https://github.com/bobbychakandrakov/Learn-languages-cards#readme"
+  "homepage": "https://github.com/bobbychakandrakov/Learn-languages-cards#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }
