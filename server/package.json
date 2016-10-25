@@ -1,0 +1,24 @@
+{
+  "name": "learn-languages",
+  "version": "1.0.0",
+  "description": "Learn languages by using cards",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobbychakandrakov/Learn-languages-cards.git"
+  },
+  "keywords": [
+    "language",
+    "cards",
+    "hybrid"
+  ],
+  "author": "Boyan Chakandrakov, Dincho Kostadinoff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bobbychakandrakov/Learn-languages-cards/issues"
+  },
+  "homepage": "https://github.com/bobbychakandrakov/Learn-languages-cards#readme"
+}
