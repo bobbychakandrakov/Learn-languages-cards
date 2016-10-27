@@ -1,7 +1,29 @@
 var mongoose = require('mongoose');
 var Word = mongoose.model('Word');
+var multer = require('multer');
+var fs = require('fs');
+var storage	=	multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, '../uploads');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + Date.now()+".png");
+    }
+});
+var upload = multer({ storage : storage}).single('userPhoto');
 
-module.exports.createWord = function(req, res) {
+module.exports.createWord = function(req,res) {
+
+    upload(req,res,function(err) {
+        if(err) {
+            res.end("Error uploading file.");
+        }
+
+        res.end("uploaded");
+    });
+
+
+    /*
     if (req.body.secretKey!='atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -28,6 +50,7 @@ module.exports.createWord = function(req, res) {
     })
 
     }
+    */
 };
 
 
