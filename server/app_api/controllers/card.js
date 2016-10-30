@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Word = mongoose.model('Word');
+var Theme = mongoose.model('Theme');
 var multer = require('multer');
 var fs = require('fs');
 var storage = multer.diskStorage({ //multers disk storage settings
@@ -116,5 +117,44 @@ module.exports.updateWord = function(req, res) {
 
 
 };
+
+module.exports.createTheme = function(req, res) {
+
+    if (req.body.secretKey!='atanasov123') {
+        res.status(401).json({
+            "message": "UnauthorizedError: Only administrator can add data!!"
+        });
+
+    }else {
+        var theme=Theme();
+        theme.name=req.body.name;
+
+
+        Theme.findOne({ name:req.body.name}, function (err, theme1) {
+            if (err) {
+                res.status(400).json(err)
+
+            }
+            if (theme1) {
+                res.status(400).json("the theme " + req.body.name + " already exists!")
+            } else {
+                theme.save(function (err) {
+                    if (err) { res.json(err)}
+                    else{
+                        res.json(" theme was created")
+                    }
+
+                })
+
+
+            }
+
+        })
+
+    }
+
+
+};
+
 
 
