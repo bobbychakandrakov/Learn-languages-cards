@@ -4,8 +4,7 @@ var app = express();
 require('./app_api/models/db');
 var routesApi = require('./app_api/routes/index');
 
-// view engine setup
-//app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'ejs');
 
 
@@ -14,9 +13,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-//app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, '../client')));
-
 
 app.all("/api/*", function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

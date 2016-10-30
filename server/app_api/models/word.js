@@ -8,9 +8,13 @@ var wordSchema = new mongoose.Schema({
     bName: {
         type: String,
         required: true
+    },
+    imagePath: {
+        type: String
+
     }
 
 });
 
-//exports Project model.
+
 module.exports = mongoose.model('Word',wordSchema);

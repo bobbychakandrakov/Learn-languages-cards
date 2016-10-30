@@ -2,55 +2,63 @@ var mongoose = require('mongoose');
 var Word = mongoose.model('Word');
 var multer = require('multer');
 var fs = require('fs');
-var storage	=	multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, '../uploads');
+var storage = multer.diskStorage({ //multers disk storage settings
+    destination: function (req, file, cb) {
+        cb(null, './uploads/');
     },
-    filename: function (req, file, callback) {
-        callback(null, file.fieldname + '-' + Date.now()+".png");
+    filename: function (req, file, cb) {
+        var datetimestamp = Date.now();
+        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]);
     }
 });
-var upload = multer({ storage : storage}).single('userPhoto');
+var upload = multer({ //multer settings
+    storage: storage
+}).single('file');
 
 module.exports.createWord = function(req,res) {
 
-    upload(req,res,function(err) {
-        if(err) {
-            res.end("Error uploading file.");
-        }
-
-        res.end("uploaded");
-    });
-
-
-    /*
-    if (req.body.secretKey!='atanasov123') {
+   if (req.body.secretKey!='atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
         });
 
-    } else {
+    }else {
         var word=Word();
-        word.eName=req.body.eName;
-        word.bName=req.body.bName;
-    Word.findOne({ eName:req.body.eName}, function (err, word1) {
-        if (err) {
-            res.status(400).json(err)
+        word.eName=req.body.eName|| 'test';
+        word.bName=req.body.bName ||'test';
 
-        }
-        if (word1) {
-            res.status(400).json("the word " + req.body.eName + " already exists!")
-        } else {
-            word.save(function (err) {
-                if (err) return res.json(err);
-                res.json("saved")
-            })
-        }
+        Word.findOne({ eName:req.body.eName}, function (err, word1) {
+            if (err) {
+                res.status(400).json(err)
 
-    })
+            }
+            if (word1) {
+                res.status(400).json("the word " + req.body.eName + " already exists!")
+            } else {
+                upload(req,res,function(err){
+                    if(err){
+                        res.json(err);
+                        return;
+                    }
+
+                    console.log('image is uploaded')
+                    word.imagePath=req.file.path+req.file.filename
+                    word.save(function (err) {
+                        if (err) { res.json(err)}
+                        else{
+                            res.json(" word is saved")
+                        }
+
+                    })
+
+                });
+
+            }
+
+        })
 
     }
-    */
+
 };
 
 
@@ -95,8 +103,8 @@ module.exports.updateWord = function(req, res) {
         } else {
 
             word.eName = req.body.eName || word.eName;
-            word.bName = req.body.bName || todo.bName;
-
+            word.bName = req.body.bName || word.bName;
+           // word.imagePath=req.file.path+req.file.filename || word.imagePath
             word.save(function (err, word1) {
                 if (err) {
                     res.status(500).json(err)

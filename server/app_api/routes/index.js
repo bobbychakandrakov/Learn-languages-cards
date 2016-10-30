@@ -10,4 +10,5 @@ router.delete('/word/:id', ctrlCard.deleteWord);
 router.put('/word/:id', ctrlCard.updateWord);
 
 
+
 module.exports = router;
