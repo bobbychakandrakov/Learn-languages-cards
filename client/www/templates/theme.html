@@ -1,0 +1,11 @@
+<ion-view title="{{title}}" id="theme">
+  <ion-content padding="true" class="has-header">
+    <ion-list id="themes-list2">
+      <ion-item class="item-thumbnail-left" ng-repeat="word in words">
+          <img src="{{word.image}}" alt=""/>
+          <h1>{{word.en}}</h1>
+          <h1>{{word.bg}}</h1>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

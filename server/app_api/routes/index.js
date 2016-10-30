@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-
-
 var ctrlCard = require('../controllers/card');
 //word routes
 router.post('/word', ctrlCard.createWord);
