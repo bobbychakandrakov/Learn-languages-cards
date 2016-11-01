@@ -108,13 +108,34 @@ module.exports.updateWord = function(req, res) {
 
             word.eName = req.body.eName || word.eName;
             word.bName = req.body.bName || word.bName;
-            // word.imagePath=req.file.path+req.file.filename || word.imagePath
-            word.save(function(err, word1) {
-                if (err) {
-                    res.status(500).json(err)
-                }
-                res.json(word1);
-            });
+            if(req.file){
+                upload(req, res, function(err) {
+                    if (err) {
+                        res.json(err);
+                        return;
+                    }
+                    word.imagePath=req.file.path+req.file.filename
+                    console.log('image was uploaded')
+                    word.save(function(err) {
+                        if (err) {
+                            res.json(err)
+                        } else {
+                            res.json(" word was saved")
+                        }
+
+                    })
+
+                });
+            }else{
+                word.imagePath=word.imagePath
+                word.save(function(err, word1) {
+                    if (err) {
+                        res.status(500).json(err)
+                    }
+                    res.json(word1);
+                });
+            }
+
         }
     });
 
