@@ -178,6 +178,25 @@ module.exports.createTheme = function(req, res) {
     }
 
 
-};
+    };
+module.exports.search = function(req, res) {
+    Word.find({eName: {
+        $regex: req.params.keyword,
+        $options: 'i'
+    }}, function(err, words) {
+        if (err) {
+            res.status(400).json(err)
+
+        }
+        if (words) {
+            res.status(200).json(words)
+        }
+
+    })
+
+
+
+}
+
 
 
