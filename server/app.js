@@ -6,7 +6,7 @@ var routesApi = require('./app_api/routes/index');
 
 
 app.set('view engine', 'ejs');
-
+app.use(express.static(__dirname + '/uploads'));
 
 //app.use(logger('dev'));
 app.use(bodyParser.json());

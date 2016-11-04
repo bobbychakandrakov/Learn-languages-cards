@@ -36,28 +36,32 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', function($scope, $stateParams, ThemeFactory) {
-  $scope.title = $stateParams.name;
-  $scope.words = ThemeFactory.getThemeWords($stateParams.name);
-}])
-
-.controller('addWordCtrl', ['$scope', '$stateParams', 'ThemeFactory', function($scope, $stateParams, ThemeFactory) {
-  $scope.saveWord = saveWord;
-  $scope.word = {
-    secretKey: 'atanasov123',
-    eName: '',
-    bName: ''
-  };
-
-
-
-  function saveWord() {
-    ThemeFactory.saveWord($scope.word).then(function() {
-      $scope.word.eName = '';
-      $scope.word.bName = '';
-      $('input[type="file"]').val('');
-    }, function(err) {
-
-    });
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory',
+  function($scope, $stateParams, ThemeFactory) {
+    $scope.title = $stateParams.name;
+    $scope.words = ThemeFactory.getThemeWords($stateParams.name);
   }
-}])
+])
+
+.controller('addWordCtrl', ['$scope', '$stateParams', 'ThemeFactory',
+  function($scope, $stateParams, ThemeFactory) {
+    $scope.saveWord = saveWord;
+    $scope.word = {
+      secretKey: 'atanasov123',
+      eName: '',
+      bName: ''
+    };
+
+
+
+    function saveWord() {
+      ThemeFactory.saveWord($scope.word).then(function() {
+        $scope.word.eName = '';
+        $scope.word.bName = '';
+        $('input[type="file"]').val('');
+      }, function(err) {
+
+      });
+    }
+  }
+])

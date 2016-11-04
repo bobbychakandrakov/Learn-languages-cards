@@ -5,19 +5,21 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives', 'app.services', 'ng-file-input'])
+angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'app.directives', 'app.services', 'ng-file-input'])
 
 .config(function($ionicConfigProvider) {
 
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaToast) {
   $ionicPlatform.ready(function() {
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
+      $cordovaToast.show('ok', 'long', 'center');
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
