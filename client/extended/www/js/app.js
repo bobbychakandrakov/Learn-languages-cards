@@ -11,7 +11,7 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
 
 })
 
-.run(function($ionicPlatform, $cordovaToast) {
+.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -19,7 +19,6 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-      $cordovaToast.show('ok', 'long', 'center');
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required

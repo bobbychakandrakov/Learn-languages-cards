@@ -41,32 +41,12 @@ angular.module('app.services', [])
     },
     getThemes: function() {
       return themeNames;
-    },
-    saveWord: function(data) {
-      console.log(data);
-      var deffed = $q.defer();
-      $.ajaxFormData(url + '/api/word', {
-        method: 'post',
-        data: {
-          'eName': data.eName,
-          'bName': data.bName,
-          'image': data.image,
-          'secretKey': 'atanasov123'
-        },
-        success: function() {
-          deffed.resolve();
-        },
-        error: function() {
-          deffed.reject();
-        }
-      });
-      return deffed.promise;
     }
   };
 }])
 
-.factory('WordsFactory', [function() {
-
+.factory('WordsFactory', ['$http', '$q', function($http, $q) {
+  const url = 'http://192.168.213.2:3333';
   var words = [{
     en: 'Dog',
     bg: 'Куче',
@@ -91,7 +71,27 @@ angular.module('app.services', [])
   return {
     getWords: function() {
       return words;
+    },
+    saveWord: function(data) {
+      var deffed = $q.defer();
+      $.ajaxFormData(url + '/api/word', {
+        method: 'post',
+        data: {
+          'eName': data.eName,
+          'bName': data.bName,
+          'image': data.image,
+          'secretKey': 'atanasov123'
+        },
+        success: function() {
+          deffed.resolve();
+        },
+        error: function() {
+          deffed.reject();
+        }
+      });
+      return deffed.promise;
     }
+
   };
 }])
 

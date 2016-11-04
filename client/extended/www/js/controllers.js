@@ -43,8 +43,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('addWordCtrl', ['$scope', '$stateParams', 'ThemeFactory',
-  function($scope, $stateParams, ThemeFactory) {
+.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory',
+  function($scope, $stateParams, WordsFactory) {
     $scope.saveWord = saveWord;
     $scope.word = {
       secretKey: 'atanasov123',
@@ -55,7 +55,7 @@ angular.module('app.controllers', [])
 
 
     function saveWord() {
-      ThemeFactory.saveWord($scope.word).then(function() {
+      WordsFactory.saveWord($scope.word).then(function() {
         $scope.word.eName = '';
         $scope.word.bName = '';
         $('input[type="file"]').val('');
