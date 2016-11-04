@@ -1,7 +1,7 @@
 angular.module('app.services', [])
 
-.factory('ThemeFactory', [function() {
-
+.factory('ThemeFactory', ['$http', function($http) {
+  const url = 'http://192.168.213.2:3333';
   var themes = {
     'School': [{
       en: 'Chair',
@@ -41,6 +41,15 @@ angular.module('app.services', [])
     },
     getThemes: function() {
       return themeNames;
+    },
+    saveWord: function(data) {
+      console.log(data);
+      return $http({
+        method: 'POST',
+        url: url + '/api/word',
+        data: data
+      });
+      // return $http.post(url + '/api/word', fd);
     }
   };
 }])

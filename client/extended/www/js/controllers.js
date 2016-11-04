@@ -40,3 +40,25 @@ angular.module('app.controllers', [])
   $scope.title = $stateParams.name;
   $scope.words = ThemeFactory.getThemeWords($stateParams.name);
 }])
+
+.controller('addWordCtrl', ['$scope', '$stateParams', 'ThemeFactory', function($scope, $stateParams, ThemeFactory) {
+  $scope.saveWord = saveWord;
+  $scope.word = {
+    secretKey: 'atanasov123',
+    eName: '',
+    bName: ''
+  };
+
+
+
+  function saveWord() {
+    var myForm = document.getElementById('myForm');
+    var fd = new FormData(myForm);
+    ThemeFactory.saveWord(fd).then(function() {
+      $scope.word.eName = '';
+      $scope.word.bName = '';
+    }, function(err) {
+
+    });
+  }
+}])

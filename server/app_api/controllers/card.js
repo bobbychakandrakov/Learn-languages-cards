@@ -3,21 +3,8 @@ var Word = mongoose.model('Word');
 var Theme = mongoose.model('Theme');
 var multer = require('multer');
 var fs = require('fs');
-var storage = multer.diskStorage({ //multers disk storage settings
-    destination: function(req, file, cb) {
-        cb(null, './uploads/');
-    },
-    filename: function(req, file, cb) {
-        var datetimestamp = Date.now();
-        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
-    }
-});
-var upload = multer({ //multer settings
-    storage: storage
-}).single('file');
 
 module.exports.createWord = function(req, res) {
-
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -56,6 +43,14 @@ module.exports.createWord = function(req, res) {
                     })
 
                 });
+                // word.save(function(err) {
+                //     if (err) {
+                //         res.json(err);
+                //     } else {
+                //         res.json(" word is saved");
+                //     }
+                //
+                // });
 
             }
 
@@ -108,13 +103,13 @@ module.exports.updateWord = function(req, res) {
 
             word.eName = req.body.eName || word.eName;
             word.bName = req.body.bName || word.bName;
-            if(req.file){
+            if (req.file) {
                 upload(req, res, function(err) {
                     if (err) {
                         res.json(err);
                         return;
                     }
-                    word.imagePath=req.file.path+req.file.filename
+                    word.imagePath = req.file.path + req.file.filename
                     console.log('image was uploaded')
                     word.save(function(err) {
                         if (err) {
@@ -126,8 +121,8 @@ module.exports.updateWord = function(req, res) {
                     })
 
                 });
-            }else{
-                word.imagePath=word.imagePath
+            } else {
+                word.imagePath = word.imagePath
                 word.save(function(err, word1) {
                     if (err) {
                         res.status(500).json(err)
@@ -144,17 +139,19 @@ module.exports.updateWord = function(req, res) {
 
 module.exports.createTheme = function(req, res) {
 
-    if (req.body.secretKey!='atanasov123') {
+    if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
         });
 
-    }else {
-        var theme=Theme();
-        theme.name=req.body.name;
+    } else {
+        var theme = Theme();
+        theme.name = req.body.name;
 
 
-        Theme.findOne({ name:req.body.name}, function (err, theme1) {
+        Theme.findOne({
+            name: req.body.name
+        }, function(err, theme1) {
             if (err) {
                 res.status(400).json(err)
 
@@ -162,9 +159,10 @@ module.exports.createTheme = function(req, res) {
             if (theme1) {
                 res.status(400).json("the theme " + req.body.name + " already exists!")
             } else {
-                theme.save(function (err) {
-                    if (err) { res.json(err)}
-                    else{
+                theme.save(function(err) {
+                    if (err) {
+                        res.json(err)
+                    } else {
                         res.json(" theme was created")
                     }
 
@@ -173,11 +171,9 @@ module.exports.createTheme = function(req, res) {
 
             }
 
-        })
+        });
 
     }
 
 
 };
-
-

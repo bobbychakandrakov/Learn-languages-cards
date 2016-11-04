@@ -40,6 +40,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.addWord', {
+    url: '/add/word',
+    views: {
+      'tab1': {
+        templateUrl: 'templates/add-word.html',
+        controller: 'addWordCtrl'
+      }
+    }
+  })
+
   .state('tabsController', {
     url: '/page1',
     templateUrl: 'templates/tabsController.html',
