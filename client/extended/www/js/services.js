@@ -1,6 +1,6 @@
 angular.module('app.services', [])
 
-.factory('ThemeFactory', ['$http', function($http) {
+.factory('ThemeFactory', ['$http', '$q', function($http, $q) {
   const url = 'http://192.168.213.2:3333';
   var themes = {
     'School': [{
@@ -44,12 +44,23 @@ angular.module('app.services', [])
     },
     saveWord: function(data) {
       console.log(data);
-      return $http({
-        method: 'POST',
-        url: url + '/api/word',
-        data: data
+      var deffed = $q.defer();
+      $.ajaxFormData(url + '/api/word', {
+        method: 'post',
+        data: {
+          'eName': data.eName,
+          'bName': data.bName,
+          'image': data.image,
+          'secretKey': 'atanasov123'
+        },
+        success: function() {
+          deffed.resolve();
+        },
+        error: function() {
+          deffed.reject();
+        }
       });
-      // return $http.post(url + '/api/word', fd);
+      return deffed.promise;
     }
   };
 }])

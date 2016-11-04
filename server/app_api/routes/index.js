@@ -13,12 +13,11 @@ var storage = multer.diskStorage({ //multers disk storage settings
         cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
     }
 });
-var upload = multer({ //multer settings
+var upload = multer({
+    //multer settings
     storage: storage
 }).single('image');
-//word routes
 router.post('/word', upload, function(req, res) {
-    console.log('tryings');
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"

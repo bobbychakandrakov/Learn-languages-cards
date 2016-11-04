@@ -52,11 +52,10 @@ angular.module('app.controllers', [])
 
 
   function saveWord() {
-    var myForm = document.getElementById('myForm');
-    var fd = new FormData(myForm);
-    ThemeFactory.saveWord(fd).then(function() {
+    ThemeFactory.saveWord($scope.word).then(function() {
       $scope.word.eName = '';
       $scope.word.bName = '';
+      $('input[type="file"]').val('');
     }, function(err) {
 
     });

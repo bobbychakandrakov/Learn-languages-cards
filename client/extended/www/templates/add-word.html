@@ -1,18 +1,18 @@
 <ion-view title="Add word" id="add-word">
   <ion-content padding="true" class="has-header">
-      <form id="myForm" action="http://localhost:3333/api/word" method="post" enctype="multipart/form-data">
+      <form>
           <input type="hidden" name="secretKey" value="atanasov123">
           <div class="list list-inset">
             <label class="item item-input">
-              <input type="text" placeholder="English" ng-model="word.eName" name="eName">
+              <input type="text" placeholder="English" ng-model="word.eName">
             </label>
             <label class="item item-input">
-              <input type="text" placeholder="Bulgarian" ng-model="word.bName" name="bName">
+              <input type="text" placeholder="Bulgarian" ng-model="word.bName">
             </label>
             <label class="item item-input">
-              <input type="file" ng-model="word.file" name="image">
+              <input type="file" ng-model="word.image">
             </label>
-            <button type="submit" class="button button-block button-balanced">Add</button>
+            <button type="submit" class="button button-block button-balanced" ng-click="saveWord()">Add</button>
          </div>
       </form>
   </ion-content>
