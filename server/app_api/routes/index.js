@@ -55,6 +55,7 @@ router.delete('/word/:id', ctrlCard.deleteWord);
 router.put('/word/:id', ctrlCard.updateWord);
 //theme routes
 router.post('/theme', ctrlCard.createTheme);
-
+//search
+router.get('/word/search/:keyword', ctrlCard.search);
 
 module.exports = router;
