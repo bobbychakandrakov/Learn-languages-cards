@@ -1,11 +1,19 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, WordsFactory) {
-
-    $scope.words = WordsFactory.getWords();
+  function($scope, $stateParams, WordsFactory, $ionicPopup) {
+    // Setting limit to 10 as default
+    var limit = 10;
+    $scope.loadMore = loadMore;
+    $scope.deleteWord = deleteWord;
+    WordsFactory.getWords().then(function(words) {
+      console.log(words);
+      $scope.words = words;
+    }, function(err) {
+      console.log(err);
+    });
     $scope.searchWord = searchWord;
     $scope.search = {
       word: ''
@@ -23,6 +31,31 @@ angular.module('app.controllers', [])
       } else {
         $scope.words = words;
       }
+    }
+
+    function deleteWord(id, word) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Deleting word',
+        template: 'Are you sure you want to delete ' + word + '?'
+      });
+
+      confirmPopup.then(function(res) {
+        if (res) {
+          console.log('You are going to delete word with id: ' + id);
+        } else {
+          console.log('You are not sure');
+        }
+      });
+    }
+
+    function loadMore() {
+      limit += 10;
+      WordsFactory.getWords(limit).then(function(words) {
+        console.log(words);
+        $scope.words = words;
+      }, function(err) {
+        console.log(err);
+      });
     }
   }
 ])

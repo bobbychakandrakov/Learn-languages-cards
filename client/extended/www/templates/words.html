@@ -12,18 +12,24 @@
       <ion-item class="item-thumbnail-left" ng-repeat="word in words">
           <div class="row responsive-sm">
               <div class="col-75 item-thumbnail-left">
-                  <img src="{{word.image}}" alt="" />
-                 <h2>{{word.en}}</h2>
-                 <h2>{{word.bg}}</h2>
+                  <img ng-src="http://localhost:3333/{{word.imagePath}}" alt="no image" />
+                 <h2>{{word.eName}}</h2>
+                 <h2>{{word.bName}}</h2>
               </div>
               <div class="col-25">
                   <div class="button-bar">
                       <a class="button button-block button-positive">Edit</a>
-                      <a class="button button-block button-assertive">Delete</a>
+                      <a class="button button-block button-assertive" ng-click="deleteWord(word._id, word.eName)">Delete</a>
                   </div>
               </div>
           </div>
       </ion-item>
     </form>
+    <ion-infinite-scroll
+    on-infinite="loadMore()"
+    icon="ion-loading-c"
+    immediate-check="false"
+    distance="1%">
+  </ion-infinite-scroll>
   </ion-content>
 </ion-view>

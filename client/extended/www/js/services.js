@@ -69,10 +69,19 @@ angular.module('app.services', [])
     image: 'img/laughting.png'
   }];
   return {
-    getWords: function() {
+    getWords: function(limit) {
+      limit = limit || 10;
+      var deffed = $q.defer();
+      $http.get(url + '/api/word/limit/' + limit).then(function(words) {
+        deffed.resolve(words.data);
+      }, function(err) {
+        deffed.reject(err);
+      });
+      return deffed.promise;
       return words;
     },
     saveWord: function(data) {
+      // Using form data jquery
       var deffed = $q.defer();
       $.ajaxFormData(url + '/api/word', {
         method: 'post',
