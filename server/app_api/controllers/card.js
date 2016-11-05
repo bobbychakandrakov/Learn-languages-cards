@@ -80,16 +80,31 @@ module.exports.getWord = function(req, res) {
 module.exports.deleteWord = function(req, res) {
 
 
-    Word.findByIdAndRemove(req.params.id, function(err) {
+    Word.findById(req.params.id, function(err, word) {
         if (err) {
             res.status(400).json(err)
 
-        } else {
-            res.json("successfully deleted!!!");
+        }
+        if (word) {
+            fs.exists('./' + word.imagePath, function(exists) {
+                if (exists) {
+                    fs.unlink('./' + word.imagePath, function (err) {
+                        if (err) throw err;
+                        console.log('successfully deleted image!');
+                    });
+                }})
+            word.remove(function (err) {
+                if(err){
+                    res.status(400).json(err)
+                }else {
+                    res.status(200).json("word was deleted!")
+                }
+            })
+        }else{
+            res.end()
         }
 
-
-    });
+    })
 
 
 };
@@ -199,7 +214,6 @@ module.exports.search = function(req, res) {
 }
 
 module.exports.getLimitWords = function(req, res) {
-    
     var queryParams = {};
     queryParams.limit = Number(req.params.limit) || 10;
     var data = {};
