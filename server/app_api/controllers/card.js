@@ -197,3 +197,19 @@ module.exports.search = function(req, res) {
 
 
 }
+
+module.exports.getLimitWords = function(req, res) {
+    
+    var queryParams = {};
+    queryParams.limit = Number(req.params.limit) || 10;
+    var data = {};
+    Word.find({}).limit(queryParams.limit).exec(function(err, results) {
+        if (err) {
+            throw err;
+        }
+        data.results = results;
+        res.json(results)
+    });
+
+
+};

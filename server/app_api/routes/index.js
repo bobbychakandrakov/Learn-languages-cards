@@ -56,5 +56,6 @@ router.put('/word/:id', ctrlCard.updateWord);
 router.post('/theme', ctrlCard.createTheme);
 //search
 router.get('/word/search/:keyword', ctrlCard.search);
+router.get('/word/limit/:limit', ctrlCard.getLimitWords);
 
 module.exports = router;
