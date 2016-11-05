@@ -1,12 +1,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var path = require('path');
 var app = express();
 require('./app_api/models/db');
 var routesApi = require('./app_api/routes/index');
 
 
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //app.use(logger('dev'));
 app.use(bodyParser.json());
