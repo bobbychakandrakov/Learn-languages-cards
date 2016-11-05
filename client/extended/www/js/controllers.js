@@ -36,14 +36,17 @@ angular.module('app.controllers', [])
     function deleteWord(id, word) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Deleting word',
-        template: 'Are you sure you want to delete ' + word + '?'
+        template: 'Are you sure you want to delete ' + word.eName + '?'
       });
 
       confirmPopup.then(function(res) {
         if (res) {
-          console.log('You are going to delete word with id: ' + id);
-        } else {
-          console.log('You are not sure');
+          WordsFactory.deleteWord(id).then(function(res) {
+            var index = $scope.words.indexOf(word);
+            $scope.words.splice(index, 1);
+          }, function(err) {
+            console.log(err);
+          });
         }
       });
     }

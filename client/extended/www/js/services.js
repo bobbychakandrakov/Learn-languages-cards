@@ -46,7 +46,7 @@ angular.module('app.services', [])
 }])
 
 .factory('WordsFactory', ['$http', '$q', function($http, $q) {
-  const url = 'http://192.168.213.2:3333';
+  const url = 'http://192.168.213.2:3333/api/word';
   var words = [{
     en: 'Dog',
     bg: 'Куче',
@@ -72,7 +72,7 @@ angular.module('app.services', [])
     getWords: function(limit) {
       limit = limit || 10;
       var deffed = $q.defer();
-      $http.get(url + '/api/word/limit/' + limit).then(function(words) {
+      $http.get(url + '/limit/' + limit).then(function(words) {
         deffed.resolve(words.data);
       }, function(err) {
         deffed.reject(err);
@@ -83,8 +83,8 @@ angular.module('app.services', [])
     saveWord: function(data) {
       // Using form data jquery
       var deffed = $q.defer();
-      $.ajaxFormData(url + '/api/word', {
-        method: 'post',
+      $.ajaxFormData(url, {
+        method: 'POST',
         data: {
           'eName': data.eName,
           'bName': data.bName,
@@ -97,6 +97,15 @@ angular.module('app.services', [])
         error: function() {
           deffed.reject();
         }
+      });
+      return deffed.promise;
+    },
+    deleteWord: function(id) {
+      var deffed = $q.defer();
+      $http.delete(url + '/' + id).then(function(res) {
+        deffed.resolve(res);
+      }, function(err) {
+        deffed.reject(err);
       });
       return deffed.promise;
     }
