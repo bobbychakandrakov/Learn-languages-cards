@@ -5,7 +5,13 @@ angular.module('app.controllers', [])
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
   function($scope, $stateParams, WordsFactory) {
 
-    $scope.words = WordsFactory.getWords();
+    $scope.$on("$ionicView.enter", function(event, data) {
+      WordsFactory.getWords().then(function(words) {
+        $scope.words = words;
+      }, function(err) {
+        console.log(err);
+      });
+    });
     $scope.searchWord = searchWord;
     $scope.search = {
       word: ''

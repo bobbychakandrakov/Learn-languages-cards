@@ -7,9 +7,9 @@
       </label>
       <div class="spacer" style="width: 300px; height: 42px;"></div>
       <ion-item class="item-thumbnail-left" ng-repeat="word in words">
-         <img src="{{word.image}}" alt="" />
-        <h2>{{word.en}}</h2>
-        <h2>{{word.bg}}</h2>
+         <img ng-src="http://localhost:3333/{{word.imagePath}}" alt="no image" />
+        <h2>{{word.eName}}</h2>
+        <h2>{{word.bName}}</h2>
       </ion-item>
     </form>
   </ion-content>
