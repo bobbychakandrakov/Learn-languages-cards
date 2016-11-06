@@ -6,14 +6,13 @@ angular.module('app.controllers', [])
   function($scope, $stateParams, WordsFactory, $ionicPopup) {
     // Setting limit to 10 as default
     var limit = 10;
+    // Ionic on page enter event listener
+    $scope.$on("$ionicView.enter", function(event, data) {
+      loadData();
+    });
+
     $scope.loadMore = loadMore;
     $scope.deleteWord = deleteWord;
-    WordsFactory.getWords().then(function(words) {
-      console.log(words);
-      $scope.words = words;
-    }, function(err) {
-      console.log(err);
-    });
     $scope.searchWord = searchWord;
     $scope.search = {
       word: ''
@@ -35,8 +34,7 @@ angular.module('app.controllers', [])
 
     function deleteWord(id, word) {
       var confirmPopup = $ionicPopup.confirm({
-        title: 'Deleting word',
-        template: 'Are you sure you want to delete ' + word.eName + '?'
+        template: 'Are you sure you want to delete \'' + word.eName + '\' ?'
       });
 
       confirmPopup.then(function(res) {
@@ -48,6 +46,15 @@ angular.module('app.controllers', [])
             console.log(err);
           });
         }
+      });
+    }
+
+    function loadData() {
+      WordsFactory.getWords().then(function(words) {
+        console.log(words);
+        $scope.words = words;
+      }, function(err) {
+        console.log(err);
       });
     }
 
@@ -76,6 +83,28 @@ angular.module('app.controllers', [])
   function($scope, $stateParams, ThemeFactory) {
     $scope.title = $stateParams.name;
     $scope.words = ThemeFactory.getThemeWords($stateParams.name);
+  }
+])
+
+.controller('editWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location',
+  function($scope, $stateParams, WordsFactory, $location) {
+    // Getting id from route
+    var id = $stateParams.id;
+    $scope.editWord = editWord;
+    WordsFactory.getWord(id).then(function(word) {
+      $scope.word = word;
+    }, function(err) {
+      console.log(err);
+    });
+
+    function editWord() {
+      WordsFactory.updateWord(id, $scope.word).then(function(word) {
+        console.log(word);
+        $location.path('/page1');
+      }, function(err) {
+        console.log(err);
+      });
+    }
   }
 ])
 

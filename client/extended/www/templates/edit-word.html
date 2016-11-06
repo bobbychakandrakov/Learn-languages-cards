@@ -1,0 +1,18 @@
+<ion-view title="Edit word" id="edit-word">
+  <ion-content padding="true" class="has-header">
+      <form>
+          <div class="list list-inset">
+            <label class="item item-input">
+              <input type="text" placeholder="English" ng-model="word.eName" required>
+            </label>
+            <label class="item item-input">
+              <input type="text" placeholder="Bulgarian" ng-model="word.bName" required>
+            </label>
+            <label class="item item-input">
+              <input type="file" ng-model="word.image" required>
+            </label>
+            <button type="submit" class="button button-block button-balanced" ng-click="editWord()">Edit</button>
+         </div>
+      </form>
+  </ion-content>
+</ion-view>

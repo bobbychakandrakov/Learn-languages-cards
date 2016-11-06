@@ -88,19 +88,20 @@ module.exports.deleteWord = function(req, res) {
         if (word) {
             fs.exists('./' + word.imagePath, function(exists) {
                 if (exists) {
-                    fs.unlink('./' + word.imagePath, function (err) {
+                    fs.unlink('./' + word.imagePath, function(err) {
                         if (err) throw err;
                         console.log('successfully deleted image!');
                     });
-                }})
-            word.remove(function (err) {
-                if(err){
+                }
+            })
+            word.remove(function(err) {
+                if (err) {
                     res.status(400).json(err)
-                }else {
+                } else {
                     res.status(200).json("word was deleted!")
                 }
             })
-        }else{
+        } else {
             res.end()
         }
 

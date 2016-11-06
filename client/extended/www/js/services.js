@@ -47,27 +47,6 @@ angular.module('app.services', [])
 
 .factory('WordsFactory', ['$http', '$q', function($http, $q) {
   const url = 'http://192.168.213.2:3333/api/word';
-  var words = [{
-    en: 'Dog',
-    bg: 'Куче',
-    image: 'img/dog.jpg'
-  }, {
-    en: 'Cat',
-    bg: 'Котка',
-    image: 'img/cat.jpg'
-  }, {
-    en: 'Guitar',
-    bg: 'Китара',
-    image: 'img/guitar.jpg'
-  }, {
-    en: 'Coffee',
-    bg: 'Кафе',
-    image: 'img/coffee.png'
-  }, {
-    en: 'Laughing',
-    bg: 'Смея се',
-    image: 'img/laughting.png'
-  }];
   return {
     getWords: function(limit) {
       limit = limit || 10;
@@ -104,6 +83,24 @@ angular.module('app.services', [])
       var deffed = $q.defer();
       $http.delete(url + '/' + id).then(function(res) {
         deffed.resolve(res);
+      }, function(err) {
+        deffed.reject(err);
+      });
+      return deffed.promise;
+    },
+    getWord: function(id) {
+      var deffed = $q.defer();
+      $http.get(url + '/' + id).then(function(word) {
+        deffed.resolve(word.data);
+      }, function(err) {
+        deffed.reject(err);
+      });
+      return deffed.promise;
+    },
+    updateWord: function(id, word) {
+      var deffed = $q.defer();
+      $http.put(url + '/' + id, word).then(function(word) {
+        deffed.resolve(word);
       }, function(err) {
         deffed.reject(err);
       });

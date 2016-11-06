@@ -50,6 +50,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.editWord', {
+    url: '/edit/word/:id',
+    views: {
+      'tab1': {
+        templateUrl: 'templates/edit-word.html',
+        controller: 'editWordCtrl'
+      }
+    }
+  })
+
   .state('tabsController', {
     url: '/page1',
     templateUrl: 'templates/tabsController.html',
