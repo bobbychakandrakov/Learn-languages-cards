@@ -9,7 +9,7 @@
             Add word
       </a>
       <div class="spacer" style="width: 300px; height: 42px;"></div>
-      <ion-item class="item-thumbnail-left" ng-repeat="word in words">
+      <!-- <ion-item class="item-thumbnail-left" ng-repeat="word in words">
           <div class="row responsive-sm">
               <div class="col-75 item-thumbnail-left">
                   <img ng-src="http://localhost:3333/{{word.imagePath}}" alt="no image" />
@@ -23,7 +23,18 @@
                   </div>
               </div>
           </div>
-      </ion-item>
+      </ion-item> -->
+      <div class="list">
+          <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true">
+              <img ng-src="http://localhost:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+              <h1 class="text-center" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
+              <h1 class="text-center" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
+              <div class="button-bar">
+                  <button class="button button-block button-positive" ng-click="editWord(word._id)"><i class="icon ion-gear-b"></i></button>
+                  <button class="button button-block button-assertive" ng-click="deleteWord(word._id, word)"><i class="icon ion-trash-a"></i></button>
+              </div>
+          </a>
+      </div>
     </form>
     <ion-infinite-scroll
     on-infinite="loadMore()"

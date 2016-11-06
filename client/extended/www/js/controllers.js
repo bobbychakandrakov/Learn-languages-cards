@@ -1,9 +1,9 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', '$ionicPopup', '$location', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, WordsFactory, $ionicPopup) {
+  function($scope, $stateParams, WordsFactory, $ionicPopup, $location) {
     // Setting limit to 10 as default
     var limit = 10;
     // Ionic on page enter event listener
@@ -14,9 +14,14 @@ angular.module('app.controllers', [])
     $scope.loadMore = loadMore;
     $scope.deleteWord = deleteWord;
     $scope.searchWord = searchWord;
+    $scope.editWord = editWord;
     $scope.search = {
       word: ''
     };
+
+    function editWord(id) {
+      $location.path('/page1/edit/word/' + id);
+    }
 
     function searchWord() {
       if ($scope.search.word !== '') {
@@ -108,16 +113,23 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory',
-  function($scope, $stateParams, WordsFactory) {
+.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture',
+  function($scope, $stateParams, WordsFactory, $cordovaCapture) {
     $scope.saveWord = saveWord;
+    $scope.addAudio = addAudio;
     $scope.word = {
       secretKey: 'atanasov123',
       eName: '',
       bName: ''
     };
 
+    function addAudio() {
+      $cordovaCapture.captureAudio().then(function(audioData) {
 
+      }, function(err) {
+
+      });
+    }
 
     function saveWord() {
       WordsFactory.saveWord($scope.word).then(function() {
