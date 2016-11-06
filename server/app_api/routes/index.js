@@ -49,9 +49,67 @@ router.post('/word', upload, function(req, res) {
     }
 
 });
+router.put('/word/:id', upload, function(req, res) {
+   if (req.body.secretKey != 'atanasov123') {
+        res.status(401).json({
+            "message": "UnauthorizedError: Only administrator can add data!!"
+        });
+    } else {
+        Word.findById(req.params.id, function(err, word) {
+            if (err) {
+                res.status(500).json(err);
+            } else {
+
+                word.eName = req.body.eName || word.eName;
+                word.bName = req.body.bName || word.bName;
+                if (req.file) {
+                    upload(req, res, function(err) {
+                        if (err) {
+                            res.json(err);
+                        } else {
+                            fs.exists('./' + word.imagePath, function(exists) {
+                                if (exists) {
+                                    fs.unlink('./' + word.imagePath, function(err) {
+                                        if (err) throw err;
+                                        console.log('successfully deleted image!');
+                                    });
+                                }
+                            })
+
+                            word.imagePath = 'uploads/' + req.file.filename;
+                            word.save(function(err) {
+                                if (err) {
+                                    console.log(err);
+                                    res.json(err);
+                                } else {
+                                    console.log('Word saved!');
+                                    res.json({
+                                        success: true
+                                    });
+                                }
+
+                            });
+                        }
+                    });
+                } else {
+                    word.imagePath = word.imagePath
+                    word.save(function(err, word1) {
+                        if (err) {
+                            res.status(500).json(err)
+                        }
+                        res.json(word1);
+                    });
+                }
+
+            }
+        });
+
+    }
+
+});
 router.get('/word/:id', ctrlCard.getWord);
 router.delete('/word/:id', ctrlCard.deleteWord);
-router.put('/word/:id', ctrlCard.updateWord);
+//router.put('/word/:id', ctrlCard.updateWord);
 //theme routes
 router.post('/theme', ctrlCard.createTheme);
 //search
