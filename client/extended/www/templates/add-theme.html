@@ -5,7 +5,29 @@
             <label class="item item-input">
               <input type="text" placeholder="Title">
             </label>
-            <button type="submit" class="button button-block button-balanced">Add</button>
+            <div class="spacer" style="width: 300px; height:20px;"></div>
+            <div class="list">
+                <div class="item" ng-repeat="wordToAdd in wordsToAdd">
+                    <h1 style="display:inline-block">{{wordToAdd.eName}}</h1>
+                    <button class="button button-assertive" style="display:inline-block;float:right"><i class="icon ion-close-circled"></i></button>
+                </div>
+            </div>
+            <div class="spacer" style="width: 300px; height:40px;"></div>
+            <label class="item item-input">
+              <i class="icon ion-search placeholder-icon"></i>
+              <input type="search" placeholder="" ng-keydown="searchWord()" ng-model="search.word">
+            </label>
+            <div class="spacer" style="width: 300px; height:30px;"></div>
+            <div class="list">
+                <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true" ng-hide="word.dontShow">
+                    <!-- <img ng-src="http://192.168.0.105:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" /> -->
+                    <img ng-src="http://192.168.213.2:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+                    <h1 class="text-center" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
+                    <h1 class="text-center" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
+                    <button class="button button-block button-positive" ng-click="addWord(word)"><i class="icon ion-plus-circled"></i></button>
+                </a>
+            </div>
+            <button type="submit" class="button button-block button-balanced" ng-click="addTheme()">Add</button>
          </div>
       </form>
   </ion-content>
