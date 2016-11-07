@@ -67,6 +67,15 @@ angular.module('app.services', [])
         deffed.reject(err);
       });
       return deffed.promise;
+    },
+    searchWord: function(word) {
+      var deffed = $q.defer();
+      $http.get(url + '/search/' + word).then(function(words) {
+        deffed.resolve(words.data);
+      }, function(err) {
+        deffed.reject(err);
+      });
+      return deffed.promise;
     }
   };
 }])

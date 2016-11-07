@@ -3,7 +3,7 @@
     <form id="words-form1" class="list">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="search" placeholder="" ng-keypress="searchWord()" ng-model="search.word">
+        <input type="search" placeholder="" ng-keydown="searchWord()" ng-model="search.word">
       </label>
       <a class="button button-block button-balanced" href="#/page1/add/word">
             Add word
@@ -26,7 +26,8 @@
       </ion-item> -->
       <div class="list">
           <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true">
-              <img ng-src="http://localhost:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+              <!-- <img ng-src="http://192.168.0.105:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" /> -->
+              <img ng-src="http://192.168.213.2:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
               <h1 class="text-center" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
               <h1 class="text-center" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
               <div class="button-bar">

@@ -2,6 +2,7 @@ angular.module('app.services', [])
 
 .factory('ThemeFactory', ['$http', '$q', function($http, $q) {
   const url = 'http://192.168.213.2:3333';
+  //const url = 'http://192.168.0.105:3333';
   var themes = {
     'School': [{
       en: 'Chair',
@@ -47,6 +48,7 @@ angular.module('app.services', [])
 
 .factory('WordsFactory', ['$http', '$q', function($http, $q) {
   const url = 'http://192.168.213.2:3333/api/word';
+  //const url = 'http://192.168.0.105:3333/api/word';
   return {
     getWords: function(limit) {
       limit = limit || 10;
@@ -99,8 +101,27 @@ angular.module('app.services', [])
     },
     updateWord: function(id, word) {
       var deffed = $q.defer();
-      $http.put(url + '/' + id, word).then(function(word) {
-        deffed.resolve(word);
+      $.ajaxFormData(url + '/' + id, {
+        method: 'PUT',
+        data: {
+          'eName': word.eName,
+          'bName': word.bName,
+          'image': word.image,
+          'secretKey': 'atanasov123'
+        },
+        success: function() {
+          deffed.resolve();
+        },
+        error: function() {
+          deffed.reject();
+        }
+      });
+      return deffed.promise;
+    },
+    searchWord: function(word) {
+      var deffed = $q.defer();
+      $http.get(url + '/search/' + word).then(function(words) {
+        deffed.resolve(words.data);
       }, function(err) {
         deffed.reject(err);
       });

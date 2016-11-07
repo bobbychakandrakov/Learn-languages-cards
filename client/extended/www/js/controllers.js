@@ -24,17 +24,16 @@ angular.module('app.controllers', [])
     }
 
     function searchWord() {
-      if ($scope.search.word !== '') {
-        var out = [];
-        for (var i = 0; i < words.length; i++) {
-          if (words[i].en.toLowerCase() == $scope.search.word.toLowerCase()) {
-            out.push(words[i]);
-          }
-        }
-        $scope.words = out;
+      if ($scope.search.word != '') {
+        WordsFactory.searchWord($scope.search.word).then(function(words) {
+          $scope.words = words;
+        }, function(err) {
+          console.log(err);
+        });
       } else {
-        $scope.words = words;
+        loadData();
       }
+
     }
 
     function deleteWord(id, word) {
@@ -56,7 +55,6 @@ angular.module('app.controllers', [])
 
     function loadData() {
       WordsFactory.getWords().then(function(words) {
-        console.log(words);
         $scope.words = words;
       }, function(err) {
         console.log(err);
@@ -66,7 +64,6 @@ angular.module('app.controllers', [])
     function loadMore() {
       limit += 10;
       WordsFactory.getWords(limit).then(function(words) {
-        console.log(words);
         $scope.words = words;
       }, function(err) {
         console.log(err);
@@ -80,6 +77,55 @@ angular.module('app.controllers', [])
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
   function($scope, $stateParams, ThemeFactory) {
     $scope.themes = ThemeFactory.getThemes();
+
+  }
+])
+
+.controller('addThemeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+  // You can include any angular dependencies as parameters for this function
+  // TIP: Access Route Parameters for your page via $stateParams.parameterName
+  function($scope, $stateParams, ThemeFactory, WordsFactory) {
+
+    $scope.wordsToAdd = [];
+    $scope.addTheme = addTheme;
+    $scope.searchWord = searchWord;
+    $scope.addWord = addWord;
+    $scope.search = {
+      word: ''
+    };
+
+    function searchWord() {
+      if ($scope.search.word != '') {
+        WordsFactory.searchWord($scope.search.word).then(function(words) {
+          if ($scope.wordsToAdd.length !== 0) {
+            for (var i = 0; i < $scope.wordsToAdd.length; i++) {
+              for (var j = 0; j < words.length; j++) {
+                if ($scope.wordsToAdd[i]._id === words[j]._id) {
+                  words[j].dontShow = true;
+                  break;
+                }
+              }
+            }
+          }
+          $scope.words = words;
+        }, function(err) {
+          console.log(err);
+        });
+      } else {
+        $scope.words = [];
+      }
+
+    }
+
+    function addWord(word) {
+      $scope.wordsToAdd.push(word);
+      $scope.search.word = '';
+      $scope.words = [];
+    }
+
+    function addTheme() {
+      console.log($scope.wordsToAdd);
+    }
 
   }
 ])

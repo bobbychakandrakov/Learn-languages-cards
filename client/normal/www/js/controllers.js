@@ -4,31 +4,45 @@ angular.module('app.controllers', [])
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
   function($scope, $stateParams, WordsFactory) {
+    var limit = 10;
 
     $scope.$on("$ionicView.enter", function(event, data) {
-      WordsFactory.getWords().then(function(words) {
-        $scope.words = words;
-      }, function(err) {
-        console.log(err);
-      });
+      loadData();
     });
+
     $scope.searchWord = searchWord;
+    $scope.loadMore = loadMore;
     $scope.search = {
       word: ''
     };
 
     function searchWord() {
-      if ($scope.search.word !== '') {
-        var out = [];
-        for (var i = 0; i < words.length; i++) {
-          if (words[i].en.toLowerCase() == $scope.search.word.toLowerCase()) {
-            out.push(words[i]);
-          }
-        }
-        $scope.words = out;
+      if ($scope.search.word != '') {
+        WordsFactory.searchWord($scope.search.word).then(function(words) {
+          $scope.words = words;
+        }, function(err) {
+          console.log(err);
+        });
       } else {
-        $scope.words = words;
+        loadData();
       }
+    }
+
+    function loadData() {
+      WordsFactory.getWords().then(function(words) {
+        $scope.words = words;
+      }, function(err) {
+        console.log(err);
+      });
+    }
+
+    function loadMore() {
+      limit += 10;
+      WordsFactory.getWords(limit).then(function(words) {
+        $scope.words = words;
+      }, function(err) {
+        console.log(err);
+      });
     }
   }
 ])
