@@ -90,8 +90,12 @@ angular.module('app.controllers', [])
     $scope.addTheme = addTheme;
     $scope.searchWord = searchWord;
     $scope.addWord = addWord;
+    $scope.removeWord = removeWord;
     $scope.search = {
       word: ''
+    };
+    $scope.theme = {
+      title: ''
     };
 
     function searchWord() {
@@ -123,8 +127,17 @@ angular.module('app.controllers', [])
       $scope.words = [];
     }
 
+    function removeWord(word) {
+      var index = $scope.wordsToAdd.indexOf(word);
+      $scope.wordsToAdd.splice(index, 1);
+    }
+
     function addTheme() {
-      console.log($scope.wordsToAdd);
+      ThemeFactory.saveTheme($scope.wordsToAdd, $scope.theme.title).then(function(theme) {
+        console.log(theme);
+      }, function(err) {
+        console.log(err);
+      });
     }
 
   }

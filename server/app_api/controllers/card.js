@@ -174,14 +174,15 @@ module.exports.createTheme = function(req, res) {
             if (theme1) {
                 res.status(400).json("the theme " + req.body.name + " already exists!")
             } else {
+                theme.wordId = req.body.words.split(',');
                 theme.save(function(err) {
                     if (err) {
-                        res.json(err)
+                        res.json(err);
                     } else {
-                        res.json(" theme was created")
+                        res.json(theme);
                     }
 
-                })
+                });
 
 
             }
@@ -231,36 +232,40 @@ module.exports.addWordToTheme = function(req, res) {
 
 
 
-      Theme.findById(req.params.themeId, function (err, theme){
+    Theme.findById(req.params.themeId, function(err, theme) {
 
-         theme.wordId=req.body.words.split(',')
-            theme.save(function(err) {
-                if (err) {
-                    res.json(err)
-                } else {
-                    res.json(" words was added")
-                }
-
-            })
+        theme.wordId = req.body.words.split(',');
+        theme.save(function(err) {
+            if (err) {
+                res.json(err)
+            } else {
+                res.json(" words was added")
+            }
 
         });
 
+    });
+
 
 };
-module.exports.getThemeWords= function(req, res) {
+module.exports.getThemeWords = function(req, res) {
 
 
 
-    Theme.findById(req.params.themeId, function (err, theme){
+    Theme.findById(req.params.themeId, function(err, theme) {
 
-        if(err){
+        if (err) {
             res.status(400).json(err)
-        }else{
-            Word.find({_id:{ $in: theme.wordId }}, function (err, words){
+        } else {
+            Word.find({
+                _id: {
+                    $in: theme.wordId
+                }
+            }, function(err, words) {
 
-                if(err){
+                if (err) {
                     res.status(400).json(err)
-                }else{
+                } else {
                     res.json(words)
 
                 }
@@ -274,10 +279,10 @@ module.exports.getThemeWords= function(req, res) {
 };
 module.exports.updateTheme = function(req, res) {
 
-    Theme.findById(req.params.themeId, function (err, theme){
-        if(theme){
-            theme.name=req.body.name || theme.name;
-            theme.wordId=req.body.words.split(',')
+    Theme.findById(req.params.themeId, function(err, theme) {
+        if (theme) {
+            theme.name = req.body.name || theme.name;
+            theme.wordId = req.body.words.split(',')
             theme.save(function(err) {
                 if (err) {
                     res.json(err)
@@ -286,7 +291,7 @@ module.exports.updateTheme = function(req, res) {
                 }
 
             })
-        }else{
+        } else {
             res.end("theme doesn't exist")
         }
 
@@ -295,14 +300,13 @@ module.exports.updateTheme = function(req, res) {
 
 
 };
-module.exports.deleteTheme= function(req, res) {
+module.exports.deleteTheme = function(req, res) {
 
 
-    Theme.findByIdAndRemove(req.params.id, function (err,theme){
-        if(err) {
+    Theme.findByIdAndRemove(req.params.id, function(err, theme) {
+        if (err) {
             res.json(err)
-        }
-        else{
+        } else {
             res.json(" theme was delted")
         }
     })

@@ -1,47 +1,26 @@
 angular.module('app.services', [])
 
 .factory('ThemeFactory', ['$http', '$q', function($http, $q) {
-  const url = 'http://192.168.213.2:3333';
+  const url = 'http://192.168.213.2:3333/api/theme';
   //const url = 'http://192.168.0.105:3333';
-  var themes = {
-    'School': [{
-      en: 'Chair',
-      bg: 'Стол',
-      image: 'img/chair.jpg'
-    }, {
-      en: 'Desk',
-      bg: 'Бюро',
-      image: 'img/desk.jpg'
-    }, {
-      en: 'Pen',
-      bg: 'Химикал',
-      image: 'img/pen.jpg'
-    }, {
-      en: 'Pencil',
-      bg: 'Молив',
-      image: 'img/pencil.jpg'
-    }],
-    'Animals': [{
-      en: 'Cat',
-      bg: 'Котка',
-      image: 'img/cat.jpg'
-    }, {
-      en: 'Dog',
-      bg: 'Куче',
-      image: 'img/dog.jpg'
-    }, {
-      en: 'Rabbit',
-      bg: 'Заек',
-      image: 'img/rabbit.jpg'
-    }]
-  };
-  var themeNames = ['School', 'Animals'];
+
   return {
-    getThemeWords: function(name) {
-      return themes[name];
-    },
-    getThemes: function() {
-      return themeNames;
+    saveTheme: function(words, name) {
+      var data = {};
+      data.words = '';
+      data.name = name;
+      data.secretKey = 'atanasov123';
+      data.words += words[0]._id;
+      for (var i = 1; i < words.length; i++) {
+        data.words += ',' + words[i]._id;
+      }
+      var deffered = $q.defer();
+      $http.post(url, data).then(function(theme) {
+        deffered.resolve(theme);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
     }
   };
 }])

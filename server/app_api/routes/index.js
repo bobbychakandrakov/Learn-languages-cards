@@ -50,7 +50,7 @@ router.post('/word', upload, function(req, res) {
 
 });
 router.put('/word/:id', upload, function(req, res) {
-   if (req.body.secretKey != 'atanasov123') {
+    if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
         });

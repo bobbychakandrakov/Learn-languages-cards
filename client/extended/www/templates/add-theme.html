@@ -3,13 +3,13 @@
       <form>
           <div class="list list-inset">
             <label class="item item-input">
-              <input type="text" placeholder="Title">
+              <input type="text" placeholder="Title" ng-model="theme.title">
             </label>
             <div class="spacer" style="width: 300px; height:20px;"></div>
             <div class="list">
                 <div class="item" ng-repeat="wordToAdd in wordsToAdd">
                     <h1 style="display:inline-block">{{wordToAdd.eName}}</h1>
-                    <button class="button button-assertive" style="display:inline-block;float:right"><i class="icon ion-close-circled"></i></button>
+                    <button class="button button-assertive" style="display:inline-block;float:right" ng-click="removeWord(wordToAdd)"><i class="icon ion-close-circled"></i></button>
                 </div>
             </div>
             <div class="spacer" style="width: 300px; height:40px;"></div>
