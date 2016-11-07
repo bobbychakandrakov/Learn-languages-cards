@@ -24,17 +24,16 @@ angular.module('app.controllers', [])
     }
 
     function searchWord() {
-      if ($scope.search.word !== '') {
-        var out = [];
-        for (var i = 0; i < words.length; i++) {
-          if (words[i].en.toLowerCase() == $scope.search.word.toLowerCase()) {
-            out.push(words[i]);
-          }
-        }
-        $scope.words = out;
+      if ($scope.search.word != '') {
+        WordsFactory.searchWord($scope.search.word).then(function(words) {
+          $scope.words = words;
+        }, function(err) {
+          console.log(err);
+        });
       } else {
-        $scope.words = words;
+        loadData();
       }
+
     }
 
     function deleteWord(id, word) {
@@ -56,7 +55,6 @@ angular.module('app.controllers', [])
 
     function loadData() {
       WordsFactory.getWords().then(function(words) {
-        console.log(words);
         $scope.words = words;
       }, function(err) {
         console.log(err);
@@ -66,7 +64,6 @@ angular.module('app.controllers', [])
     function loadMore() {
       limit += 10;
       WordsFactory.getWords(limit).then(function(words) {
-        console.log(words);
         $scope.words = words;
       }, function(err) {
         console.log(err);
