@@ -101,10 +101,20 @@ angular.module('app.services', [])
     },
     updateWord: function(id, word) {
       var deffed = $q.defer();
-      $http.put(url + '/' + id, word).then(function(word) {
-        deffed.resolve(word);
-      }, function(err) {
-        deffed.reject(err);
+      $.ajaxFormData(url + '/' + id, {
+        method: 'PUT',
+        data: {
+          'eName': word.eName,
+          'bName': word.bName,
+          'image': word.image,
+          'secretKey': 'atanasov123'
+        },
+        success: function() {
+          deffed.resolve();
+        },
+        error: function() {
+          deffed.reject();
+        }
       });
       return deffed.promise;
     },
