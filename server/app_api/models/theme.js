@@ -4,6 +4,9 @@ var themeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    wordId: {
+        type:Object
     }
 });
 

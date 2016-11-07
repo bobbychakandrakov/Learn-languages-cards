@@ -3,7 +3,6 @@ var Word = mongoose.model('Word');
 var Theme = mongoose.model('Theme');
 var multer = require('multer');
 var fs = require('fs');
-
 module.exports.createWord = function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
@@ -225,6 +224,88 @@ module.exports.getLimitWords = function(req, res) {
         data.results = results;
         res.json(results)
     });
+
+
+};
+module.exports.addWordToTheme = function(req, res) {
+
+
+
+      Theme.findById(req.params.themeId, function (err, theme){
+
+         theme.wordId=req.body.words.split(',')
+            theme.save(function(err) {
+                if (err) {
+                    res.json(err)
+                } else {
+                    res.json(" words was added")
+                }
+
+            })
+
+        });
+
+
+};
+module.exports.getThemeWords= function(req, res) {
+
+
+
+    Theme.findById(req.params.themeId, function (err, theme){
+
+        if(err){
+            res.status(400).json(err)
+        }else{
+            Word.find({_id:{ $in: theme.wordId }}, function (err, words){
+
+                if(err){
+                    res.status(400).json(err)
+                }else{
+                    res.json(words)
+
+                }
+
+            });
+        }
+
+    });
+
+
+};
+module.exports.updateTheme = function(req, res) {
+
+    Theme.findById(req.params.themeId, function (err, theme){
+        if(theme){
+            theme.name=req.body.name || theme.name;
+            theme.wordId=req.body.words.split(',')
+            theme.save(function(err) {
+                if (err) {
+                    res.json(err)
+                } else {
+                    res.json("theme was updated")
+                }
+
+            })
+        }else{
+            res.end("theme doesnt exist")
+        }
+
+
+    });
+
+
+};
+module.exports.deleteTheme= function(req, res) {
+
+
+    Theme.findByIdAndRemove(req.params.id, function (err,theme){
+        if(err) {
+            res.json(err)
+        }
+        else{
+            res.json(" theme was delted")
+        }
+    })
 
 
 };

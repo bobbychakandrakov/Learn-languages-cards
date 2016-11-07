@@ -109,9 +109,14 @@ router.put('/word/:id', upload, function(req, res) {
 });
 router.get('/word/:id', ctrlCard.getWord);
 router.delete('/word/:id', ctrlCard.deleteWord);
+
 //router.put('/word/:id', ctrlCard.updateWord);
 //theme routes
 router.post('/theme', ctrlCard.createTheme);
+router.post('/theme/word/:themeId', ctrlCard.addWordToTheme);
+router.put('/theme/word/:themeId', ctrlCard.updateTheme);
+router.get('/theme/word/:themeId', ctrlCard.getThemeWords);
+router.delete('/theme/:id', ctrlCard.deleteTheme);
 //search
 router.get('/word/search/:keyword', ctrlCard.search);
 router.get('/word/limit/:limit', ctrlCard.getLimitWords);
