@@ -287,7 +287,7 @@ module.exports.updateTheme = function(req, res) {
 
             })
         }else{
-            res.end("theme doesnt exist")
+            res.end("theme doesn't exist")
         }
 
 
