@@ -1,6 +1,10 @@
 <ion-view title="{{title}}" id="theme">
   <ion-content padding="true" class="has-header">
     <ion-list id="themes-list2">
+        <div class="button-bar">
+            <a class="button button-block button-positive" href="#/page1/edit/theme/{{id}}"><i class="icon ion-gear-b"></i></a>
+            <button class="button button-block button-assertive" ng-click="deleteTheme()"><i class="icon ion-trash-a"></i></button>
+        </div>
         <div class="list">
             <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true">
                 <!-- <img ng-src="http://192.168.0.105:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" /> -->

@@ -40,6 +40,15 @@ angular.module('app.services', [])
         deffered.reject(err);
       });
       return deffered.promise;
+    },
+    deleteTheme: function(id) {
+      var deffered = $q.defer();
+      $http.delete(url + '/' + id).then(function(theme) {
+        deffered.resolve(theme);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
     }
   };
 }])

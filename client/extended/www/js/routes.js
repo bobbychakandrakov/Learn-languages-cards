@@ -50,6 +50,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.editTheme', {
+    url: '/edit/theme/:id',
+    views: {
+      'tab2': {
+        templateUrl: 'templates/edit-theme.html',
+        controller: 'editThemeCtrl'
+      }
+    }
+  })
+
   .state('tabsController.addWord', {
     url: '/add/word',
     views: {

@@ -158,12 +158,34 @@ angular.module('app.controllers', [])
 
 .controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', '$ionicPopup', '$location',
   function($scope, $stateParams, ThemeFactory, WordsFactory, $ionicPopup, $location) {
+
+    var id = $stateParams.id;
+    $scope.id = id;
     $scope.title = $stateParams.name;
+    $scope.deleteTheme = deleteTheme;
+
     ThemeFactory.getThemeWords($stateParams.id).then(function(words) {
       $scope.words = words;
     }, function(err) {
       console.log(err);
     });
+
+    function deleteTheme() {
+      var confirmPopup = $ionicPopup.confirm({
+        template: 'Are you sure you want to delete \'' + $scope.title + '\' ?'
+      });
+
+      confirmPopup.then(function(res) {
+        if (res) {
+          ThemeFactory.deleteTheme(id).then(function(theme) {
+            $location.path('/page1/page3');
+          }, function(err) {
+            console.log(err);
+          });
+        }
+      });
+
+    }
   }
 ])
 
@@ -186,6 +208,12 @@ angular.module('app.controllers', [])
         console.log(err);
       });
     }
+  }
+])
+
+.controller('editThemeCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location',
+  function($scope, $stateParams, WordsFactory, $location) {
+
   }
 ])
 
