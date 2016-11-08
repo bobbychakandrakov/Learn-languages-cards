@@ -1,11 +1,14 @@
 <ion-view title="{{title}}" id="theme">
   <ion-content padding="true" class="has-header">
     <ion-list id="themes-list2">
-      <ion-item class="item-thumbnail-left" ng-repeat="word in words">
-          <img src="{{word.image}}" alt=""/>
-          <h1>{{word.en}}</h1>
-          <h1>{{word.bg}}</h1>
-      </ion-item>
+        <div class="list">
+            <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true">
+                <!-- <img ng-src="http://192.168.0.105:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" /> -->
+                <img ng-src="http://192.168.213.2:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+                <h1 class="text-center" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
+                <h1 class="text-center" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
+            </a>
+        </div>
     </ion-list>
   </ion-content>
 </ion-view>

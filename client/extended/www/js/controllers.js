@@ -76,7 +76,19 @@ angular.module('app.controllers', [])
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
   function($scope, $stateParams, ThemeFactory) {
-    $scope.themes = ThemeFactory.getThemes();
+    var limit = 10;
+    $scope.$on("$ionicView.enter", function(event, data) {
+      loadData();
+    });
+
+    function loadData() {
+      ThemeFactory.getThemes(limit).then(function(themes) {
+        $scope.themes = themes;
+      }, function(err) {
+        console.log(err);
+      });
+    }
+
 
   }
 ])
@@ -134,7 +146,8 @@ angular.module('app.controllers', [])
 
     function addTheme() {
       ThemeFactory.saveTheme($scope.wordsToAdd, $scope.theme.title).then(function(theme) {
-        console.log(theme);
+        $scope.theme.title = '';
+        $scope.wordsToAdd = [];
       }, function(err) {
         console.log(err);
       });
@@ -143,10 +156,14 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory',
-  function($scope, $stateParams, ThemeFactory) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', '$ionicPopup', '$location',
+  function($scope, $stateParams, ThemeFactory, WordsFactory, $ionicPopup, $location) {
     $scope.title = $stateParams.name;
-    $scope.words = ThemeFactory.getThemeWords($stateParams.name);
+    ThemeFactory.getThemeWords($stateParams.id).then(function(words) {
+      $scope.words = words;
+    }, function(err) {
+      console.log(err);
+    });
   }
 ])
 

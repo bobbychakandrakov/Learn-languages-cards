@@ -2,7 +2,7 @@ angular.module('app.services', [])
 
 .factory('ThemeFactory', ['$http', '$q', function($http, $q) {
   const url = 'http://192.168.213.2:3333/api/theme';
-  //const url = 'http://192.168.0.105:3333';
+  //const url = 'http://192.168.0.105:3333/api/theme';
 
   return {
     saveTheme: function(words, name) {
@@ -17,6 +17,25 @@ angular.module('app.services', [])
       var deffered = $q.defer();
       $http.post(url, data).then(function(theme) {
         deffered.resolve(theme);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    getThemes: function(limit) {
+      limit = limit || 10;
+      var deffered = $q.defer();
+      $http.get(url + '/limit/' + limit).then(function(themes) {
+        deffered.resolve(themes.data);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    getThemeWords: function(id) {
+      var deffered = $q.defer();
+      $http.get(url + '/word/' + id).then(function(theme) {
+        deffered.resolve(theme.data);
       }, function(err) {
         deffered.reject(err);
       });

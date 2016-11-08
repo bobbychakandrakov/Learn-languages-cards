@@ -1,11 +1,11 @@
 <ion-view title="Themes" id="page3">
   <ion-content padding="true" class="has-header">
     <ion-list id="themes-list1">
-      <a class="button button-block button-balanced" href="#/page1/add/word">
+      <a class="button button-block button-balanced" href="#/page1/add/theme">
               Add theme
       </a>
       <ion-item ng-repeat="theme in themes">
-          <h1 style="text-align:center;"><a href="#/page1/theme/{{theme}}" style="text-decoration:none">{{theme}}</a></h1>
+          <h1 style="text-align:center;"><a href="#/page1/theme/{{theme.name}}/{{theme._id}}" style="text-decoration:none">{{theme.name}}</a></h1>
       </ion-item>
     </ion-list>
   </ion-content>
