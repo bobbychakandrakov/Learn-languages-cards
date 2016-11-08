@@ -313,3 +313,17 @@ module.exports.deleteTheme = function(req, res) {
 
 
 };
+module.exports.getLimitThemes = function(req, res) {
+    var queryParams = {};
+    queryParams.limit = Number(req.params.limit) || 10;
+    var data = {};
+    Theme.find({}).limit(queryParams.limit).exec(function(err, results) {
+        if (err) {
+            throw err;
+        }
+        data.results = results;
+        res.json(results)
+    });
+
+
+};
