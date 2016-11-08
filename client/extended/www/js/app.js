@@ -11,6 +11,11 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
 
 })
 
+.constant('BACKEND_API', {
+  THEMES: 'http://192.168.213.2:3333/api/theme',
+  WORDS: 'http://192.168.213.2:3333/api/word'
+})
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
 

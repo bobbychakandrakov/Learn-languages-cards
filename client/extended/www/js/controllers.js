@@ -164,11 +164,19 @@ angular.module('app.controllers', [])
     $scope.title = $stateParams.name;
     $scope.deleteTheme = deleteTheme;
 
-    ThemeFactory.getThemeWords($stateParams.id).then(function(words) {
-      $scope.words = words;
-    }, function(err) {
-      console.log(err);
+
+
+    $scope.$on("$ionicView.enter", function(event, data) {
+      loadData();
     });
+
+    function loadData() {
+      ThemeFactory.getThemeWords($stateParams.id).then(function(words) {
+        $scope.words = words;
+      }, function(err) {
+        console.log(err);
+      });
+    }
 
     function deleteTheme() {
       var confirmPopup = $ionicPopup.confirm({
@@ -211,9 +219,73 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('editThemeCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location',
-  function($scope, $stateParams, WordsFactory, $location) {
+.controller('editThemeCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location', 'ThemeFactory', '$ionicHistory',
+  function($scope, $stateParams, WordsFactory, $location, ThemeFactory, $ionicHistory) {
+    var id = $stateParams.id;
+    $scope.wordsToAdd = [];
+    $scope.addWord = addWord;
+    $scope.removeWord = removeWord;
+    $scope.searchWord = searchWord;
+    $scope.updateTheme = updateTheme;
+    $scope.theme = {
+      title: ''
+    };
+    $scope.search = {
+      word: ''
+    };
 
+    ThemeFactory.getTheme(id).then(function(theme) {
+      $scope.theme.title = theme.name;
+      ThemeFactory.getThemeWords(id).then(function(words) {
+        $scope.wordsToAdd = words;
+      }, function(err) {
+        console.log(err);
+      });
+    }, function(err) {
+      console.log(err);
+    });
+
+    function addWord(word) {
+      $scope.wordsToAdd.push(word);
+      $scope.search.word = '';
+      $scope.words = [];
+    }
+
+    function removeWord(word) {
+      var index = $scope.wordsToAdd.indexOf(word);
+      $scope.wordsToAdd.splice(index, 1);
+    }
+
+    function updateTheme() {
+      ThemeFactory.updateTheme($scope.wordsToAdd, $scope.theme.title, id).then(function(theme) {
+        $ionicHistory.goBack();
+      }, function(err) {
+        console.log(err);
+      });
+    }
+
+    function searchWord() {
+      if ($scope.search.word != '') {
+        WordsFactory.searchWord($scope.search.word).then(function(words) {
+          if ($scope.wordsToAdd.length !== 0) {
+            for (var i = 0; i < $scope.wordsToAdd.length; i++) {
+              for (var j = 0; j < words.length; j++) {
+                if ($scope.wordsToAdd[i]._id === words[j]._id) {
+                  words[j].dontShow = true;
+                  break;
+                }
+              }
+            }
+          }
+          $scope.words = words;
+        }, function(err) {
+          console.log(err);
+        });
+      } else {
+        $scope.words = [];
+      }
+
+    }
   }
 ])
 

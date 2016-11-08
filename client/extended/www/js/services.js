@@ -1,7 +1,8 @@
 angular.module('app.services', [])
 
-.factory('ThemeFactory', ['$http', '$q', function($http, $q) {
-  const url = 'http://192.168.213.2:3333/api/theme';
+.factory('ThemeFactory', ['$http', '$q', 'BACKEND_API', function($http, $q, BACKEND_API) {
+  //const url = 'http://192.168.213.2:3333/api/theme';
+  const url = BACKEND_API.THEMES;
   //const url = 'http://192.168.0.105:3333/api/theme';
 
   return {
@@ -16,6 +17,23 @@ angular.module('app.services', [])
       }
       var deffered = $q.defer();
       $http.post(url, data).then(function(theme) {
+        deffered.resolve(theme);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    updateTheme: function(words, name, id) {
+      var data = {};
+      data.words = '';
+      data.name = name;
+      data.secretKey = 'atanasov123';
+      data.words += words[0]._id;
+      for (var i = 1; i < words.length; i++) {
+        data.words += ',' + words[i]._id;
+      }
+      var deffered = $q.defer();
+      $http.put(url + '/word/' + id, data).then(function(theme) {
         deffered.resolve(theme);
       }, function(err) {
         deffered.reject(err);
@@ -49,12 +67,22 @@ angular.module('app.services', [])
         deffered.reject(err);
       });
       return deffered.promise;
+    },
+    getTheme: function(id) {
+      var deffered = $q.defer();
+      $http.get(url + '/' + id).then(function(theme) {
+        deffered.resolve(theme.data);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
     }
   };
 }])
 
-.factory('WordsFactory', ['$http', '$q', function($http, $q) {
-  const url = 'http://192.168.213.2:3333/api/word';
+.factory('WordsFactory', ['$http', '$q', 'BACKEND_API', function($http, $q, BACKEND_API) {
+  //const url = 'http://192.168.213.2:3333/api/word';
+  const url = BACKEND_API.WORDS;
   //const url = 'http://192.168.0.105:3333/api/word';
   return {
     getWords: function(limit) {
