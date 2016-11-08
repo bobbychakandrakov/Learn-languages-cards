@@ -327,3 +327,20 @@ module.exports.getLimitThemes = function(req, res) {
 
 
 };
+
+module.exports.getTheme = function(req, res) {
+
+
+    Theme.findById(req.params.id, function(err, theme) {
+        if (err) {
+            res.status(400).json(err)
+
+        }
+        if (theme) {
+            res.status(200).json(theme)
+        }
+
+    })
+
+
+};
