@@ -16,8 +16,17 @@ var storage = multer.diskStorage({ //multers disk storage settings
 var upload = multer({
     //multer settings
     storage: storage
-}).single('image');
-router.post('/word', upload, function(req, res) {
+});
+router.post('/word', upload.fields([{
+    name: 'image',
+    maxCount: 1
+}, {
+    name: 'maleVoice',
+    maxCount: 1
+}, {
+    name: 'femaleVoice',
+    maxCount: 1
+}]), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -26,30 +35,45 @@ router.post('/word', upload, function(req, res) {
         var word = new Word();
         word.eName = req.body.eName || 'test';
         word.bName = req.body.bName || 'test';
-        upload(req, res, function(err) {
+        // upload(req, res, function(err) {
+        //     if (err) {
+        //         res.json(err);
+        //     } else {
+        //         word.imagePath = 'uploads/' + req.file.filename;
+        //         word.save(function(err) {
+        //             if (err) {
+        //                 console.log(err);
+        //                 res.json(err);
+        //             } else {
+        //                 console.log('Word saved!');
+        //                 res.json({
+        //                     success: true
+        //                 });
+        //             }
+        //
+        //         });
+        //     }
+        // });
+        word.imagePath = 'uploads/' + req.files['image'][0].filename;
+        word.maleVoice = 'uploads/' + req.files['maleVoice'][0].filename;
+        word.femaleVoice = 'uploads/' + req.files['femaleVoice'][0].filename;
+        word.save(function(err) {
             if (err) {
+                console.log(err);
                 res.json(err);
             } else {
-                word.imagePath = 'uploads/' + req.file.filename;
-                word.save(function(err) {
-                    if (err) {
-                        console.log(err);
-                        res.json(err);
-                    } else {
-                        console.log('Word saved!');
-                        res.json({
-                            success: true
-                        });
-                    }
-
+                console.log('Word saved!');
+                res.json({
+                    success: true
                 });
             }
+
         });
 
     }
 
 });
-router.put('/word/:id', upload, function(req, res) {
+router.put('/word/:id', upload.single('image'), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -64,44 +88,44 @@ router.put('/word/:id', upload, function(req, res) {
                 word.bName = req.body.bName || word.bName;
                 if (req.file) {
                     fs.exists('./' + word.imagePath, function(exists) {
-                        if (exists) {
-                            fs.unlink('./' + word.imagePath, function(err) {
-                                if (err) throw err;
-                                else{
-                                    console.log('successfully deleted image!');
-                                    word.imagePath = 'uploads/' + req.file.filename;
-                                    word.save(function(err) {
-                                        if (err) {
-                                            console.log(err);
-                                            res.json(err);
-                                        } else {
-                                            console.log('Word saved!');
-                                            res.json({
-                                                success: true
-                                            });
-                                        }
+                            if (exists) {
+                                fs.unlink('./' + word.imagePath, function(err) {
+                                    if (err) throw err;
+                                    else {
+                                        console.log('successfully deleted image!');
+                                        word.imagePath = 'uploads/' + req.file.filename;
+                                        word.save(function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                                res.json(err);
+                                            } else {
+                                                console.log('Word saved!');
+                                                res.json({
+                                                    success: true
+                                                });
+                                            }
 
-                                    });
-                                }
+                                        });
+                                    }
 
-                            });
-                        }else{
-                            word.imagePath = 'uploads/' + req.file.filename;
-                            word.save(function(err) {
-                                if (err) {
-                                    console.log(err);
-                                    res.json(err);
-                                } else {
-                                    console.log('Word saved!');
-                                    res.json({
-                                        success: true
-                                    });
-                                }
+                                });
+                            } else {
+                                word.imagePath = 'uploads/' + req.file.filename;
+                                word.save(function(err) {
+                                    if (err) {
+                                        console.log(err);
+                                        res.json(err);
+                                    } else {
+                                        console.log('Word saved!');
+                                        res.json({
+                                            success: true
+                                        });
+                                    }
 
-                            });
-                        }
-                    })
-                   /*upload(req, res, function(err) {
+                                });
+                            }
+                        })
+                        /*upload(req, res, function(err) {
                         if (err) {
                             res.json(err);
                         } else {

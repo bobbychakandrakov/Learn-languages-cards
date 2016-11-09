@@ -20,8 +20,8 @@
             <div class="spacer" style="width: 300px; height:30px;"></div>
             <div class="list">
                 <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true" ng-hide="word.dontShow">
-                    <!-- <img ng-src="http://192.168.0.105:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" /> -->
-                    <img ng-src="http://192.168.213.2:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+                    <img ng-src="https://demo-project-bobbychakandrakov.c9users.io/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+                    <!-- <img ng-src="http://192.168.213.2:3333/{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" /> -->
                     <h1 class="text-center" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
                     <h1 class="text-center" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
                     <button class="button button-block button-positive" ng-click="addWord(word)"><i class="icon ion-plus-circled"></i></button>

@@ -12,9 +12,15 @@ var wordSchema = new mongoose.Schema({
     imagePath: {
         type: String
 
+    },
+    maleVoice: {
+        type: String
+    },
+    femaleVoice: {
+        type: String
     }
 
 });
 
 
-module.exports = mongoose.model('Word',wordSchema);
+module.exports = mongoose.model('Word', wordSchema);

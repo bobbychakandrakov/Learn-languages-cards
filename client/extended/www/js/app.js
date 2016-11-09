@@ -16,6 +16,12 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
   WORDS: 'http://192.168.213.2:3333/api/word'
 })
 
+// Test Cloud
+// .constant('BACKEND_API', {
+//   THEMES: 'https://demo-project-bobbychakandrakov.c9users.io:8080/api/theme',
+//   WORDS: 'https://demo-project-bobbychakandrakov.c9users.io:8080/api/word'
+// })
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
 
