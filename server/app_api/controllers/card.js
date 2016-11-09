@@ -109,7 +109,7 @@ module.exports.deleteWord = function(req, res) {
 
 };
 
-module.exports.updateWord = function(req, res) {
+/*module.exports.updateWord = function(req, res) {
 
     Word.findById(req.params.id, function(err, word) {
         if (err) {
@@ -150,6 +150,7 @@ module.exports.updateWord = function(req, res) {
     });
 
 };
+*/
 
 
 module.exports.createTheme = function(req, res) {
@@ -282,7 +283,9 @@ module.exports.updateTheme = function(req, res) {
     Theme.findById(req.params.themeId, function(err, theme) {
         if (theme) {
             theme.name = req.body.name || theme.name;
-            theme.wordId = req.body.words.split(',')
+            if(req.body.words){
+                theme.wordId = req.body.words.split(',')
+            }
             theme.save(function(err) {
                 if (err) {
                     res.json(err)

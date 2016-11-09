@@ -63,19 +63,48 @@ router.put('/word/:id', upload, function(req, res) {
                 word.eName = req.body.eName || word.eName;
                 word.bName = req.body.bName || word.bName;
                 if (req.file) {
-                    upload(req, res, function(err) {
+                    fs.exists('./' + word.imagePath, function(exists) {
+                        if (exists) {
+                            fs.unlink('./' + word.imagePath, function(err) {
+                                if (err) throw err;
+                                else{
+                                    console.log('successfully deleted image!');
+                                    word.imagePath = 'uploads/' + req.file.filename;
+                                    word.save(function(err) {
+                                        if (err) {
+                                            console.log(err);
+                                            res.json(err);
+                                        } else {
+                                            console.log('Word saved!');
+                                            res.json({
+                                                success: true
+                                            });
+                                        }
+
+                                    });
+                                }
+
+                            });
+                        }else{
+                            word.imagePath = 'uploads/' + req.file.filename;
+                            word.save(function(err) {
+                                if (err) {
+                                    console.log(err);
+                                    res.json(err);
+                                } else {
+                                    console.log('Word saved!');
+                                    res.json({
+                                        success: true
+                                    });
+                                }
+
+                            });
+                        }
+                    })
+                   /*upload(req, res, function(err) {
                         if (err) {
                             res.json(err);
                         } else {
-                            fs.exists('./' + word.imagePath, function(exists) {
-                                if (exists) {
-                                    fs.unlink('./' + word.imagePath, function(err) {
-                                        if (err) throw err;
-                                        console.log('successfully deleted image!');
-                                    });
-                                }
-                            })
-
                             word.imagePath = 'uploads/' + req.file.filename;
                             word.save(function(err) {
                                 if (err) {
@@ -91,6 +120,8 @@ router.put('/word/:id', upload, function(req, res) {
                             });
                         }
                     });
+
+*/
                 } else {
                     word.imagePath = word.imagePath
                     word.save(function(err, word1) {
