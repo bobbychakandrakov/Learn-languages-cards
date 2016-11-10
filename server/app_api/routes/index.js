@@ -55,8 +55,10 @@ router.post('/word', upload.fields([{
         //     }
         // });
         word.imagePath = 'uploads/' + req.files['image'][0].filename;
-        word.maleVoice = 'uploads/' + req.files['maleVoice'][0].filename;
-        word.femaleVoice = 'uploads/' + req.files['femaleVoice'][0].filename;
+        word.maleVoice.url = 'uploads/' + req.files['maleVoice'][0].filename || '';
+        word.maleVoice.media = req.files['maleVoice'][0].mimetype;
+        word.femaleVoice.url = 'uploads/' + req.files['femaleVoice'][0].filename || '';
+        word.femaleVoice.media = req.files['femaleVoice'][0].mimetype;
         word.save(function(err) {
             if (err) {
                 console.log(err);

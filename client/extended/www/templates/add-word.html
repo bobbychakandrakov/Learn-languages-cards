@@ -12,11 +12,12 @@
               <input type="file" ng-model="word.image">
             </label>
             <div class="spacer" style="width: 300px; height:20px;"></div>
-            <div class="text-center">
-                <button class="button icon ion-android-microphone" ng-click="addAudio()"></button>
-                <button class="button icon ion-play" ng-click="playAudio()"></button>
-                <button class="button icon ion-close-circled" ng-click="deleteAudio()"></button>
-            </div>
+            <h2 style="display:inline-block;float:left;vertical-align:middle;margin-top:0">Male:</h2>
+            <input type="file" ng-model="word.maleVoice" style="float:right">
+            <div class="spacer" style="width: 300px; height:60px;"></div>
+            <h2 style="display:inline-block;float:left;vertical-align:middle;margin-top:0">Female:</h2>
+            <input type="file" ng-model="word.femaleVoice" style="float:right">
+            <div class="spacer" style="width: 300px; height:60px;"></div>
             <button type="submit" class="button button-block button-balanced" ng-click="saveWord()">Add</button>
          </div>
       </form>

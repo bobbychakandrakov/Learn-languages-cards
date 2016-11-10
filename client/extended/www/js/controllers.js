@@ -289,44 +289,18 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture', '$cordovaMedia', '$ionicPopup',
-  function($scope, $stateParams, WordsFactory, $cordovaCapture, $cordovaMedia, $ionicPopup) {
-
-    var audioURL = '';
-    var my_media;
+.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture', '$cordovaMedia', '$ionicPopup', '$cordovaFile',
+  function($scope, $stateParams, WordsFactory, $cordovaCapture, $cordovaMedia, $ionicPopup, $cordovaFile) {
 
     $scope.saveWord = saveWord;
-    $scope.addAudio = addAudio;
-    $scope.playAudio = playAudio;
-    $scope.deleteAudio = deleteAudio;
     $scope.word = {
       secretKey: 'atanasov123',
       eName: '',
       bName: ''
     };
 
-
-    function addAudio() {
-      $cordovaCapture.captureAudio().then(function(audioData) {
-        // Getting audio and storing localURL
-        audioURL = audioData[0].localURL;
-        my_media = new Media(audioURL);
-      }, function(err) {
-
-      });
-    }
-
-    function playAudio() {
-      if (audioURL) {
-        my_media.play();
-      }
-    }
-
-    function deleteAudio() {
-      audioURL = '';
-    }
-
     function saveWord() {
+      console.log($scope.word);
       WordsFactory.saveWord($scope.word).then(function() {
         $scope.word.eName = '';
         $scope.word.bName = '';

@@ -11,13 +11,22 @@ var wordSchema = new mongoose.Schema({
     },
     imagePath: {
         type: String
-
     },
     maleVoice: {
-        type: String
+        url: {
+            type: String
+        },
+        media: {
+            type: String
+        }
     },
     femaleVoice: {
-        type: String
+        url: {
+            type: String
+        },
+        media: {
+            type: String
+        }
     }
 
 });
