@@ -175,7 +175,10 @@ module.exports.createTheme = function(req, res) {
             if (theme1) {
                 res.status(400).json("the theme " + req.body.name + " already exists!")
             } else {
-                theme.wordId = req.body.words.split(',');
+                if(req.body.words){
+                    theme.wordId = req.body.words.split(',');
+                }
+
                 theme.save(function(err) {
                     if (err) {
                         res.json(err);
@@ -347,3 +350,24 @@ module.exports.getTheme = function(req, res) {
 
 
 };
+module.exports.searchTheme = function(req, res) {
+    Theme.find({
+        name: {
+            $regex: req.params.keyword,
+            $options: 'i'
+        }
+    }, function(err, themes) {
+        if (err) {
+            res.status(400).json(err)
+
+        }
+        if (themes) {
+            res.status(200).json(themes)
+        }
+
+    })
+
+
+
+}
+
