@@ -76,6 +76,16 @@ angular.module('app.services', [])
         deffered.reject(err);
       });
       return deffered.promise;
+    },
+    searchTheme: function(name) {
+      var deffered = $q.defer();
+      $http.get(url).then(function(themes) {
+          deffered.resolve(themes.data);
+        },
+        function(err) {
+          deffered.reject(err);
+        });
+      return deffered.promise;
     }
   };
 }])
@@ -105,7 +115,9 @@ angular.module('app.services', [])
           'eName': data.eName,
           'bName': data.bName,
           'image': data.image,
-          'secretKey': 'atanasov123'
+          'secretKey': 'atanasov123',
+          'maleVoice': data.maleVoice,
+          'femaleVoice': data.femaleVoice
         },
         success: function() {
           deffed.resolve();

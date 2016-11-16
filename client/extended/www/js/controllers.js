@@ -1,11 +1,14 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', '$ionicPopup', '$location', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-  // You can include any angular dependencies as parameters for this function
-  // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, WordsFactory, $ionicPopup, $location) {
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', '$ionicPopup', '$location', '$sce', '$cordovaMedia', 'BACKEND_API',
+  function($scope, $stateParams, WordsFactory, $ionicPopup, $location, $sce, $cordovaMedia, BACKEND_API) {
+    $scope.IMG = BACKEND_API.IMG;
     // Setting limit to 10 as default
     var limit = 10;
+
+    $scope.trustSrc = function(src) {
+      return $sce.trustAsResourceUrl($scope.IMG + src);
+    };
     // Ionic on page enter event listener
     $scope.$on("$ionicView.enter", function(event, data) {
       loadData();
@@ -72,10 +75,13 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, ThemeFactory) {
+  function($scope, $stateParams, ThemeFactory, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
+
     var limit = 10;
     $scope.$on("$ionicView.enter", function(event, data) {
       loadData();
@@ -93,10 +99,12 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('addThemeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('addThemeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', 'BACKEND_API', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, ThemeFactory, WordsFactory) {
+  function($scope, $stateParams, ThemeFactory, WordsFactory, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
 
     $scope.wordsToAdd = [];
     $scope.addTheme = addTheme;
@@ -156,8 +164,10 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', '$ionicPopup', '$location',
-  function($scope, $stateParams, ThemeFactory, WordsFactory, $ionicPopup, $location) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'WordsFactory', '$ionicPopup', '$location', 'BACKEND_API',
+  function($scope, $stateParams, ThemeFactory, WordsFactory, $ionicPopup, $location, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
 
     var id = $stateParams.id;
     $scope.id = id;
@@ -197,8 +207,11 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('editWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location',
-  function($scope, $stateParams, WordsFactory, $location) {
+.controller('editWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location', 'BACKEND_API',
+  function($scope, $stateParams, WordsFactory, $location, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
+
     // Getting id from route
     var id = $stateParams.id;
     $scope.editWord = editWord;
@@ -219,8 +232,11 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('editThemeCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location', 'ThemeFactory', '$ionicHistory',
-  function($scope, $stateParams, WordsFactory, $location, ThemeFactory, $ionicHistory) {
+.controller('editThemeCtrl', ['$scope', '$stateParams', 'WordsFactory', '$location', 'ThemeFactory', '$ionicHistory', 'BACKEND_API',
+  function($scope, $stateParams, WordsFactory, $location, ThemeFactory, $ionicHistory, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
+
     var id = $stateParams.id;
     $scope.wordsToAdd = [];
     $scope.addWord = addWord;
@@ -289,8 +305,10 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture', '$cordovaMedia', '$ionicPopup', '$cordovaFile',
-  function($scope, $stateParams, WordsFactory, $cordovaCapture, $cordovaMedia, $ionicPopup, $cordovaFile) {
+.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture', '$cordovaMedia', '$ionicPopup', '$cordovaFile', 'BACKEND_API',
+  function($scope, $stateParams, WordsFactory, $cordovaCapture, $cordovaMedia, $ionicPopup, $cordovaFile, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
 
     $scope.saveWord = saveWord;
     $scope.word = {
