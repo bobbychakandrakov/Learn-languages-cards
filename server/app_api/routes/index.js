@@ -27,26 +27,33 @@ router.post('/word', upload.array('files', 3) , function(req, res) {
         word.eName = req.body.eName || 'test';
         word.bName = req.body.bName || 'test';
         if(req.files[0]){
-            word.imagePath = 'uploads/' + req.files[0].filename;
-        }
-        if(req.files[1]){
-            word.maleVoice.url = 'uploads/' + req.files[1].filename || '';
-            word.maleVoice.media = req.files[1].mimetype;
-        }
-        if(req.files[2]){
-            word.femaleVoice.url = 'uploads/' + req.files[2].filename || '';
-            word.femaleVoice.media = req.files[2].mimetype;
+            if(req.files[0].mimetype.split('/')[0]==='image'){
+                word.imagePath = 'uploads/' + req.files[0].filename;
+            }
         }
 
-        word.save(function(err) {
+        if(req.files[1]){
+            if(req.files[1].mimetype.split('/')[1]==='audio'){
+                word.maleVoice.url = 'uploads/' + req.files[1].filename || '';
+                word.maleVoice.media = req.files[1].mimetype;
+            }
+
+        }
+        if(req.files[2]){
+            if(req.files[1].mimetype.split('/')[1]==='audio'){
+                word.femaleVoice.url = 'uploads/' + req.files[2].filename || '';
+                word.femaleVoice.media = req.files[2].mimetype;
+            }
+
+        }
+
+        word.save(function(err,word1) {
             if (err) {
                 console.log(err);
-                res.json(err);
+                res.status(400).json(err);
             } else {
                 console.log('Word saved!');
-                res.json({
-                    success: true
-                });
+                res.status(200).json(word1);
             }
 
         });
@@ -62,7 +69,7 @@ router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
     } else {
         Word.findById(req.params.id, function(err, word) {
             if (err) {
-                res.status(500).json(err);
+                res.status(400).json(err);
             } else {
 
                 word.eName = req.body.eName || word.eName;
@@ -77,7 +84,7 @@ router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
                                     word.imagePath = 'uploads/' + req.files[0].filename;
                                     word.save(function(err, word1) {
                                         if (err) {
-                                            res.status(500).json(err)
+                                            res.status(400).json(err)
                                         }
                                         res.json(word1);
                                     });
@@ -89,9 +96,9 @@ router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
                             word.imagePath = 'uploads/' + req.files[0].filename;
                             word.save(function(err, word1) {
                                 if (err) {
-                                    res.status(500).json(err)
+                                    res.status(400).json(err)
                                 }
-                                res.json(word1);
+                                res.status(200).json(word1);
                             });
                         }
                     })
@@ -102,9 +109,9 @@ router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
                     word.imagePath = word.imagePath
                     word.save(function(err, word1) {
                         if (err) {
-                            res.status(500).json(err)
+                            res.status(400).json(err)
                         }
-                        res.json(word1);
+                        res.status(200).json(word1);
                     });
 
                 }
@@ -125,7 +132,7 @@ router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
     } else {
         Word.findById(req.params.id, function(err, word) {
             if (err) {
-                res.status(500).json(err);
+                res.status(400).json(err);
             } else {
 
                 word.eName = req.body.eName || word.eName;
@@ -141,9 +148,9 @@ router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
                                     word.maleVoice.media = req.files[0].mimetype;
                                     word.save(function(err, word1) {
                                         if (err) {
-                                            res.status(500).json(err)
+                                            res.status(400).json(err)
                                         }
-                                        res.json(word1);
+                                        res.status(200).json(word1);
                                     });
 
                                 }
@@ -154,9 +161,9 @@ router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
                             word.maleVoice.media = req.files[0].mimetype;
                             word.save(function(err, word1) {
                                 if (err) {
-                                    res.status(500).json(err)
+                                    res.status(400).json(err)
                                 }
-                                res.json(word1);
+                                res.status(200).json(word1);
                             });
                         }
                     })
@@ -167,9 +174,9 @@ router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
                     word.maleVoice = word.maleVoice
                     word.save(function(err, word1) {
                         if (err) {
-                            res.status(500).json(err)
+                            res.status(400).json(err)
                         }
-                        res.json(word1);
+                        res.status(200).json(word1);
                     });
 
                 }
@@ -190,7 +197,7 @@ router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
     } else {
         Word.findById(req.params.id, function(err, word) {
             if (err) {
-                res.status(500).json(err);
+                res.status(400).json(err);
             } else {
 
                 word.eName = req.body.eName || word.eName;
@@ -206,9 +213,9 @@ router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
                                     word.femaleVoice.media = req.files[0].mimetype;
                                     word.save(function(err, word1) {
                                         if (err) {
-                                            res.status(500).json(err)
+                                            res.status(400).json(err)
                                         }
-                                        res.json(word1);
+                                        res.status(200).json(word1);
                                     });
 
                                 }
@@ -219,9 +226,9 @@ router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
                             word.femaleVoice.media = req.files[0].mimetype;
                             word.save(function(err, word1) {
                                 if (err) {
-                                    res.status(500).json(err)
+                                    res.status(400).json(err)
                                 }
-                                res.json(word1);
+                                res.status(200).json(word1);
                             });
                         }
                     })
@@ -232,9 +239,9 @@ router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
                     word.femaleVoice = word.femaleVoice
                     word.save(function(err, word1) {
                         if (err) {
-                            res.status(500).json(err)
+                            res.status(400).json(err)
                         }
-                        res.json(word1);
+                        res.status(200).json(word1);
                     });
 
                 }
@@ -249,82 +256,13 @@ router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
 });
 
 
-/*router.put('/word/:id', upload.single('image'), function(req, res) {
-    if (req.body.secretKey != 'atanasov123') {
-        res.status(401).json({
-            "message": "UnauthorizedError: Only administrator can add data!!"
-        });
-    } else {
-        Word.findById(req.params.id, function(err, word) {
-            if (err) {
-                res.status(500).json(err);
-            } else {
-
-                word.eName = req.body.eName || word.eName;
-                word.bName = req.body.bName || word.bName;
-                if (req.file) {
-                    fs.exists('./' + word.imagePath, function(exists) {
-                            if (exists) {
-                                fs.unlink('./' + word.imagePath, function(err) {
-                                    if (err) throw err;
-                                    else {
-                                        console.log('successfully deleted image!');
-                                        word.imagePath = 'uploads/' + req.file.filename;
-                                        word.save(function(err) {
-                                            if (err) {
-                                                console.log(err);
-                                                res.json(err);
-                                            } else {
-                                                console.log('Word saved!');
-                                                res.json({
-                                                    success: true
-                                                });
-                                            }
-
-                                        });
-                                    }
-
-                                });
-                            } else {
-                                word.imagePath = 'uploads/' + req.file.filename;
-                                word.save(function(err) {
-                                    if (err) {
-                                        console.log(err);
-                                        res.json(err);
-                                    } else {
-                                        console.log('Word saved!');
-                                        res.json({
-                                            success: true
-                                        });
-                                    }
-
-                                });
-                            }
-                        })
-
-
-                } else {
-                    word.imagePath = word.imagePath
-                    word.save(function(err, word1) {
-                        if (err) {
-                            res.status(500).json(err)
-                        }
-                        res.json(word1);
-                    });
-                }
-
-            }
-        });
-
-    }
-
-});*/
 
 
 router.get('/word/:id', ctrlCard.getWord);
 router.delete('/word/:id', ctrlCard.deleteWord);
 
 //router.put('/word/:id', ctrlCard.updateWord);
+
 //theme routes
 router.post('/theme', ctrlCard.createTheme);
 router.post('/theme/word/:themeId', ctrlCard.addWordToTheme);

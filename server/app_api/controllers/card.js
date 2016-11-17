@@ -3,6 +3,7 @@ var Word = mongoose.model('Word');
 var Theme = mongoose.model('Theme');
 var multer = require('multer');
 var fs = require('fs');
+/*
 module.exports.createWord = function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
@@ -58,6 +59,7 @@ module.exports.createWord = function(req, res) {
     }
 
 };
+*/
 
 
 module.exports.getWord = function(req, res) {
@@ -88,7 +90,10 @@ module.exports.deleteWord = function(req, res) {
             fs.exists('./' + word.imagePath, function(exists) {
                 if (exists) {
                     fs.unlink('./' + word.imagePath, function(err) {
-                        if (err) throw err;
+                        if (err)  {
+                            res.status(400).json(err)
+
+                        }
                         console.log('successfully deleted image!');
                     });
                 }
@@ -183,7 +188,7 @@ module.exports.createTheme = function(req, res) {
                     if (err) {
                         res.json(err);
                     } else {
-                        res.json(theme);
+                        res.status(200).json(theme);
                     }
 
                 });
@@ -224,7 +229,7 @@ module.exports.getLimitWords = function(req, res) {
     var data = {};
     Word.find({}).limit(queryParams.limit).exec(function(err, results) {
         if (err) {
-            throw err;
+            res.status(400).json(err)
         }
         data.results = results;
         res.json(results)
@@ -243,7 +248,7 @@ module.exports.addWordToTheme = function(req, res) {
             if (err) {
                 res.json(err)
             } else {
-                res.json(" words was added")
+                res.status(200).json("words was added")
             }
 
         });
@@ -270,7 +275,7 @@ module.exports.getThemeWords = function(req, res) {
                 if (err) {
                     res.status(400).json(err)
                 } else {
-                    res.json(words)
+                    res.status(200).json(words)
 
                 }
 
@@ -291,9 +296,9 @@ module.exports.updateTheme = function(req, res) {
             }
             theme.save(function(err) {
                 if (err) {
-                    res.json(err)
+                    res.status(400).json(err)
                 } else {
-                    res.json("theme was updated")
+                    res.status(200).json(theme)
                 }
 
             })
@@ -325,10 +330,10 @@ module.exports.getLimitThemes = function(req, res) {
     var data = {};
     Theme.find({}).limit(queryParams.limit).exec(function(err, results) {
         if (err) {
-            throw err;
+            res.status(400).json(err)
         }
         data.results = results;
-        res.json(results)
+        res.status(200).json(results)
     });
 
 
