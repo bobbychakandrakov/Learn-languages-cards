@@ -90,7 +90,7 @@ module.exports.deleteWord = function(req, res) {
             fs.exists('./' + word.imagePath, function(exists) {
                 if (exists) {
                     fs.unlink('./' + word.imagePath, function(err) {
-                        if (err)  {
+                        if (err) {
                             res.status(400).json(err)
 
                         }
@@ -180,7 +180,7 @@ module.exports.createTheme = function(req, res) {
             if (theme1) {
                 res.status(400).json("the theme " + req.body.name + " already exists!")
             } else {
-                if(req.body.words){
+                if (req.body.words) {
                     theme.wordId = req.body.words.split(',');
                 }
 
@@ -291,7 +291,7 @@ module.exports.updateTheme = function(req, res) {
     Theme.findById(req.params.themeId, function(err, theme) {
         if (theme) {
             theme.name = req.body.name || theme.name;
-            if(req.body.words){
+            if (req.body.words) {
                 theme.wordId = req.body.words.split(',')
             }
             theme.save(function(err) {
@@ -375,4 +375,3 @@ module.exports.searchTheme = function(req, res) {
 
 
 }
-

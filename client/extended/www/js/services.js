@@ -109,16 +109,17 @@ angular.module('app.services', [])
     saveWord: function(data) {
       // Using form data jquery
       var deffed = $q.defer();
+      var form = new FormData();
+      form.append('eName', data.eName);
+      form.append('bName', data.bName);
+      form.append('secretKey', 'atanasov123');
+      form.append('files', data.image);
+      form.append('files', data.maleVoice);
+      form.append('files', data.femaleVoice);
+      form.headers('Content-Type', undefined);
       $.ajaxFormData(url, {
         method: 'POST',
-        data: {
-          'eName': data.eName,
-          'bName': data.bName,
-          'image': data.image,
-          'secretKey': 'atanasov123',
-          'maleVoice': data.maleVoice,
-          'femaleVoice': data.femaleVoice
-        },
+        data: form,
         success: function() {
           deffed.resolve();
         },
@@ -148,12 +149,12 @@ angular.module('app.services', [])
     },
     updateWord: function(id, word) {
       var deffed = $q.defer();
-      $.ajaxFormData(url + '/' + id, {
+      $.ajaxFormData(url + '/image/' + id, {
         method: 'PUT',
         data: {
           'eName': word.eName,
           'bName': word.bName,
-          'image': word.image,
+          'files': word.image,
           'secretKey': 'atanasov123'
         },
         success: function() {

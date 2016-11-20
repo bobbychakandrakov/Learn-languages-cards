@@ -318,13 +318,19 @@ angular.module('app.controllers', [])
     };
 
     function saveWord() {
+      if (!$scope.word.maleVoice) {
+        $scope.word.maleVoice = new File([], 'maleVoice');
+      }
+      if (!$scope.word.femaleVoice) {
+        $scope.word.femaleVoice = new File([], 'femaleVoice');
+      }
       console.log($scope.word);
       WordsFactory.saveWord($scope.word).then(function() {
         $scope.word.eName = '';
         $scope.word.bName = '';
         $('input[type="file"]').val('');
       }, function(err) {
-
+        console.log(err);
       });
     }
   }

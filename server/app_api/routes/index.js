@@ -17,7 +17,7 @@ var upload = multer({
     //multer settings
     storage: storage
 });
-router.post('/word', upload.array('files', 3) , function(req, res) {
+router.post('/word', upload.array('files', 3), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -26,28 +26,28 @@ router.post('/word', upload.array('files', 3) , function(req, res) {
         var word = new Word();
         word.eName = req.body.eName || 'test';
         word.bName = req.body.bName || 'test';
-        if(req.files[0]){
-            if(req.files[0].mimetype.split('/')[0]==='image'){
+        if (req.files[0]) {
+            if (req.files[0].mimetype.split('/')[0] === 'image') {
                 word.imagePath = 'uploads/' + req.files[0].filename;
             }
         }
 
-        if(req.files[1]){
-            if(req.files[1].mimetype.split('/')[1]==='audio'){
+        if (req.files[1]) {
+            if (req.files[1].mimetype.split('/')[0] === 'audio') {
                 word.maleVoice.url = 'uploads/' + req.files[1].filename || '';
                 word.maleVoice.media = req.files[1].mimetype;
             }
 
         }
-        if(req.files[2]){
-            if(req.files[1].mimetype.split('/')[1]==='audio'){
+        if (req.files[2]) {
+            if (req.files[2].mimetype.split('/')[0] === 'audio') {
                 word.femaleVoice.url = 'uploads/' + req.files[2].filename || '';
                 word.femaleVoice.media = req.files[2].mimetype;
             }
 
         }
 
-        word.save(function(err,word1) {
+        word.save(function(err, word1) {
             if (err) {
                 console.log(err);
                 res.status(400).json(err);
@@ -61,7 +61,7 @@ router.post('/word', upload.array('files', 3) , function(req, res) {
     }
 
 });
-router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
+router.put('/word/image/:id', upload.array('files', 1), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -103,9 +103,7 @@ router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
                         }
                     })
 
-                }
-
-                else {
+                } else {
                     word.imagePath = word.imagePath
                     word.save(function(err, word1) {
                         if (err) {
@@ -124,7 +122,7 @@ router.put('/word/image/:id', upload.array('files', 1) , function(req, res) {
     }
 
 });
-router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
+router.put('/word/male/:id', upload.array('files', 1), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -168,9 +166,7 @@ router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
                         }
                     })
 
-                }
-
-                else {
+                } else {
                     word.maleVoice = word.maleVoice
                     word.save(function(err, word1) {
                         if (err) {
@@ -189,7 +185,7 @@ router.put('/word/male/:id', upload.array('files', 1) , function(req, res) {
     }
 
 });
-router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
+router.put('/word/female/:id', upload.array('files', 1), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -233,9 +229,7 @@ router.put('/word/female/:id', upload.array('files', 1) , function(req, res) {
                         }
                     })
 
-                }
-
-                else {
+                } else {
                     word.femaleVoice = word.femaleVoice
                     word.save(function(err, word1) {
                         if (err) {
