@@ -38,4 +38,5 @@ gracefulShutdown = function(msg, callback) {
 //require all models
 require('./word');
 require('./theme');
+require('./package');
 

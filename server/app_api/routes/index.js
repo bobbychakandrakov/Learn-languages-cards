@@ -243,6 +243,10 @@ router.get('/theme/search/:keyword', ctrlCard.searchTheme);
 
 router.get('/word/search/:keyword', ctrlCard.search);
 router.get('/word/limit/:limit', ctrlCard.getLimitWords);
-
+//themes Packages
+router.post('/package', ctrlCard.createPackage);
+router.get('/package/theme/:packageCode',ctrlCard.getPackage)
+router.put('/package/:id', ctrlCard.updatePackage);
+router.delete('/package/:id', ctrlCard.deletePackage);
 
 module.exports = router;

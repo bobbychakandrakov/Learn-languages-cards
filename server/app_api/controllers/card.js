@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Word = mongoose.model('Word');
 var Theme = mongoose.model('Theme');
+var Package = mongoose.model('Package');
 var multer = require('multer');
 var fs = require('fs');
 /*
@@ -166,6 +167,8 @@ module.exports.createTheme = function(req, res) {
         });
 
     } else {
+
+
         var theme = Theme();
         theme.name = req.body.name;
 
@@ -291,6 +294,7 @@ module.exports.updateTheme = function(req, res) {
     Theme.findById(req.params.themeId, function(err, theme) {
         if (theme) {
             theme.name = req.body.name || theme.name;
+
             if (req.body.words) {
                 theme.wordId = req.body.words.split(',')
             }
@@ -375,3 +379,125 @@ module.exports.searchTheme = function(req, res) {
 
 
 }
+module.exports.createPackage = function(req, res) {
+
+    if (req.body.secretKey != 'atanasov123') {
+        res.status(401).json({
+            "message": "UnauthorizedError: Only administrator can add data!!"
+        });
+
+    } else {
+        function stringGen(len)
+        {
+            var text = "";
+
+            var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < len; i++ )
+                text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+            return text;
+        }
+
+        var package = Package();
+        package.name=req.body.name;
+        package.packageCode=stringGen(6);
+        if (req.body.themeId) {
+            package.themeId = req.body.themeId.split(',')
+        }
+
+
+        package.save(function(err) {
+            if (err) {
+                res.json(err);
+            } else {
+                res.status(200).json(package);
+            }
+
+        })
+
+    }
+
+
+};
+module.exports.getPackage= function(req, res) {
+
+
+    Package.find({packageCode:req.params.packageCode}, function(err, package) {
+
+        if (err) {
+            res.status(400).json(err)
+        } else {
+                    res.status(200).json(package)
+
+        }
+
+    });
+
+
+};
+module.exports.updatePackage = function(req, res) {
+
+    if (req.body.secretKey != 'atanasov123') {
+        res.status(401).json({
+            "message": "UnauthorizedError: Only administrator can add data!!"
+        });
+
+    } else {
+        Package.findById(req.params.id, function(err, package) {
+            if (err) {
+                res.status(400).json(err)
+
+            }
+            if (package) {
+                function stringGen(len)
+                {
+                    var text = "";
+
+                    var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+                    for( var i=0; i < len; i++ )
+                        text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+                    return text;
+                }
+
+                package.name=req.body.name || package.name;
+                package.packageCode=stringGen(6);
+                if (req.body.themeId) {
+                    package.themeId = req.body.themeId.split(',')
+                }else{
+                    package.themeId=package.themeId;
+                }
+
+
+                package.save(function(err) {
+                    if (err) {
+                        res.json(err);
+                    } else {
+                        res.status(200).json(package);
+                    }
+
+                })
+
+            }
+
+        })
+
+    }
+
+
+};
+module.exports.deletePackage = function(req, res) {
+
+
+    Package.findByIdAndRemove(req.params.id, function(err,package) {
+        if (err) {
+            res.json(err)
+        } else {
+            res.json(" package was deleted")
+        }
+    })
+
+
+};

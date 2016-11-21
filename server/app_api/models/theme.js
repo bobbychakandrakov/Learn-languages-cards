@@ -8,6 +8,7 @@ var themeSchema = new mongoose.Schema({
     wordId: {
         type:Object
     }
+
 });
 
 
