@@ -30,6 +30,26 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.packages', {
+    url: '/page4',
+    views: {
+      'tab3': {
+        templateUrl: 'templates/packages.html',
+        controller: 'packagesCtrl'
+      }
+    }
+  })
+
+  .state('tabsController.addPackages', {
+    url: '/add/package',
+    views: {
+      'tab3': {
+        templateUrl: 'templates/add-package.html',
+        controller: 'addPackageCtrl'
+      }
+    }
+  })
+
   .state('tabsController.theme', {
     url: '/theme/:name/:id',
     views: {

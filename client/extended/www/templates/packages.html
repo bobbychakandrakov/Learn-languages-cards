@@ -1,0 +1,14 @@
+<ion-view title="Packages" id="page4">
+  <ion-content padding="true" class="has-header">
+    <ion-list id="package-list1">
+      <a class="button button-block button-balanced" href="#/page1/add/package">
+        Add package
+      </a>
+      <ion-item ng-repeat="package in packages">
+        <a class="item-icon-left" href="">
+          {{package.name}}
+          <span class="badge badge-royal">{{package.packageCode}}</span>
+        </a>
+    </ion-list>
+  </ion-content>
+</ion-view>

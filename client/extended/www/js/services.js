@@ -109,17 +109,16 @@ angular.module('app.services', [])
     saveWord: function(data) {
       // Using form data jquery
       var deffed = $q.defer();
-      var form = new FormData();
-      form.append('eName', data.eName);
-      form.append('bName', data.bName);
-      form.append('secretKey', 'atanasov123');
-      form.append('files', data.image);
-      form.append('files', data.maleVoice);
-      form.append('files', data.femaleVoice);
-      form.headers('Content-Type', undefined);
       $.ajaxFormData(url, {
         method: 'POST',
-        data: form,
+        data: {
+          'eName': data.eName,
+          'bName': data.bName,
+          'secretKey': 'atanasov123',
+          'image': data.image,
+          'maleVoice': data.maleVoice,
+          'femaleVoice': data.femaleVoice
+        },
         success: function() {
           deffed.resolve();
         },
@@ -176,6 +175,48 @@ angular.module('app.services', [])
       return deffed.promise;
     }
 
+  };
+}])
+
+.factory('PackageFactory', ['$http', '$q', 'BACKEND_API', function($http, $q, BACKEND_API) {
+  const url = BACKEND_API.PACKAGE;
+  return {
+    createPackage: function(data) {
+      var deffered = $q.defer();
+      $http.post(url, data).then(function(package) {
+        deffered.resolve(package);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    getAll: function() {
+      var deffered = $q.defer();
+      $http.get(url + 's').then(function(packages) {
+        deffered.resolve(packages.data);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    deletePackage: function(id) {
+      var deffered = $q.defer();
+      $http.delete(url + '/' + id).then(function(package) {
+        deffered.resolve(package);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    updatePackage: function(id, data) {
+      var deffered = $q.defer();
+      $http.put(url + '/' + id, data).then(function(package) {
+        deffered.resolve(package);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    }
   };
 }])
 

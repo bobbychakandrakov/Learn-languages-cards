@@ -18,13 +18,17 @@
                   <button class="button button-block button-positive" ng-click="editWord(word._id)"><i class="icon ion-gear-b"></i></button>
                   <button class="button button-block button-assertive" ng-click="deleteWord(word._id, word)"><i class="icon ion-trash-a"></i></button>
               </div>
-              <audio controls ng-show="word.maleVoice.url">
+              <audio ng-show="word.maleVoice.url" id="male{{word._id}}">
                     <source ng-src="{{trustSrc(word.maleVoice.url)}}" type="{{word.maleVoice.media}}">
              </audio>
              <br>
-              <audio controls ng-show="word.femaleVoice.url">
+              <audio ng-show="word.femaleVoice.url" id="female{{word._id}}">
                     <source ng-src="{{trustSrc(word.femaleVoice.url)}}" type="{{word.maleVoice.media}}">
              </audio>
+             <div class="button-bar">
+                 <button type="button" class="button button-block button-energized" ng-show="word.maleVoice.url" ng-click="playMaleVoice(word._id)"><i class="icon ion-man"></i></button>
+                 <button type="button" class="button button-block button-royal" ng-show="word.femaleVoice.url" ng-click="playFemaleVoice(word._id)"><i class="icon ion-woman"></i></button>
+             </div>
           </a>
       </div>
     </form>

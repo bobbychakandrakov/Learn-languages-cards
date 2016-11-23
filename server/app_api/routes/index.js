@@ -17,7 +17,16 @@ var upload = multer({
     //multer settings
     storage: storage
 });
-router.post('/word', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'maleVoice', maxCount: 1 },{ name: 'femaleVoice', maxCount: 1 }]), function(req, res) {
+router.post('/word', upload.fields([{
+    name: 'image',
+    maxCount: 1
+}, {
+    name: 'maleVoice',
+    maxCount: 1
+}, {
+    name: 'femaleVoice',
+    maxCount: 1
+}]), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -27,13 +36,13 @@ router.post('/word', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'mal
         word.eName = req.body.eName || 'test';
         word.bName = req.body.bName || 'test';
 
-        if (req.files['image']!==undefined) {
+        if (req.files['image'] !== undefined) {
             if (req.files['image'][0].mimetype.split('/')[0] === 'image') {
                 word.imagePath = 'uploads/' + req.files[['image']][0].filename;
             }
         }
 
-        if (req.files['maleVoice']!==undefined) {
+        if (req.files['maleVoice'] !== undefined) {
 
             if (req.files['maleVoice'][0].mimetype.split('/')[0] === 'audio') {
                 word.maleVoice.url = 'uploads/' + req.files['maleVoice'][0].filename || '';
@@ -41,7 +50,7 @@ router.post('/word', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'mal
             }
 
         }
-        if (req.files['femaleVoice']!==undefined) {
+        if (req.files['femaleVoice'] !== undefined) {
             if (req.files['femaleVoice'][0].mimetype.split('/')[0] === 'audio') {
                 word.femaleVoice.url = 'uploads/' + req.files['femaleVoice'][0].filename || '';
                 word.femaleVoice.media = req.files['femaleVoice'][0].mimetype;
@@ -63,7 +72,10 @@ router.post('/word', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'mal
     }
 
 });
-router.put('/word/image/:id',upload.fields([{ name: 'image', maxCount: 1 }]), function(req, res) {
+router.put('/word/image/:id', upload.fields([{
+    name: 'image',
+    maxCount: 1
+}]), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -76,7 +88,7 @@ router.put('/word/image/:id',upload.fields([{ name: 'image', maxCount: 1 }]), fu
 
                 word.eName = req.body.eName || word.eName;
                 word.bName = req.body.bName || word.bName;
-                if (req.files['image']!==undefined) {
+                if (req.files['image'] !== undefined) {
                     fs.exists('./' + word.imagePath, function(exists) {
                         if (exists) {
                             fs.unlink('./' + word.imagePath, function(err) {
@@ -124,7 +136,13 @@ router.put('/word/image/:id',upload.fields([{ name: 'image', maxCount: 1 }]), fu
     }
 
 });
-router.put('/word/voice/:id', upload.fields([{ name: 'maleVoice', maxCount: 1 },{ name: 'femaleVoice', maxCount: 1 }]), function(req, res) {
+router.put('/word/voice/:id', upload.fields([{
+    name: 'maleVoice',
+    maxCount: 1
+}, {
+    name: 'femaleVoice',
+    maxCount: 1
+}]), function(req, res) {
     if (req.body.secretKey != 'atanasov123') {
         res.status(401).json({
             "message": "UnauthorizedError: Only administrator can add data!!"
@@ -137,7 +155,7 @@ router.put('/word/voice/:id', upload.fields([{ name: 'maleVoice', maxCount: 1 },
 
                 word.eName = req.body.eName || word.eName;
                 word.bName = req.body.bName || word.bName;
-                if (req.files['maleVoice']!==undefined) {
+                if (req.files['maleVoice'] !== undefined) {
                     fs.exists('./' + word.maleVoice.url, function(exists) {
                         if (exists) {
                             fs.unlink('./' + word.maleVoice.url, function(err) {
@@ -150,7 +168,7 @@ router.put('/word/voice/:id', upload.fields([{ name: 'maleVoice', maxCount: 1 },
                                         if (err) {
                                             res.status(400).json(err)
                                         }
-                                       // res.status(200).json(word1);
+                                        // res.status(200).json(word1);
                                     });
 
                                 }
@@ -169,7 +187,7 @@ router.put('/word/voice/:id', upload.fields([{ name: 'maleVoice', maxCount: 1 },
                     })
 
                 }
-                if (req.files['femaleVoice']!==undefined) {
+                if (req.files['femaleVoice'] !== undefined) {
                     fs.exists('./' + word.femaleVoice.url, function(exists) {
                         if (exists) {
                             fs.unlink('./' + word.femaleVoice.url, function(err) {
@@ -245,7 +263,8 @@ router.get('/word/search/:keyword', ctrlCard.search);
 router.get('/word/limit/:limit', ctrlCard.getLimitWords);
 //themes Packages
 router.post('/package', ctrlCard.createPackage);
-router.get('/package/theme/:packageCode',ctrlCard.getPackage)
+router.get('/packages', ctrlCard.getPackages);
+router.get('/package/theme/:packageCode', ctrlCard.getPackage)
 router.put('/package/:id', ctrlCard.updatePackage);
 router.delete('/package/:id', ctrlCard.deletePackage);
 

@@ -5,7 +5,7 @@ angular.module('app.controllers', [])
     $scope.IMG = BACKEND_API.IMG;
     // Setting limit to 10 as default
     var limit = 10;
-
+    var myAudio;
     $scope.trustSrc = function(src) {
       return $sce.trustAsResourceUrl($scope.IMG + src);
     };
@@ -18,9 +18,35 @@ angular.module('app.controllers', [])
     $scope.deleteWord = deleteWord;
     $scope.searchWord = searchWord;
     $scope.editWord = editWord;
+    $scope.playMaleVoice = playMaleVoice;
+    $scope.playFemaleVoice = playFemaleVoice;
     $scope.search = {
       word: ''
     };
+
+    function playMaleVoice(id) {
+      if (myAudio) {
+        myAudio.pause();
+      }
+      myAudio = document.getElementById('male' + id);
+      if (myAudio.paused) {
+        myAudio.play();
+      } else {
+        myAudio.pause();
+      }
+    }
+
+    function playFemaleVoice(id) {
+      if (myAudio) {
+        myAudio.pause();
+      }
+      myAudio = document.getElementById('female' + id);
+      if (myAudio.paused) {
+        myAudio.play();
+      } else {
+        myAudio.pause();
+      }
+    }
 
     function editWord(id) {
       $location.path('/page1/edit/word/' + id);
@@ -96,6 +122,48 @@ angular.module('app.controllers', [])
     }
 
 
+  }
+])
+
+.controller('packagesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'PackageFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+  // You can include any angular dependencies as parameters for this function
+  // TIP: Access Route Parameters for your page via $stateParams.parameterName
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, PackageFactory) {
+    PackageFactory.getAll().then(function(packages) {
+      console.log(packages);
+      $scope.packages = packages;
+    }, function(err) {
+      console.log(err);
+    });
+  }
+])
+
+.controller('addPackageCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'PackageFactory', '$ionicHistory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+  // You can include any angular dependencies as parameters for this function
+  // TIP: Access Route Parameters for your page via $stateParams.parameterName
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, PackageFactory, $ionicHistory) {
+    $scope.packageData = {
+      name: '',
+      themeId: '',
+      secretKey: 'atanasov123'
+    };
+    $scope.createPackage = createPackage;
+
+    ThemeFactory.getThemes().then(function(themes) {
+      $scope.themes = themes;
+    }, function(err) {
+      console.log(err);
+    });
+
+    function createPackage() {
+      if ($scope.packageData.name != '' && $scope.packageData.themeId != '') {
+        PackageFactory.createPackage($scope.packageData).then(function(pack) {
+          console.log(pack);
+        }, function(err) {
+          console.log(err);
+        });
+      }
+    }
   }
 ])
 

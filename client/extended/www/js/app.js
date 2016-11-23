@@ -11,17 +11,20 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
 
 })
 
-.constant('BACKEND_API', {
-  THEMES: 'http://192.168.213.2:3333/api/theme',
-  WORDS: 'http://192.168.213.2:3333/api/word',
-  IMG: 'http://192.168.213.2:3333/'
-})
-
-// Test Cloud
 // .constant('BACKEND_API', {
-//   THEMES: 'https://demo-project-bobbychakandrakov.c9users.io:8080/api/theme',
-//   WORDS: 'https://demo-project-bobbychakandrakov.c9users.io:8080/api/word'
+//   THEMES: 'http://192.168.213.2:3333/api/theme',
+//   PACKAGE: 'http://192.168.213.2:3333/api/package',
+//   WORDS: 'http://192.168.213.2:3333/api/word',
+//   IMG: 'http://192.168.213.2:3333/'
 // })
+
+//Test Cloud
+.constant('BACKEND_API', {
+  THEMES: 'https://demo-project-bobbychakandrakov.c9users.io/api/theme',
+  PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package',
+  WORDS: 'https://demo-project-bobbychakandrakov.c9users.io/api/word',
+  IMG: 'https://demo-project-bobbychakandrakov.c9users.io/'
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

@@ -387,23 +387,22 @@ module.exports.createPackage = function(req, res) {
         });
 
     } else {
-        function stringGen(len)
-        {
+        function stringGen(len) {
             var text = "";
 
             var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-            for( var i=0; i < len; i++ )
+            for (var i = 0; i < len; i++)
                 text += charset.charAt(Math.floor(Math.random() * charset.length));
 
             return text;
         }
 
         var package = Package();
-        package.name=req.body.name;
-        package.packageCode=stringGen(6);
+        package.name = req.body.name;
+        package.packageCode = stringGen(6);
         if (req.body.themeId) {
-            package.themeId = req.body.themeId.split(',')
+            package.themeId = req.body.themeId;
         }
 
 
@@ -420,15 +419,34 @@ module.exports.createPackage = function(req, res) {
 
 
 };
-module.exports.getPackage= function(req, res) {
+module.exports.getPackage = function(req, res) {
 
 
-    Package.find({packageCode:req.params.packageCode}, function(err, package) {
+    Package.find({
+        packageCode: req.params.packageCode
+    }, function(err, package) {
 
         if (err) {
             res.status(400).json(err)
         } else {
-                    res.status(200).json(package)
+            res.status(200).json(package)
+
+        }
+
+    });
+
+
+};
+
+module.exports.getPackages = function(req, res) {
+
+
+    Package.find({}, function(err, packages) {
+
+        if (err) {
+            res.status(400).json(err)
+        } else {
+            res.status(200).json(packages)
 
         }
 
@@ -450,24 +468,23 @@ module.exports.updatePackage = function(req, res) {
 
             }
             if (package) {
-                function stringGen(len)
-                {
+                function stringGen(len) {
                     var text = "";
 
                     var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-                    for( var i=0; i < len; i++ )
+                    for (var i = 0; i < len; i++)
                         text += charset.charAt(Math.floor(Math.random() * charset.length));
 
                     return text;
                 }
 
-                package.name=req.body.name || package.name;
-                package.packageCode=stringGen(6);
+                package.name = req.body.name || package.name;
+                package.packageCode = stringGen(6);
                 if (req.body.themeId) {
                     package.themeId = req.body.themeId.split(',')
-                }else{
-                    package.themeId=package.themeId;
+                } else {
+                    package.themeId = package.themeId;
                 }
 
 
@@ -491,7 +508,7 @@ module.exports.updatePackage = function(req, res) {
 module.exports.deletePackage = function(req, res) {
 
 
-    Package.findByIdAndRemove(req.params.id, function(err,package) {
+    Package.findByIdAndRemove(req.params.id, function(err, package) {
         if (err) {
             res.json(err)
         } else {
