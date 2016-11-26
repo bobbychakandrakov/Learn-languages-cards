@@ -402,7 +402,8 @@ module.exports.createPackage = function(req, res) {
         package.name = req.body.name;
         package.packageCode = stringGen(6);
         if (req.body.themeId) {
-            package.themeId = req.body.themeId;
+            package.themeId = req.body.themeId.split(',');
+
         }
 
 
@@ -422,14 +423,32 @@ module.exports.createPackage = function(req, res) {
 module.exports.getPackage = function(req, res) {
 
 
-    Package.find({
+    Package.findOne({
         packageCode: req.params.packageCode
     }, function(err, package) {
 
         if (err) {
             res.status(400).json(err)
         } else {
-            res.status(200).json(package)
+            if(package){
+                Theme.find( {_id : { $in : package.themeId.split(',') } } ,function (err,themes) {
+                        if (err) {
+                            res.status(400).json(err)
+                        }else {
+                            res.status(200).json({
+                                packageCode: package.packageCode,
+                                packageName: package.name,
+                                themes: themes
+                            })
+
+                        }
+                    }
+
+                );
+
+            }else{
+                res.status(400).json("cannot find package")
+            }
 
         }
 
@@ -441,12 +460,20 @@ module.exports.getPackage = function(req, res) {
 module.exports.getPackages = function(req, res) {
 
 
-    Package.find({}, function(err, packages) {
+    Package.findOne({}, function(err, packages) {
 
         if (err) {
             res.status(400).json(err)
         } else {
-            res.status(200).json(packages)
+
+
+            Theme.find( {_id : { $in : packages.themeId } },function (err,themes) {
+
+                res.status(200).json(themes)
+                }
+
+            );
+
 
         }
 
