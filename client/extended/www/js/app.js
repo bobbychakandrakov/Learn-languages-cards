@@ -11,6 +11,7 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
 
 })
 
+//Development
 // .constant('BACKEND_API', {
 //   THEMES: 'http://192.168.213.2:3333/api/theme',
 //   PACKAGE: 'http://192.168.213.2:3333/api/package',
