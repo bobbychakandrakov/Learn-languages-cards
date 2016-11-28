@@ -1,81 +1,82 @@
 angular.module('app.services', [])
 
-.factory('ThemeFactory', [function() {
+.factory('ThemeFactory', ['$http', '$q', 'BACKEND_API', function($http, $q, BACKEND_API) {
 
-  var themes = {
-    'School': [{
-      en: 'Chair',
-      bg: 'Стол',
-      image: 'img/chair.jpg'
-    }, {
-      en: 'Desk',
-      bg: 'Бюро',
-      image: 'img/desk.jpg'
-    }, {
-      en: 'Pen',
-      bg: 'Химикал',
-      image: 'img/pen.jpg'
-    }, {
-      en: 'Pencil',
-      bg: 'Молив',
-      image: 'img/pencil.jpg'
-    }],
-    'Animals': [{
-      en: 'Cat',
-      bg: 'Котка',
-      image: 'img/cat.jpg'
-    }, {
-      en: 'Dog',
-      bg: 'Куче',
-      image: 'img/dog.jpg'
-    }, {
-      en: 'Rabbit',
-      bg: 'Заек',
-      image: 'img/rabbit.jpg'
-    }]
-  };
-  var themeNames = ['School', 'Animals'];
+  const url = BACKEND_API.THEMES;
+
   return {
     getThemeWords: function(name) {
-      return themes[name];
+
     },
-    getThemes: function() {
-      return themeNames;
+    getThemes: function(limit) {
+      limit = limit || 10;
+      var deffered = $q.defer();
+      $http.get(url + '/limit/' + limit).then(function(themes) {
+        deffered.resolve(themes.data);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    getTheme: function(id) {
+      var themeToSend = {};
+      var deffered = $q.defer();
+      $http.get(url + '/' + id).then(function(theme) {
+        themeToSend.data = theme.data;
+        $http.get(url + '/word/' + id).then(function(words) {
+          themeToSend.words = words.data;
+          deffered.resolve(themeToSend);
+        }, function(err) {
+          deffered.reject(err);
+        });
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    getThemeWords: function(id) {
+      var deffered = $q.defer();
+      $http.get(url + '/word/' + id).then(function(theme) {
+        deffered.resolve(theme.data);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
     }
   };
 }])
 
-.factory('WordsFactory', ['$http', '$q', function($http, $q) {
+.factory('WordsFactory', ['$http', '$q', 'BACKEND_API', function($http, $q, BACKEND_API) {
 
-  const url = 'http://192.168.213.2:3333/api/word';
+  const url = BACKEND_API.WORDS;
   return {
     getWords: function(limit) {
       limit = limit || 10;
-      var deffed = $q.defer();
+      var deffered = $q.defer();
       $http.get(url + '/limit/' + limit).then(function(words) {
-        deffed.resolve(words.data);
+        deffered.resolve(words.data);
       }, function(err) {
-        deffed.reject(err);
+        deffered.reject(err);
       });
-      return deffed.promise;
+      return deffered.promise;
     },
     getWord: function(id) {
-      var deffed = $q.defer();
+      var deffered = $q.defer();
       $http.get(url + '/' + id).then(function(word) {
-        deffed.resolve(word.data);
+        deffered.resolve(word.data);
       }, function(err) {
-        deffed.reject(err);
+        deffered.reject(err);
       });
-      return deffed.promise;
+      return deffered.promise;
     },
     searchWord: function(word) {
-      var deffed = $q.defer();
+      var deffered = $q.defer();
       $http.get(url + '/search/' + word).then(function(words) {
-        deffed.resolve(words.data);
+        deffered.resolve(words.data);
       }, function(err) {
-        deffed.reject(err);
+        deffered.reject(err);
       });
-      return deffed.promise;
+      return deffered.promise;
     }
   };
 }])

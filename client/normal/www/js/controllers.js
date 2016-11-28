@@ -1,10 +1,12 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, WordsFactory) {
+  function($scope, $stateParams, WordsFactory, BACKEND_API) {
     var limit = 10;
+
+    $scope.IMG = BACKEND_API.IMG;
 
     $scope.$on("$ionicView.enter", function(event, data) {
       loadData();
@@ -47,16 +49,69 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, ThemeFactory) {
-    $scope.themes = ThemeFactory.getThemes();
+  function($scope, $stateParams, ThemeFactory, BACKEND_API) {
+
+    $scope.IMG = BACKEND_API.IMG;
+
+    ThemeFactory.getThemes().then(function(themes) {
+      $scope.themes = themes;
+    }, function(err) {
+      console.log(err);
+    });
 
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', function($scope, $stateParams, ThemeFactory) {
-  $scope.title = $stateParams.name;
-  $scope.words = ThemeFactory.getThemeWords($stateParams.name);
-}])
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API',
+  function($scope, $stateParams, ThemeFactory, BACKEND_API) {
+
+    var id = $stateParams.id;
+    var myAudio;
+
+    $scope.playMaleVoice = playMaleVoice;
+    $scope.playFemaleVoice = playFemaleVoice;
+
+    $scope.$on("$ionicView.enter", function(event, data) {
+      loadData();
+    });
+
+    $scope.IMG = BACKEND_API.IMG;
+
+    function loadData() {
+      ThemeFactory.getTheme(id).then(function(theme) {
+        $scope.theme = theme;
+        console.log(theme);
+      }, function(err) {
+        console.log(err);
+      });
+    }
+
+    function playMaleVoice(id) {
+      if (myAudio) {
+        myAudio.pause();
+      }
+      myAudio = document.getElementById('male' + id);
+      if (myAudio.paused) {
+        myAudio.play();
+      } else {
+        myAudio.pause();
+      }
+    }
+
+    function playFemaleVoice(id) {
+      if (myAudio) {
+        myAudio.pause();
+      }
+      myAudio = document.getElementById('female' + id);
+      if (myAudio.paused) {
+        myAudio.play();
+      } else {
+        myAudio.pause();
+      }
+    }
+
+  }
+])

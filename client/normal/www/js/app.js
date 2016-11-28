@@ -5,11 +5,27 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services',])
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives', 'app.services', ])
 
-.config(function($ionicConfigProvider){
-  
+.config(function($ionicConfigProvider) {
+
 })
+
+//Development
+.constant('BACKEND_API', {
+  THEMES: 'http://localhost:3333/api/theme',
+  PACKAGE: 'http://localhost:3333/api/package',
+  WORDS: 'http://localhost:3333/api/word',
+  IMG: 'http://localhost:3333/'
+})
+
+//Test Cloud
+// .constant('BACKEND_API', {
+//   THEMES: 'https://demo-project-bobbychakandrakov.c9users.io/api/theme',
+//   PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package',
+//   WORDS: 'https://demo-project-bobbychakandrakov.c9users.io/api/word',
+//   IMG: 'https://demo-project-bobbychakandrakov.c9users.io/'
+// })
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

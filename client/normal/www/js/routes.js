@@ -31,7 +31,7 @@ angular.module('app.routes', [])
   })
 
   .state('tabsController.theme', {
-    url: '/theme/:name',
+    url: '/theme/:id',
     views: {
       'tab2': {
         templateUrl: 'templates/theme.html',

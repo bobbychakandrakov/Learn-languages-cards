@@ -38,7 +38,7 @@ router.post('/word', upload.fields([{
 
         if (req.files['image'] !== undefined) {
             if (req.files['image'][0].mimetype.split('/')[0] === 'image') {
-                word.imagePath = 'uploads/' + req.files[['image']][0].filename;
+                word.imagePath = 'uploads/' + req.files['image'][0].filename;
             }
         }
 
