@@ -12,20 +12,22 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 })
 
 //Development
-.constant('BACKEND_API', {
-  THEMES: 'http://localhost:3333/api/theme',
-  PACKAGE: 'http://localhost:3333/api/package',
-  WORDS: 'http://localhost:3333/api/word',
-  IMG: 'http://localhost:3333/'
-})
+// .constant('BACKEND_API', {
+//   THEMES: 'http://localhost:3333/api/theme',
+//   PACKAGE: 'http://localhost:3333/api/package',
+//   WORDS: 'http://localhost:3333/api/word',
+//   IMG: 'http://localhost:3333/',
+//   PACKAGE: 'http://localhost:3333/api/package/'
+// })
 
 //Test Cloud
-// .constant('BACKEND_API', {
-//   THEMES: 'https://demo-project-bobbychakandrakov.c9users.io/api/theme',
-//   PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package',
-//   WORDS: 'https://demo-project-bobbychakandrakov.c9users.io/api/word',
-//   IMG: 'https://demo-project-bobbychakandrakov.c9users.io/'
-// })
+.constant('BACKEND_API', {
+  THEMES: 'https://demo-project-bobbychakandrakov.c9users.io/api/theme',
+  PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package',
+  WORDS: 'https://demo-project-bobbychakandrakov.c9users.io/api/word',
+  IMG: 'https://demo-project-bobbychakandrakov.c9users.io/',
+  PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package/'
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

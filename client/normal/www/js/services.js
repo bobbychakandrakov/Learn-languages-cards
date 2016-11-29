@@ -3,11 +3,9 @@ angular.module('app.services', [])
 .factory('ThemeFactory', ['$http', '$q', 'BACKEND_API', function($http, $q, BACKEND_API) {
 
   const url = BACKEND_API.THEMES;
+  const packageUrl = BACKEND_API.PACKAGE;
 
   return {
-    getThemeWords: function(name) {
-
-    },
     getThemes: function(limit) {
       limit = limit || 10;
       var deffered = $q.defer();
@@ -38,6 +36,15 @@ angular.module('app.services', [])
       var deffered = $q.defer();
       $http.get(url + '/word/' + id).then(function(theme) {
         deffered.resolve(theme.data);
+      }, function(err) {
+        deffered.reject(err);
+      });
+      return deffered.promise;
+    },
+    redeemTheme: function(code) {
+      var deffered = $q.defer();
+      $http.get(packageUrl + 'theme/' + code).then(function(package) {
+        deffered.resolve(package.data.themes);
       }, function(err) {
         deffered.reject(err);
       });

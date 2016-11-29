@@ -1,7 +1,10 @@
 <ion-view title="Themes" id="page3">
   <ion-content padding="true" class="has-header">
     <ion-list id="themes-list1">
-      <ion-item ng-repeat="theme in themes">
+      <button class="button button-block button-balanced" ng-click="redeemTheme()">
+              Redeem theme
+      </button>
+      <ion-item ng-repeat="theme in themes track by $index">
           <h1 style="text-align:center;"><a href="#/page1/theme/{{theme._id}}" style="text-decoration:none">{{theme.name}}</a></h1>
       </ion-item>
     </ion-list>

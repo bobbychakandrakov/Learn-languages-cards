@@ -129,12 +129,24 @@ angular.module('app.controllers', [])
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
   function($scope, $stateParams, ThemeFactory, BACKEND_API, PackageFactory) {
-    PackageFactory.getAll().then(function(packages) {
-      console.log(packages);
-      $scope.packages = packages;
-    }, function(err) {
-      console.log(err);
+    $scope.packages = [];
+
+    $scope.$on("$ionicView.enter", function(event, data) {
+      loadData();
     });
+
+    function loadData() {
+      PackageFactory.getAll().then(function(packages) {
+        $scope.packages = [];
+        for (var i = 0; i < packages.length; i++) {
+          $scope.packages.push(packages[i]);
+        }
+
+      }, function(err) {
+        console.log(err);
+      });
+    }
+
   }
 ])
 
@@ -150,6 +162,7 @@ angular.module('app.controllers', [])
     $scope.createPackage = createPackage;
 
     ThemeFactory.getThemes().then(function(themes) {
+      console.log(themes);
       $scope.themes = themes;
     }, function(err) {
       console.log(err);
@@ -158,7 +171,7 @@ angular.module('app.controllers', [])
     function createPackage() {
       if ($scope.packageData.name != '' && $scope.packageData.themeId != '') {
         PackageFactory.createPackage($scope.packageData).then(function(pack) {
-          console.log(pack);
+          $ionicHistory.goBack();
         }, function(err) {
           console.log(err);
         });
