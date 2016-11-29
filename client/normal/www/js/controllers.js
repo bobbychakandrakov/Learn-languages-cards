@@ -1,39 +1,53 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', '$sce', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, WordsFactory, BACKEND_API) {
+  function($scope, $stateParams, WordsFactory, BACKEND_API, $sce) {
     var limit = 10;
+    var isPlaying = false;
 
     $scope.IMG = BACKEND_API.IMG;
     var myAudio;
-
+    $scope.trustSrc = function(src) {
+      return $sce.trustAsResourceUrl($scope.IMG + src);
+    };
     $scope.playMaleVoice = playMaleVoice;
     $scope.playFemaleVoice = playFemaleVoice;
 
     function playMaleVoice(id) {
-      if (myAudio) {
+      if (isPlaying) {
         myAudio.pause();
-      }
-      myAudio = document.getElementById('male' + id);
-      if (myAudio.paused) {
-        myAudio.play();
+        isPlaying = !isPlaying;
       } else {
-        myAudio.pause();
+        myAudio = document.getElementById('male' + id);
+        if (myAudio.paused) {
+          myAudio.play();
+          isPlaying = true;
+        } else {
+          myAudio.pause();
+          isPlaying = false;
+        }
       }
+
     }
 
     function playFemaleVoice(id) {
-      if (myAudio) {
+      if (isPlaying) {
         myAudio.pause();
-      }
-      myAudio = document.getElementById('female' + id);
-      if (myAudio.paused) {
-        myAudio.play();
+        isPlaying = !isPlaying;
+
       } else {
-        myAudio.pause();
+        myAudio = document.getElementById('female' + id);
+        if (myAudio.paused) {
+          myAudio.play();
+          isPlaying = true;
+        } else {
+          myAudio.pause();
+          isPlaying = false;
+        }
       }
+
     }
 
     $scope.$on("$ionicView.enter", function(event, data) {

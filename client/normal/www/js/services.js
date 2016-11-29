@@ -4,6 +4,7 @@ angular.module('app.services', [])
 
   const url = BACKEND_API.THEMES;
   const packageUrl = BACKEND_API.PACKAGE;
+  var cachedThemes = [];
 
   return {
     getThemes: function(limit) {
