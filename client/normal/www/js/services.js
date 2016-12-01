@@ -88,12 +88,21 @@ angular.module('app.services', [])
   };
 }])
 
-.factory('settingsFactory', ['$http', '$q', function($http, $q) {
+.factory('settingsFactory', ['$http', '$q', '$cordovaFile', function($http, $q, $cordovaFile) {
   return {
-    saveSettings: function(word) {
+    saveSettings: function(code) {
+      $cordovaFile.writeFile('codex.txt', 'this is fucking code', {
+        'append': false
+      }).then(function(result) {
+
+      }, function(err) {
+
+      });
+    },
+    editSettings: function(code) {
 
     },
-    editSettings: function(theme) {
+    deleteSettings: function(code) {
 
     }
   };

@@ -155,14 +155,18 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API',
-  function($scope, $stateParams, ThemeFactory, BACKEND_API) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory',
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory) {
 
     var id = $stateParams.id;
     var myAudio;
 
     $scope.playMaleVoice = playMaleVoice;
     $scope.playFemaleVoice = playFemaleVoice;
+    $scope.toggleDownload = toggleDownload;
+    $scope.isSaving = {
+      checked: false
+    };
 
     $scope.$on("$ionicView.enter", function(event, data) {
       loadData();
@@ -170,10 +174,19 @@ angular.module('app.controllers', [])
 
     $scope.IMG = BACKEND_API.IMG;
 
+    function toggleDownload() {
+      if ($scope.isSaving.checked) {
+        // Save code in codex.txt file
+        //settingsFactory.saveSettings();
+      } else {
+        // Delete code from codes.txt file
+        //settingsFactory.deleteSettings();
+      }
+    }
+
     function loadData() {
       ThemeFactory.getTheme(id).then(function(theme) {
         $scope.theme = theme;
-        console.log(theme);
       }, function(err) {
         console.log(err);
       });
