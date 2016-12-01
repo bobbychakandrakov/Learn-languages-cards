@@ -90,14 +90,65 @@ angular.module('app.services', [])
 
 .factory('settingsFactory', ['$http', '$q', '$cordovaFile', function($http, $q, $cordovaFile) {
   return {
+    readSettings: function() {
+
+    },
     saveSettings: function(code) {
-      $cordovaFile.writeFile('codex.txt', 'this is fucking code', {
-        'append': false
-      }).then(function(result) {
+      var deffered = $q.defer();
 
-      }, function(err) {
+      $cordovaFile.checkDir(cordova.file.externalRootDirectory + '/LearnLanguageCards')
+        .then(function(success) {
+          $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+            .then(function(success) {
+              $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', code)
+                .then(function(success) {
+                  deffered.resolve(success);
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            }, function(err) {
+              $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', true)
+                .then(function(success) {
+                  $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', code)
+                    .then(function(success) {
+                      deffered.resolve(success);
+                    }, function(err) {
+                      deffered.reject(err);
+                    });
+                }, function(err) {
+                  deffered.resolve(err);
+                });
+            });
+        }, function(err) {
+          $cordovaFile.createDir(cordova.file.externalRootDirectory, 'LearnLanguageCards', false)
+            .then(function(success) {
+              $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+                .then(function(success) {
+                  $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', code)
+                    .then(function(success) {
+                      deffered.resolve(success);
+                    }, function(err) {
+                      deffered.reject(err);
+                    });
+                }, function(err) {
+                  $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', true)
+                    .then(function(success) {
+                      $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', code)
+                        .then(function(success) {
+                          deffered.resolve(success);
+                        }, function(err) {
+                          deffered.reject(err);
+                        });
+                    }, function(err) {
+                      deffered.resolve(err);
+                    });
+                });
+            }, function(error) {
+              deffered.reject(error);
+            });
+        });
 
-      });
+      return deffered.promise;
     },
     editSettings: function(code) {
 

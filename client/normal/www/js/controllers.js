@@ -177,7 +177,11 @@ angular.module('app.controllers', [])
     function toggleDownload() {
       if ($scope.isSaving.checked) {
         // Save code in codex.txt file
-        //settingsFactory.saveSettings();
+        settingsFactory.saveSettings('dwada').then(function(result) {
+
+        }, function(err) {
+
+        });
       } else {
         // Delete code from codes.txt file
         //settingsFactory.deleteSettings();
