@@ -4,7 +4,6 @@ angular.module('app.services', [])
 
   const url = BACKEND_API.THEMES;
   const packageUrl = BACKEND_API.PACKAGE;
-  var cachedThemes = [];
 
   return {
     getThemes: function(limit) {
@@ -85,6 +84,28 @@ angular.module('app.services', [])
         deffered.reject(err);
       });
       return deffered.promise;
+    }
+  };
+}])
+
+.factory('settingsFactory', ['$http', '$q', function($http, $q) {
+  return {
+    saveSettings: function(word) {
+
+    },
+    editSettings: function(theme) {
+
+    }
+  };
+}])
+
+.factory('downloadFactory', ['$http', '$q', function($http, $q) {
+  return {
+    downloadWord: function(word) {
+
+    },
+    downloadTheme: function(theme) {
+
     }
   };
 }])

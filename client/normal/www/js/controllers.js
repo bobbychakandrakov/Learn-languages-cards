@@ -106,6 +106,10 @@ angular.module('app.controllers', [])
     });
 
     function redeemTheme() {
+      showPopup();
+    }
+
+    function showPopup() {
       $scope.data = {};
       var myPopup = $ionicPopup.show({
         template: '<input type="text" ng-model="data.code">',
@@ -141,7 +145,7 @@ angular.module('app.controllers', [])
             });
 
             alertPopup.then(function(res) {
-
+              showPopup();
             });
           });
         }
