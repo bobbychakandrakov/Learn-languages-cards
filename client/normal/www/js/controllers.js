@@ -91,22 +91,35 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', '$ionicPopup', 'settingsFactory', 'downloadFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, ThemeFactory, BACKEND_API, $ionicPopup) {
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, $ionicPopup, settingsFactory, downloadFactory) {
 
     $scope.IMG = BACKEND_API.IMG;
     $scope.redeemTheme = redeemTheme;
 
-    ThemeFactory.getThemes().then(function(themes) {
-      $scope.themes = [];
-    }, function(err) {
-      console.log(err);
-    });
+    // ThemeFactory.getThemes().then(function(themes) {
+    //   $scope.themes = [];
+    // }, function(err) {
+    //   console.log(err);
+    // });
+    settingsFactory.getSettings()
+      .then(function(data) {
+        $scope.themes = JSON.parse(data);
+      }, function(err) {
+
+      });
 
     function redeemTheme() {
-      showPopup();
+      downloadFactory.downloadTheme({})
+        .then(function() {
+
+        }, function() {
+
+        });
+
+      //showPopup();
     }
 
     function showPopup() {
@@ -177,7 +190,7 @@ angular.module('app.controllers', [])
     function toggleDownload() {
       if ($scope.isSaving.checked) {
         // Save code in codex.txt file
-        settingsFactory.saveSettings('dwada').then(function(result) {
+        settingsFactory.editSettings($scope.theme).then(function(result) {
 
         }, function(err) {
 

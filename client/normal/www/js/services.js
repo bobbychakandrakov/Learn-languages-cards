@@ -89,9 +89,47 @@ angular.module('app.services', [])
 }])
 
 .factory('settingsFactory', ['$http', '$q', '$cordovaFile', function($http, $q, $cordovaFile) {
+
+
+  var codes = '';
+  var themes = [];
+
   return {
     readSettings: function() {
-
+      var deffered = $q.defer();
+      // Checking if directroty exists
+      $cordovaFile.checkDir(cordova.file.externalRootDirectory + '/LearnLanguageCards')
+        .then(function(success) {
+          $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+            .then(function(success) {
+              $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+                .then(function(data) {
+                  deffered.resolve();
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            }, function(err) {
+              $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codex.txt', true)
+                .then(function(success) {
+                  deffered.resolve(success);
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            });
+        }, function(err) {
+          $cordovaFile.createDir(cordova.file.externalRootDirectory, 'LearnLanguageCards', false)
+            .then(function(success) {
+              $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', true)
+                .then(function(success) {
+                  deffered.resolve(success);
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            }, function(err) {
+              deffered.reject(err);
+            });
+        });
+      return deffered.promise;
     },
     saveSettings: function(code) {
       var deffered = $q.defer();
@@ -151,21 +189,47 @@ angular.module('app.services', [])
       return deffered.promise;
     },
     editSettings: function(code) {
-
+      var content = JSON.stringify(code);
+      $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', content)
+        .then(function(success) {
+          deffered.resolve(success);
+        }, function(err) {
+          deffered.reject(err);
+        });
     },
     deleteSettings: function(code) {
 
+    },
+    getSettings: function() {
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+        .then(function(data) {
+          deffered.resolve(data);
+        }, function(err) {
+          deffered.reject(err);
+        });
+      return deffered.promise;
     }
   };
 }])
 
-.factory('downloadFactory', ['$http', '$q', function($http, $q) {
+.factory('downloadFactory', ['$http', '$q', '$cordovaFileTransfer', 'BACKEND_API', function($http, $q, $cordovaFileTransfer, BACKEND_API) {
+  const url = BACKEND_API.IMG;
   return {
     downloadWord: function(word) {
 
     },
     downloadTheme: function(theme) {
-
+      document.addEventListener('deviceready', function() {
+        var deffered = $q.defer();
+        $cordovaFileTransfer.download('https://demo-project-bobbychakandrakov.c9users.io/uploads/image-1480413741787.jpeg', cordova.file.externalRootDirectory + 'testImage.jpeg', {}, true)
+          .then(function(success) {
+            deffered.resolve(success);
+          }, function(err) {
+            deffered.reject(err);
+          });
+        return deffered.promise;
+      }, false);
     }
   };
 }])
