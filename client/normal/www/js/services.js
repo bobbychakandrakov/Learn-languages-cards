@@ -92,7 +92,9 @@ angular.module('app.services', [])
 
 
   var codes = '';
-  var themes = [];
+  var objs = {
+    themes: []
+  };
 
   return {
     readSettings: function() {
@@ -102,11 +104,16 @@ angular.module('app.services', [])
         .then(function(success) {
           $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
             .then(function(success) {
-              $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
-                .then(function(data) {
-                  deffered.resolve();
+              $cordovaFile.checkDir(cordova.file.externalRootDirectory + '/LearnLanguageCards/uploads')
+                .then(function(success) {
+                  deffered.resolve(success);
                 }, function(err) {
-                  deffered.reject(err);
+                  $cordovaFile.createDir(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'uploads')
+                    .then(function(success) {
+                      deffered.resolve(success);
+                    }, function(err) {
+                      deffered.reject(err);
+                    });
                 });
             }, function(err) {
               $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codex.txt', true)
@@ -121,7 +128,12 @@ angular.module('app.services', [])
             .then(function(success) {
               $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', true)
                 .then(function(success) {
-                  deffered.resolve(success);
+                  $cordovaFile.createDir(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'uploads')
+                    .then(function(success) {
+                      deffered.resolve(success);
+                    }, function(err) {
+                      deffered.reject(err);
+                    });
                 }, function(err) {
                   deffered.reject(err);
                 });
@@ -189,12 +201,28 @@ angular.module('app.services', [])
       return deffered.promise;
     },
     editSettings: function(code) {
-      var content = JSON.stringify(code);
-      $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', content)
+      objs.themes.push(code);
+      var content = JSON.stringify(objs);
+      $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(success) {
-          deffered.resolve(success);
+          $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', content)
+            .then(function(success) {
+              deffered.resolve(success);
+            }, function(err) {
+              deffered.reject(err);
+            });
         }, function(err) {
-          deffered.reject(err);
+          $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+            .then(function(success) {
+              $cordovaFile.writeExistingFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', content)
+                .then(function(success) {
+                  deffered.resolve(success);
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            }, function(err) {
+              deffered.reject(err);
+            });
         });
     },
     deleteSettings: function(code) {
@@ -202,6 +230,17 @@ angular.module('app.services', [])
     },
     getSettings: function() {
       var deffered = $q.defer();
+      // $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+      //   .then(function(success) {
+      //     $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+      //       .then(function(data) {
+      //         deffered.resolve(data);
+      //       }, function(err) {
+      //         deffered.reject(err);
+      //       });
+      //   }, function(err) {
+      //     deffered.reject(err);
+      //   });
       $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(data) {
           deffered.resolve(data);
@@ -217,12 +256,23 @@ angular.module('app.services', [])
   const url = BACKEND_API.IMG;
   return {
     downloadWord: function(word) {
-
-    },
-    downloadTheme: function(theme) {
+      // Making it to folder LearnLanguageCards/uploads for better performance
       document.addEventListener('deviceready', function() {
         var deffered = $q.defer();
-        $cordovaFileTransfer.download('https://demo-project-bobbychakandrakov.c9users.io/uploads/image-1480413741787.jpeg', cordova.file.externalRootDirectory + 'testImage.jpeg', {}, true)
+        $cordovaFileTransfer.download(url + word, cordova.file.externalRootDirectory + 'LearnLanguageCards/' + word, {}, true)
+          .then(function(success) {
+            deffered.resolve(success);
+          }, function(err) {
+            deffered.reject(err);
+          });
+        return deffered.promise;
+      }, false);
+    },
+    downloadTheme: function(theme) {
+      // Making it to folder LearnLanguageCards/uploads for better performance
+      document.addEventListener('deviceready', function() {
+        var deffered = $q.defer();
+        $cordovaFileTransfer.download(url + 'uploads/image-1480413741787.jpeg', cordova.file.externalRootDirectory + 'LearnLanguageCards/uploads/image-1480413741787.jpeg', {}, true)
           .then(function(success) {
             deffered.resolve(success);
           }, function(err) {

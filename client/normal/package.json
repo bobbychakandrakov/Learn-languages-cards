@@ -28,7 +28,8 @@
     "cordova-plugin-statusbar@~2.2.0",
     "ionic-plugin-keyboard@~2.2.1",
     "cordova-plugin-file",
-    "cordova-plugin-file-transfer"
+    "cordova-plugin-file-transfer",
+    "cordova-plugin-app-preferences"
   ],
   "cordovaPlatforms": []
 }

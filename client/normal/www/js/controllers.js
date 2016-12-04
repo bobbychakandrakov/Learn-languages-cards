@@ -98,28 +98,29 @@ angular.module('app.controllers', [])
 
     $scope.IMG = BACKEND_API.IMG;
     $scope.redeemTheme = redeemTheme;
-
+    $scope.themes = [];
     // ThemeFactory.getThemes().then(function(themes) {
     //   $scope.themes = [];
     // }, function(err) {
     //   console.log(err);
     // });
-    settingsFactory.getSettings()
-      .then(function(data) {
-        $scope.themes = JSON.parse(data);
-      }, function(err) {
+    $scope.$on("$ionicView.enter", function(event, data) {
+      settingsFactory.getSettings()
+        .then(function(data) {
+          data = JSON.parse(data);
+          for (var i = 0; i < data.themes.length; i++) {
+            $scope.themes.push(data.themes[i].data);
+          }
+          //$scope.themes = data.themes.data;
+        }, function(err) {
+          alert(JSON.stringify(err));
+          $scope.themes = [];
+        });
+    });
 
-      });
 
     function redeemTheme() {
-      downloadFactory.downloadTheme({})
-        .then(function() {
-
-        }, function() {
-
-        });
-
-      //showPopup();
+      showPopup();
     }
 
     function showPopup() {
@@ -168,8 +169,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory',
-  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog',
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog) {
 
     var id = $stateParams.id;
     var myAudio;
@@ -186,15 +187,20 @@ angular.module('app.controllers', [])
     });
 
     $scope.IMG = BACKEND_API.IMG;
+    var promises = [];
 
     function toggleDownload() {
       if ($scope.isSaving.checked) {
-        // Save code in codex.txt file
-        settingsFactory.editSettings($scope.theme).then(function(result) {
+        for (var i = 0; i < $scope.theme.words.length; i++) {
+          promises.push(downloadFactory.downloadWord($scope.theme.words[i].imagePath));
+          if (!angular.isUndefined($scope.theme.words[i].maleVoice)) {
+            promises.push(downloadFactory.downloadWord($scope.theme.words[i].maleVoice.url));
+          }
+          if (!angular.isUndefined($scope.theme.words[i].femaleVoice)) {
+            promises.push(downloadFactory.downloadWord($scope.theme.words[i].femaleVoice.url));
+          }
+        }
 
-        }, function(err) {
-
-        });
       } else {
         // Delete code from codes.txt file
         //settingsFactory.deleteSettings();
@@ -204,6 +210,12 @@ angular.module('app.controllers', [])
     function loadData() {
       ThemeFactory.getTheme(id).then(function(theme) {
         $scope.theme = theme;
+        settingsFactory.editSettings(theme)
+          .then(function(success) {
+
+          }, function(err) {
+
+          });
       }, function(err) {
         console.log(err);
       });
