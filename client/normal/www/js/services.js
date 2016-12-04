@@ -93,7 +93,8 @@ angular.module('app.services', [])
 
   var codes = '';
   var objs = {
-    themes: []
+    themes: [],
+    words: []
   };
 
   return {
@@ -230,17 +231,6 @@ angular.module('app.services', [])
     },
     getSettings: function() {
       var deffered = $q.defer();
-      // $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
-      //   .then(function(success) {
-      //     $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
-      //       .then(function(data) {
-      //         deffered.resolve(data);
-      //       }, function(err) {
-      //         deffered.reject(err);
-      //       });
-      //   }, function(err) {
-      //     deffered.reject(err);
-      //   });
       $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(data) {
           deffered.resolve(data);
@@ -248,6 +238,12 @@ angular.module('app.services', [])
           deffered.reject(err);
         });
       return deffered.promise;
+    },
+    getSavedThemes: function() {
+
+    },
+    getSavedWords: function() {
+
     }
   };
 }])
