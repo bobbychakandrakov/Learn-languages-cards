@@ -201,8 +201,8 @@ angular.module('app.services', [])
 
       return deffered.promise;
     },
-    editSettings: function(code) {
-      objs.themes.push(code);
+    editSettings: function(theme) {
+      objs.themes.push(theme);
       var content = JSON.stringify(objs);
       $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(success) {
@@ -239,11 +239,43 @@ angular.module('app.services', [])
         });
       return deffered.promise;
     },
+    loadThemes: function() {
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+        .then(function(data) {
+          data = JSON.parse(data);
+          objs.themes = [].concat(objs.themes, data.themes);
+          deffered.resolve();
+        }, function(err) {
+          deffered.reject();
+        });
+      return deffered.promise;
+    },
+    loadWords: function() {
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+        .then(function(data) {
+          data = JSON.parse(data);
+          objs.words = [].concat(objs.words, data.words);
+          deffered.resolve();
+        }, function(err) {
+          deffered.reject();
+        });
+      return deffered.promise;
+    },
     getSavedThemes: function() {
-
+      return objs.themes;
     },
     getSavedWords: function() {
-
+      return objs.words;
+    },
+    searchTheme: function(theme) {
+      for (var i = 0; i < objs.themes.length; i++) {
+        if (objs.themes[i]._id === theme._id) {
+          return objs.themes[i];
+        }
+      }
+      return -1;
     }
   };
 }])
