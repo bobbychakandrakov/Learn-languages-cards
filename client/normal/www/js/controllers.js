@@ -99,13 +99,9 @@ angular.module('app.controllers', [])
     $scope.IMG = BACKEND_API.IMG;
     $scope.redeemTheme = redeemTheme;
     $scope.themes = [];
-    // ThemeFactory.getThemes().then(function(themes) {
-    //   $scope.themes = [];
-    // }, function(err) {
-    //   console.log(err);
-    // });
+
     $scope.$on("$ionicView.enter", function(event, data) {
-      settingsFactory.getSettings()
+      settingsFactory.getSavedThemes()
         .then(function(data) {
           data = JSON.parse(data);
           for (var i = 0; i < data.themes.length; i++) {
@@ -113,7 +109,6 @@ angular.module('app.controllers', [])
           }
           //$scope.themes = data.themes.data;
         }, function(err) {
-          alert(JSON.stringify(err));
           $scope.themes = [];
         });
     });
@@ -152,6 +147,19 @@ angular.module('app.controllers', [])
             for (var i = 0; i < data.length; i++) {
               $scope.themes.push(data[i]);
             }
+            // var pushToArr = false;
+            // for (var i = 0; i < data.length; i++) {
+            //   for (var j = 0; j < $scope.themes.length; j++) {
+            //     if (data[i]._id === $scope.themes[j]) {
+            //       pushToArr = true;
+            //     }
+            //   }
+            //   if (pushToArr) {
+            //     $scope.themes.push(data[i]);
+            //   }
+            //   pushToArr = false;
+            // }
+            // console.log();
           }, function(err) {
             var alertPopup = $ionicPopup.alert({
               title: 'Ooops!',

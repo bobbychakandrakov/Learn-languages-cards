@@ -386,8 +386,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture', '$cordovaMedia', '$ionicPopup', '$cordovaFile', 'BACKEND_API',
-  function($scope, $stateParams, WordsFactory, $cordovaCapture, $cordovaMedia, $ionicPopup, $cordovaFile, BACKEND_API) {
+.controller('addWordCtrl', ['$scope', '$stateParams', 'WordsFactory', '$cordovaCapture', '$cordovaMedia', '$ionicPopup', '$cordovaFile', 'BACKEND_API', '$cordovaImagePicker',
+  function($scope, $stateParams, WordsFactory, $cordovaCapture, $cordovaMedia, $ionicPopup, $cordovaFile, BACKEND_API, $cordovaImagePicker) {
 
     $scope.IMG = BACKEND_API.IMG;
 
@@ -396,6 +396,18 @@ angular.module('app.controllers', [])
       secretKey: 'atanasov123',
       eName: '',
       bName: ''
+    };
+    $scope.captureAudio = function() {
+      var options = {
+        limit: 3,
+        duration: 10
+      };
+
+      $cordovaCapture.captureAudio(options).then(function(audioData) {
+        // Success! Audio data is here
+      }, function(err) {
+        // An error occurred. Show a message to the user
+      });
     };
 
     function saveWord() {
