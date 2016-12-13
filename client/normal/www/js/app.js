@@ -29,11 +29,20 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
   PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package/'
 })
 
-.run(function($ionicPlatform, settingsFactory) {
+.run(function($ionicPlatform, settingsFactory, platformService, folderService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
 
+    // Setting current platfrom info and file structure
+    platformService.setCurrentPlatform();
+
+    folderService.settupAplicationFolder()
+      .then(function(success) {
+        console.log('settuped!');
+      }, function(err) {
+        console.log(err);
+      });
     // Reading the codes.txt and themes.txt files from application folder
 
     settingsFactory.readSettings()

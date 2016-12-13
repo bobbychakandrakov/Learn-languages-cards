@@ -220,6 +220,37 @@ angular.module('app.services', [])
   };
 }])
 
+.factory('platformService', ['$q', function($q) {
+  var platform = '';
+  var fileStructure;
+  return {
+    setCurrentPlatform: function() {
+      console.log('Setting ...');
+      if (ionic.Platform.isIPad()) {
+        platform = 'IPad';
+        fileStructure = cordova.file.dataDirectory;
+      } else if (ionic.Platform.isIOS()) {
+        platform = 'IOS';
+        fileStructure = cordova.file.dataDirectory;
+      } else if (ionic.Platform.isAndroid()) {
+        platform = 'Android';
+        fileStructure = cordova.file.externalRootDirectory;
+      } else if (ionic.Platform.isWindowsPhone()) {
+        platform = 'Windows';
+        fileStructure = cordova.file.dataDirectory;
+      } else {
+        platform = 'undefined';
+      }
+    },
+    getCurrentPlatform: function() {
+      return platform;
+    },
+    getFileStructure: function() {
+      return fileStructure;
+    }
+  };
+}])
+
 .service('BlankService', [function() {
 
 }]);

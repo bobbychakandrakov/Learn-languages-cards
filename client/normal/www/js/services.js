@@ -287,7 +287,7 @@ angular.module('app.services', [])
       // Making it to folder LearnLanguageCards/uploads for better performance
       document.addEventListener('deviceready', function() {
         var deffered = $q.defer();
-        $cordovaFileTransfer.download(url + word, cordova.file.externalRootDirectory + 'LearnLanguageCards/' + word, {}, true)
+        $cordovaFileTransfer.download(url + word, cordova.file.dataDirectory + 'LearnLanguageCards/' + word, {}, true)
           .then(function(success) {
             deffered.resolve(success);
           }, function(err) {
@@ -300,7 +300,7 @@ angular.module('app.services', [])
       // Making it to folder LearnLanguageCards/uploads for better performance
       document.addEventListener('deviceready', function() {
         var deffered = $q.defer();
-        $cordovaFileTransfer.download(url + 'uploads/image-1480413741787.jpeg', cordova.file.externalRootDirectory + 'LearnLanguageCards/uploads/image-1480413741787.jpeg', {}, true)
+        $cordovaFileTransfer.download(url + 'uploads/image-1480413741787.jpeg', cordova.file.dataDirectory + 'LearnLanguageCards/uploads/image-1480413741787.jpeg', {}, true)
           .then(function(success) {
             deffered.resolve(success);
           }, function(err) {
@@ -308,6 +308,92 @@ angular.module('app.services', [])
           });
         return deffered.promise;
       }, false);
+    }
+  };
+}])
+
+.factory('platformService', ['$q', function($q) {
+  var platform = '';
+  var fileStructure;
+  return {
+    setCurrentPlatform: function() {
+      console.log('Setting ...');
+      if (ionic.Platform.isIPad()) {
+        platform = 'IPad';
+        fileStructure = cordova.file.dataDirectory;
+      } else if (ionic.Platform.isIOS()) {
+        platform = 'IOS';
+        fileStructure = cordova.file.dataDirectory;
+      } else if (ionic.Platform.isAndroid()) {
+        platform = 'Android';
+        fileStructure = cordova.file.externalRootDirectory;
+      } else if (ionic.Platform.isWindowsPhone()) {
+        platform = 'Windows';
+        fileStructure = cordova.file.dataDirectory;
+      } else {
+        platform = 'undefined';
+      }
+    },
+    getCurrentPlatform: function() {
+      return platform;
+    },
+    getFileStructure: function() {
+      return fileStructure;
+    }
+  };
+}])
+
+.factory('folderService', ['$q', '$cordovaFile', 'platformService', function($q, $cordovaFile, platformService) {
+  return {
+    settupAplicationFolder: function() {
+      //var folder = platformService.getFileStructure();
+      var deffered = $q.defer();
+      // $cordovaFile.checkDir(cordova.file.dataDirectory + '/LearnLanguageCards')
+      //   .then(function(success) {
+      //     $cordovaFile.createDir(cordova.file.dataDirectorylder, 'LearnLanguageCards', false)
+      //       .then(function(success) {
+      //         console.log('OK');
+      //         deffered.resolve(success);
+      //       }, function(err) {
+      //         // Error creating application folder
+      //         deffered.reject(err);
+      //         console.log(err);
+      //       });
+      //   }, function(err) {
+      //     // Create application folder
+      //     $cordovaFile.createDir(folder, 'LearnLanguageCards', false)
+      //       .then(function(success) {
+      //         deffered.resolve(success);
+      //       }, function(err) {
+      //         // Folder structure not meet requirements
+      //         deffered.reject(err);
+      //         console.log(err);
+      //       });
+      //   });
+      $cordovaFile.createFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt', true)
+        .then(function(success) {
+          $cordovaFile.writeExistingFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt', 'dincho')
+            .then(function(success) {
+              $cordovaFile.readAsText(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt')
+                .then(function(data) {
+                  console.log(data);
+                  deffered.resolve(data);
+                }, function(err) {
+                  console.log(err);
+                  deffered.reject(err);
+                });
+              //deffered.resolve(success);
+            }, function(err) {
+              deffered.reject(err);
+            });
+        }, function(err) {
+          deffered.resolve(err);
+        });
+      return deffered.promise;
+    },
+    writeConfiguratinFile: function() {
+      var deffered = $q.defer();
+      return deffered.promise;
     }
   };
 }])

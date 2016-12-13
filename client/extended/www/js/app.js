@@ -27,8 +27,12 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
   IMG: 'https://demo-project-bobbychakandrakov.c9users.io/'
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, platformService) {
   $ionicPlatform.ready(function() {
+
+    // Setting platform info and folder structure
+
+    platformService.setCurrentPlatform();
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)

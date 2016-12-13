@@ -397,18 +397,10 @@ angular.module('app.controllers', [])
       eName: '',
       bName: ''
     };
-    $scope.captureAudio = function() {
-      var options = {
-        limit: 3,
-        duration: 10
-      };
 
-      $cordovaCapture.captureAudio(options).then(function(audioData) {
-        // Success! Audio data is here
-      }, function(err) {
-        // An error occurred. Show a message to the user
-      });
-    };
+    $scope.openBroser = function() {
+      var ref = cordova.InAppBrowser.open('templates/add-word.html', '_blank');
+    }
 
     function saveWord() {
       if (!$scope.word.maleVoice) {
@@ -417,7 +409,6 @@ angular.module('app.controllers', [])
       if (!$scope.word.femaleVoice) {
         $scope.word.femaleVoice = new File([], 'femaleVoice');
       }
-      console.log($scope.word);
       WordsFactory.saveWord($scope.word).then(function() {
         $scope.word.eName = '';
         $scope.word.bName = '';
