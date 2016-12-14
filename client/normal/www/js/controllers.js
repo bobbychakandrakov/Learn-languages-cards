@@ -184,8 +184,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog', 'dataManager',
-  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog, dataManager) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog', 'dataManager', 'folderService',
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog, dataManager, folderService) {
 
     var id = $stateParams.id;
     var myAudio;
@@ -220,26 +220,49 @@ angular.module('app.controllers', [])
       //   // Delete code from codes.txt file
       //   //settingsFactory.deleteSettings();
       // }
-      dataManager.readConfigurationFile()
-        .then(function(data) {
-          // body...
+      folderService.toggleDownloadMode(id)
+        .then(function(success) {
+          dataManager.readConfigurationFile()
+            .then(function(data) {
+              // body...
+            }, function(err) {
+              // body...
+            });
         }, function(err) {
-          // body...
+          console.log('Error toggle mode');
+          dataManager.readConfigurationFile()
+            .then(function(data) {
+              // body...
+            }, function(err) {
+              // body...
+            });
         });
+
     }
 
     function loadData() {
-      ThemeFactory.getTheme(id).then(function(theme) {
-        $scope.theme = theme;
-        settingsFactory.editSettings(theme)
-          .then(function(success) {
+      folderService.getSavedTheme(id)
+        .then(function(theme) {
+          $scope.theme = theme;
+          if ($scope.theme.toggled === true) {
+            $scope.isSaving.checked = true;
+          }
 
+        }, function(err) {
+          console.log(err);
+          ThemeFactory.getTheme(id).then(function(theme) {
+            $scope.theme = theme;
+            settingsFactory.editSettings(theme)
+              .then(function(success) {
+
+              }, function(err) {
+
+              });
           }, function(err) {
-
+            console.log(err);
           });
-      }, function(err) {
-        console.log(err);
-      });
+        });
+
     }
 
     function playMaleVoice(id) {

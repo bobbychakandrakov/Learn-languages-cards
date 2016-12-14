@@ -344,6 +344,11 @@ angular.module('app.services', [])
 }])
 
 .factory('folderService', ['$q', '$cordovaFile', 'platformService', function($q, $cordovaFile, platformService) {
+  // Storing themes and words in one main object
+  var mainObj = {
+    themes: [],
+    words: []
+  };
   return {
     settupAplicationFolder: function() {
       // Switch hardcoded folder path with folder variable
@@ -389,7 +394,10 @@ angular.module('app.services', [])
     },
     writeConfiguratinFile: function(data) {
       var deffered = $q.defer();
-      var transformedData = JSON.stringify(data);
+      for (var i = 0; i < data.length; i++) {
+        mainObj.themes.push(data[i]);
+      }
+      var transformedData = JSON.stringify(mainObj);
       $cordovaFile.checkFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(success) {
           $cordovaFile.writeFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
@@ -413,12 +421,57 @@ angular.module('app.services', [])
             });
         });
       return deffered.promise;
+    },
+    toggleDownloadMode: function(id) {
+      var deffered = $q.defer();
+      for (var i = 0; i < mainObj.themes.length; i++) {
+        if (mainObj.themes[i]._id == id) {
+          mainObj.themes[i].toggled = true;
+          break;
+        }
+      }
+      var transformedData = JSON.stringify(mainObj);
+      $cordovaFile.checkFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt')
+        .then(function(success) {
+          $cordovaFile.writeFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
+            .then(function(success) {
+              deffered.resolve(success);
+            }, function(err) {
+              deffered.reject(err);
+            });
+        }, function(err) {
+          // Create configuration file
+          $cordovaFile.createFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt', true)
+            .then(function(success) {
+              $cordovaFile.writeFile(cordova.file.documentsDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
+                .then(function(success) {
+                  deffered.resolve(success);
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            }, function(err) {
+              deffered.reject(err);
+            });
+        });
+      return deffered.promise;
+    },
+    getSavedTheme: function(id) {
+      var deffered = $q.defer();
+      for (var i = 0; i < mainObj.themes.length; i++) {
+        if (mainObj.themes[i]._id == id) {
+          deffered.resolve(mainObj.themes[i]);
+          return deffered.promise;
+        }
+      }
+      deffered.reject('Theme not found!');
+      return deffered.promise;
     }
   };
 }])
 
 
 .factory('dataManager', ['$q', '$cordovaFile', function($q, $cordovaFile) {
+
   return {
     readConfigurationFile: function() {
       // Return parsed data from string to JSON
