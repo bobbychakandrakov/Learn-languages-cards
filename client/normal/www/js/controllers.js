@@ -91,10 +91,10 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', '$ionicPopup', 'settingsFactory', 'downloadFactory', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('themesCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', '$ionicPopup', 'settingsFactory', 'downloadFactory', 'folderService',
   // You can include any angular dependencies as parameters for this function
   // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, ThemeFactory, BACKEND_API, $ionicPopup, settingsFactory, downloadFactory) {
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, $ionicPopup, settingsFactory, downloadFactory, folderService) {
 
     $scope.IMG = BACKEND_API.IMG;
     $scope.redeemTheme = redeemTheme;
@@ -147,6 +147,13 @@ angular.module('app.controllers', [])
             for (var i = 0; i < data.length; i++) {
               $scope.themes.push(data[i]);
             }
+            folderService.writeConfiguratinFile(data)
+              .then(function(success) {
+                console.log('Data added! :)');
+              }, function(err) {
+                console.log('Error trying to write data:');
+                console.log(err);
+              });
             // var pushToArr = false;
             // for (var i = 0; i < data.length; i++) {
             //   for (var j = 0; j < $scope.themes.length; j++) {
@@ -177,8 +184,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog',
-  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog', 'dataManager',
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog, dataManager) {
 
     var id = $stateParams.id;
     var myAudio;
@@ -198,21 +205,27 @@ angular.module('app.controllers', [])
     var promises = [];
 
     function toggleDownload() {
-      if ($scope.isSaving.checked) {
-        for (var i = 0; i < $scope.theme.words.length; i++) {
-          promises.push(downloadFactory.downloadWord($scope.theme.words[i].imagePath));
-          if (!angular.isUndefined($scope.theme.words[i].maleVoice)) {
-            promises.push(downloadFactory.downloadWord($scope.theme.words[i].maleVoice.url));
-          }
-          if (!angular.isUndefined($scope.theme.words[i].femaleVoice)) {
-            promises.push(downloadFactory.downloadWord($scope.theme.words[i].femaleVoice.url));
-          }
-        }
-
-      } else {
-        // Delete code from codes.txt file
-        //settingsFactory.deleteSettings();
-      }
+      // if ($scope.isSaving.checked) {
+      //   for (var i = 0; i < $scope.theme.words.length; i++) {
+      //     promises.push(downloadFactory.downloadWord($scope.theme.words[i].imagePath));
+      //     if (!angular.isUndefined($scope.theme.words[i].maleVoice)) {
+      //       promises.push(downloadFactory.downloadWord($scope.theme.words[i].maleVoice.url));
+      //     }
+      //     if (!angular.isUndefined($scope.theme.words[i].femaleVoice)) {
+      //       promises.push(downloadFactory.downloadWord($scope.theme.words[i].femaleVoice.url));
+      //     }
+      //   }
+      //
+      // } else {
+      //   // Delete code from codes.txt file
+      //   //settingsFactory.deleteSettings();
+      // }
+      dataManager.readConfigurationFile()
+        .then(function(data) {
+          // body...
+        }, function(err) {
+          // body...
+        });
     }
 
     function loadData() {
