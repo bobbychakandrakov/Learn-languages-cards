@@ -101,15 +101,21 @@ angular.module('app.controllers', [])
     $scope.themes = [];
 
     $scope.$on("$ionicView.enter", function(event, data) {
-      settingsFactory.getSavedThemes()
-        .then(function(data) {
-          data = JSON.parse(data);
-          for (var i = 0; i < data.themes.length; i++) {
-            $scope.themes.push(data.themes[i].data);
-          }
-          //$scope.themes = data.themes.data;
-        }, function(err) {
-          $scope.themes = [];
+      // settingsFactory.getSavedThemes()
+      //   .then(function(data) {
+      //     data = JSON.parse(data);
+      //     for (var i = 0; i < data.themes.length; i++) {
+      //       $scope.themes.push(data.themes[i].data);
+      //     }
+      //     //$scope.themes = data.themes.data;
+      //   }, function(err) {
+      //     $scope.themes = [];
+      //   });
+      settingsFactory.getThemes()
+        .then(function(themes) {
+          $scope.themes = themes;
+        }, function(error) {
+          console.log(error);
         });
     });
 
@@ -144,16 +150,33 @@ angular.module('app.controllers', [])
         // Check redeem code and add theme
         if (res) {
           ThemeFactory.redeemTheme(res).then(function(data) {
+            var add = true;
             for (var i = 0; i < data.length; i++) {
-              $scope.themes.push(data[i]);
+              // Check if themes are in the array already
+              for (var j = 0; j < $scope.themes.length; j++) {
+                if ($scope.themes[j]._id == data[i]._id) {
+                  add = false;
+                  break;
+                }
+              }
+              if (add) {
+                $scope.themes.push(data[i]);
+              }
+              add = false;
             }
-            folderService.writeConfiguratinFile(data)
+            settingsFactory.saveThemeCache($scope.themes)
               .then(function(success) {
-                console.log('Data added! :)');
-              }, function(err) {
-                console.log('Error trying to write data:');
-                console.log(err);
+                alert('ok');
+              }, function(error) {
+                alert(error);
               });
+            // folderService.writeConfiguratinFile(data)
+            //   .then(function(success) {
+            //     console.log('Data added! :)');
+            //   }, function(err) {
+            //     console.log('Error trying to write data:');
+            //     console.log(err);
+            //   });
             // var pushToArr = false;
             // for (var i = 0; i < data.length; i++) {
             //   for (var j = 0; j < $scope.themes.length; j++) {
@@ -262,6 +285,7 @@ angular.module('app.controllers', [])
             console.log(err);
           });
         });
+
 
     }
 

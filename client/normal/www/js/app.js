@@ -47,7 +47,14 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
 
     settingsFactory.readSettings()
       .then(function(result) {
-
+        settingsFactory.loadThemes()
+          .then(function(themes) {
+            // body...
+            alert(themes);
+          }, function(err) {
+            // body...
+            alert(err)
+          });
       }, function(err) {
 
       });
