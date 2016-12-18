@@ -50,7 +50,7 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
         settingsFactory.loadThemes()
           .then(function(themes) {
             // body...
-            alert(themes);
+
           }, function(err) {
             // body...
             alert(err)

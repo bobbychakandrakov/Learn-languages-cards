@@ -111,13 +111,15 @@ angular.module('app.controllers', [])
       //   }, function(err) {
       //     $scope.themes = [];
       //   });
-      settingsFactory.getThemes()
-        .then(function(themes) {
-          $scope.themes = themes;
-        }, function(error) {
-          console.log(error);
-        });
+
     });
+
+    settingsFactory.getThemes()
+      .then(function(themes) {
+        $scope.themes = themes;
+      }, function(error) {
+        console.log(error);
+      });
 
 
     function redeemTheme() {
@@ -207,8 +209,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog', 'dataManager', 'folderService',
-  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog, dataManager, folderService) {
+.controller('themeCtrl', ['$scope', '$stateParams', 'ThemeFactory', 'BACKEND_API', 'settingsFactory', 'downloadFactory', '$cordovaToast', '$cordovaSpinnerDialog', 'dataManager', 'folderService', '$q',
+  function($scope, $stateParams, ThemeFactory, BACKEND_API, settingsFactory, downloadFactory, $cordovaToast, $cordovaSpinnerDialog, dataManager, folderService, $q) {
 
     var id = $stateParams.id;
     var myAudio;
@@ -222,65 +224,122 @@ angular.module('app.controllers', [])
 
     $scope.$on("$ionicView.enter", function(event, data) {
       loadData();
-    });
 
+    });
+    $scope.theme = {};
     $scope.IMG = BACKEND_API.IMG;
     var promises = [];
 
     function toggleDownload() {
-      // if ($scope.isSaving.checked) {
-      //   for (var i = 0; i < $scope.theme.words.length; i++) {
-      //     promises.push(downloadFactory.downloadWord($scope.theme.words[i].imagePath));
-      //     if (!angular.isUndefined($scope.theme.words[i].maleVoice)) {
-      //       promises.push(downloadFactory.downloadWord($scope.theme.words[i].maleVoice.url));
-      //     }
-      //     if (!angular.isUndefined($scope.theme.words[i].femaleVoice)) {
-      //       promises.push(downloadFactory.downloadWord($scope.theme.words[i].femaleVoice.url));
-      //     }
-      //   }
-      //
-      // } else {
-      //   // Delete code from codes.txt file
-      //   //settingsFactory.deleteSettings();
-      // }
-      folderService.toggleDownloadMode(id)
+      if ($scope.isSaving.checked) {
+        for (var i = 0; i < $scope.theme.words.length; i++) {
+          promises.push(downloadFactory.downloadWord($scope.theme.words[i].imagePath));
+          if (!angular.isUndefined($scope.theme.words[i].maleVoice)) {
+            promises.push(downloadFactory.downloadWord($scope.theme.words[i].maleVoice.url));
+          }
+          if (!angular.isUndefined($scope.theme.words[i].femaleVoice)) {
+            promises.push(downloadFactory.downloadWord($scope.theme.words[i].femaleVoice.url));
+          }
+        }
+        $q.all(promises)
+          .then(function(data) {
+            // body...
+            alert('Donwloaded');
+          }, function(error) {
+            // body...
+            alert(error);
+          });
+
+      } else {
+        // Delete code from codes.txt file
+        //settingsFactory.deleteSettings();
+      }
+      // folderService.toggleDownloadMode(id)
+      //   .then(function(success) {
+      //     dataManager.readConfigurationFile()
+      //       .then(function(data) {
+      //         // body...
+      //       }, function(err) {
+      //         // body...
+      //       });
+      //   }, function(err) {
+      //     console.log('Error toggle mode');
+      //     dataManager.readConfigurationFile()
+      //       .then(function(data) {
+      //         // body...
+      //       }, function(err) {
+      //         // body...
+      //       });
+      //   });
+      $scope.theme.toggled = true;
+      settingsFactory.saveDownloadedTheme($scope.theme)
         .then(function(success) {
-          dataManager.readConfigurationFile()
-            .then(function(data) {
-              // body...
-            }, function(err) {
-              // body...
-            });
-        }, function(err) {
-          console.log('Error toggle mode');
-          dataManager.readConfigurationFile()
-            .then(function(data) {
-              // body...
-            }, function(err) {
-              // body...
-            });
+          // body...
+          alert('Theme saved!');
+        }, function(error) {
+          // body...
+          alert('Error while saving theme!');
         });
 
     }
 
     function loadData() {
-      folderService.getSavedTheme(id)
-        .then(function(theme) {
-          $scope.theme = theme;
-          if ($scope.theme.toggled === true) {
-            $scope.isSaving.checked = true;
-          }
+      // folderService.getSavedTheme(id)
+      //   .then(function(theme) {
+      //     $scope.theme = theme;
+      //     if ($scope.theme.toggled === true) {
+      //       $scope.isSaving.checked = true;
+      //     }
+      //
+      //   }, function(err) {
+      //     console.log(err);
+      //     ThemeFactory.getTheme(id).then(function(theme) {
+      //       $scope.theme = theme;
+      //       settingsFactory.editSettings(theme)
+      //         .then(function(success) {
+      //
+      //         }, function(err) {
+      //
+      //         });
+      //     }, function(err) {
+      //       console.log(err);
+      //     });
+      //   });
 
-        }, function(err) {
-          console.log(err);
+      // var isSaved = settingsFactory.checkDownload(id);
+      // if (isSaved == true) {
+      //   //$scope.IMG = "file:///storage/emulated/0/LearnLanguageCards/";
+      //   // settingsFactory.getDownloadedTheme(id)
+      //   //   .then(function(theme) {
+      //   //     // body...
+      //   //     $scope.theme = theme;
+      //   //     $scope.theme.toggled = true;
+      //   //   }, function(error) {
+      //   //     // body...
+      //   //     alert('Something is wrong!');
+      //   //   });
+      //   $scope.theme = settingsFactory.getDownloadedTheme(id);
+      //   alert($scope.theme.words[0].eName);
+      //
+      // } else {
+      //   alert('From internet!');
+      //   ThemeFactory.getTheme(id).then(function(theme) {
+      //     $scope.theme = theme;
+      //   }, function(err) {
+      //     console.log(err);
+      //   });
+      // }
+
+      settingsFactory.checkDownload(id)
+        .then(function(theme) {
+          // body...
+          $scope.IMG = "file:///storage/emulated/0/LearnLanguageCards/";
+          $scope.theme = theme;
+          $scope.isSaving.checked = true;
+        }, function(error) {
+          // body...
           ThemeFactory.getTheme(id).then(function(theme) {
             $scope.theme = theme;
-            settingsFactory.editSettings(theme)
-              .then(function(success) {
-
-              }, function(err) {
-
-              });
           }, function(err) {
             console.log(err);
           });

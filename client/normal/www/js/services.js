@@ -245,8 +245,8 @@ angular.module('app.services', [])
       $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(data) {
           data = JSON.parse(data);
-          objs.savedThemes = [].concat(objs.savedThemes, data.savedThemes);
-          objs.themes = [].concat(objs.themes, data.themes);
+          objs.savedThemes = data.savedThemes;
+          objs.themes = data.themes;
           deffered.resolve(objs.themes.length);
         }, function(err) {
           deffered.reject();
@@ -301,6 +301,66 @@ angular.module('app.services', [])
           deffered.reject(error);
         });
       return deffered.promise;
+    },
+    saveDownloadedTheme: function(theme) {
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+        .then(function(data) {
+          data = JSON.parse(data);
+          objs.savedThemes = data.savedThemes;
+          objs.themes = data.themes;
+          objs.savedThemes.push(theme);
+          var content = JSON.stringify(objs);
+          $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', content, true)
+            .then(function(success) {
+              deffered.resolve(success);
+            }, function(error) {
+              deffered.reject(error);
+            });
+        }, function(err) {
+          deffered.reject();
+        });
+
+
+      return deffered.promise;
+    },
+    checkDownload: function(id) {
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
+        .then(function(data) {
+          data = JSON.parse(data);
+          objs.savedThemes = data.savedThemes;
+          objs.themes = data.themes;
+          for (var i = 0; i < objs.savedThemes.length; i++) {
+            if (objs.savedThemes[i].data._id == id) {
+              deffered.resolve(objs.savedThemes[i]);
+            }
+          }
+          deffered.reject();
+        }, function(err) {
+          deffered.reject();
+        });
+      return deffered.promise;
+    },
+    getDownloadedTheme: function(id) {
+      // var deffered = $q.defer();
+      // var isFound = false;
+      // for (var i = 0; i < objs.savedThemes.length; i++) {
+      //   if (objs.savedThemes[i]._id == id) {
+      //     deffered.resolve(objs.savedThemes[i].data);
+      //     isFound = true;
+      //     break;
+      //   }
+      // }
+      // if (!isFound) {
+      //   deffered.reject();
+      // }
+      // return deffered.promise;
+      for (var i = 0; i < objs.savedThemes.length; i++) {
+        if (objs.savedThemes[i].data._id == id) {
+          return objs.savedThemes[i].data;
+        }
+      }
     }
   };
 }])
@@ -312,7 +372,7 @@ angular.module('app.services', [])
       // Making it to folder LearnLanguageCards/uploads for better performance
       document.addEventListener('deviceready', function() {
         var deffered = $q.defer();
-        $cordovaFileTransfer.download(url + word, cordova.file.dataDirectory + 'LearnLanguageCards/' + word, {}, true)
+        $cordovaFileTransfer.download(url + word, cordova.file.externalRootDirectory + 'LearnLanguageCards/' + word, {}, true)
           .then(function(success) {
             deffered.resolve(success);
           }, function(err) {
@@ -325,7 +385,7 @@ angular.module('app.services', [])
       // Making it to folder LearnLanguageCards/uploads for better performance
       document.addEventListener('deviceready', function() {
         var deffered = $q.defer();
-        $cordovaFileTransfer.download(url + 'uploads/image-1480413741787.jpeg', cordova.file.dataDirectory + 'LearnLanguageCards/uploads/image-1480413741787.jpeg', {}, true)
+        $cordovaFileTransfer.download(url + 'uploads/image-1480413741787.jpeg', cordova.file.externalRootDirectory + 'LearnLanguageCards/uploads/image-1480413741787.jpeg', {}, true)
           .then(function(success) {
             deffered.resolve(success);
           }, function(err) {
