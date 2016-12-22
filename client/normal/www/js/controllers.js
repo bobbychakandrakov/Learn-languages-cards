@@ -221,6 +221,9 @@ angular.module('app.controllers', [])
     $scope.isSaving = {
       checked: false
     };
+    $scope.trustSrc = function(src) {
+      return $sce.trustAsResourceUrl($scope.IMG + src);
+    };
 
     $scope.$on("$ionicView.enter", function(event, data) {
       loadData();
@@ -333,9 +336,12 @@ angular.module('app.controllers', [])
       settingsFactory.checkDownload(id)
         .then(function(theme) {
           // body...
-          $scope.IMG = "file:///storage/emulated/0/LearnLanguageCards/";
+          $scope.IMG = cordova.file.externalRootDirectory + '/LearnLanguageCards/';
           $scope.theme = theme;
           $scope.isSaving.checked = true;
+          $scope.trustSrc = function(src) {
+            return $scope.IMG + src;
+          };
         }, function(error) {
           // body...
           ThemeFactory.getTheme(id).then(function(theme) {

@@ -405,16 +405,16 @@ angular.module('app.services', [])
       console.log('Setting ...');
       if (ionic.Platform.isIPad()) {
         platform = 'IPad';
-        fileStructure = cordova.file.dataDirectory;
+        fileStructure = cordova.file.externalRootDirectory;
       } else if (ionic.Platform.isIOS()) {
         platform = 'IOS';
-        fileStructure = cordova.file.dataDirectory;
+        fileStructure = cordova.file.externalRootDirectory;
       } else if (ionic.Platform.isAndroid()) {
         platform = 'Android';
         fileStructure = cordova.file.externalRootDirectory;
       } else if (ionic.Platform.isWindowsPhone()) {
         platform = 'Windows';
-        fileStructure = cordova.file.dataDirectory;
+        fileStructure = cordova.file.externalRootDirectory;
       } else {
         platform = 'undefined';
       }
@@ -429,8 +429,8 @@ angular.module('app.services', [])
 }])
 
 
-// For Android : cordova.file.dataDirectory
-// For IOS: cordova.file.documentsDirectory
+// For Android : cordova.file.externalRootDirectory
+// For IOS: cordova.file.externalRootDirectory
 
 .factory('folderService', ['$q', '$cordovaFile', 'platformService', function($q, $cordovaFile, platformService) {
   // Storing themes and words in one main object
@@ -443,11 +443,11 @@ angular.module('app.services', [])
       // Switch hardcoded folder path with folder variable
       // var folder = platformService.getFileStructure();
       var deffered = $q.defer();
-      $cordovaFile.checkDir(cordova.file.dataDirectory + '/LearnLanguageCards')
+      $cordovaFile.checkDir(cordova.file.externalRootDirectory + '/LearnLanguageCards')
         .then(function(success) {
-          $cordovaFile.createDir(cordova.file.dataDirectory, 'LearnLanguageCards', false)
+          $cordovaFile.createDir(cordova.file.externalRootDirectory, 'LearnLanguageCards', false)
             .then(function(success) {
-              $cordovaFile.createDir(cordova.file.dataDirectory + '/LearnLanguageCards', 'uploads', false)
+              $cordovaFile.createDir(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'uploads', false)
                 .then(function(success) {
                   deffered.resolve(success);
                 }, function(err) {
@@ -462,9 +462,9 @@ angular.module('app.services', [])
             });
         }, function(err) {
           // Create application folder
-          $cordovaFile.createDir(cordova.file.dataDirectory, 'LearnLanguageCards', false)
+          $cordovaFile.createDir(cordova.file.externalRootDirectory, 'LearnLanguageCards', false)
             .then(function(success) {
-              $cordovaFile.createDir(cordova.file.dataDirectory + '/LearnLanguageCards', 'uploads', false)
+              $cordovaFile.createDir(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'uploads', false)
                 .then(function(success) {
                   deffered.resolve(success);
                 }, function(err) {
@@ -487,9 +487,9 @@ angular.module('app.services', [])
         mainObj.themes.push(data[i]);
       }
       var transformedData = JSON.stringify(mainObj);
-      $cordovaFile.checkFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt')
+      $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(success) {
-          $cordovaFile.writeFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
+          $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
             .then(function(success) {
               deffered.resolve(success);
             }, function(err) {
@@ -497,9 +497,9 @@ angular.module('app.services', [])
             });
         }, function(err) {
           // Create configuration file
-          $cordovaFile.createFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt', true)
+          $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', true)
             .then(function(success) {
-              $cordovaFile.writeFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
+              $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
                 .then(function(success) {
                   deffered.resolve(success);
                 }, function(err) {
@@ -520,9 +520,9 @@ angular.module('app.services', [])
         }
       }
       var transformedData = JSON.stringify(mainObj);
-      $cordovaFile.checkFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt')
+      $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(success) {
-          $cordovaFile.writeFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
+          $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
             .then(function(success) {
               deffered.resolve(success);
             }, function(err) {
@@ -530,9 +530,9 @@ angular.module('app.services', [])
             });
         }, function(err) {
           // Create configuration file
-          $cordovaFile.createFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt', true)
+          $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', true)
             .then(function(success) {
-              $cordovaFile.writeFile(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
+              $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt', transformedData, true)
                 .then(function(success) {
                   deffered.resolve(success);
                 }, function(err) {
@@ -565,7 +565,7 @@ angular.module('app.services', [])
     readConfigurationFile: function() {
       // Return parsed data from string to JSON
       var deffered = $q.defer();
-      $cordovaFile.readAsText(cordova.file.dataDirectory + '/LearnLanguageCards', 'codes.txt')
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'codes.txt')
         .then(function(data) {
           // Formatting data to JSON object
           console.log('Data from file:');
