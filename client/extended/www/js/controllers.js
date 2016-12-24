@@ -156,9 +156,13 @@ angular.module('app.controllers', [])
   function($scope, $stateParams, ThemeFactory, BACKEND_API, PackageFactory, $ionicHistory) {
     $scope.packageData = {
       name: '',
-      themeId: '',
-      secretKey: 'atanasov123'
+      themeId: [],
+      secretKey: 'atanasov123',
+      currentTheme: '',
+      addId: []
     };
+    $scope.addPackage = addPackage;
+    $scope.removeTheme = removeTheme;
     $scope.createPackage = createPackage;
 
     ThemeFactory.getThemes().then(function(themes) {
@@ -167,6 +171,7 @@ angular.module('app.controllers', [])
     }, function(err) {
       console.log(err);
     });
+
 
     function createPackage() {
       if ($scope.packageData.name != '' && $scope.packageData.themeId != '') {
@@ -177,6 +182,27 @@ angular.module('app.controllers', [])
         });
       }
     }
+
+    function addPackage() {
+      for (var i = 0; i < $scope.themes.length; i++) {
+        if ($scope.themes[i]._id == $scope.packageData.currentTheme) {
+          $scope.packageData.themeId.push($scope.themes[i]);
+          break;
+        }
+      }
+      console.log($scope.packageData);
+    }
+
+
+    function removeTheme(id) {
+      for (var i = 0; i < $scope.packageData.themeId.length; i++) {
+        if ($scope.packageData.themeId[i]._id == id) {
+          $scope.packageData.themeId.splice(i, 1);
+          break;
+        }
+      }
+    }
+
   }
 ])
 

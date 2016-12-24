@@ -9,10 +9,19 @@
           <div class="input-label">
             Theme
           </div>
-          <select id="selectedTheme" ng-model="packageData.themeId">
+          <select id="selectedTheme" ng-model="packageData.currentTheme" ng-change="addPackage()">
               <option ng-repeat="theme in themes" value="{{theme._id}}">{{theme.name}}</option>
           </select>
         </label>
+        <label class="list list-insert">
+            <button type="button" class="button button-block button-positive" ng-click="addPackage()">Add</button>
+        </label>
+        <div class="list">
+            <ion-item ng-repeat="theme in packageData.themeId" style="text-align:center;vertical-align:middle">
+              {{theme.name}}
+              <button class="button button-assertive" style="float:right" ng-click="removeTheme(theme._id)"><i class="icon ion-minus-circled"></i></button>
+            </ion-item>
+        </div>
         <div class="spacer" style="width: 300px; height:20px;"></div>
         <button type="submit" class="button button-block button-balanced" ng-click="createPackage()">Create</button>
       </div>

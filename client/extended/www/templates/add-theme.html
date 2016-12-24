@@ -19,12 +19,16 @@
             </label>
             <div class="spacer" style="width: 300px; height:30px;"></div>
             <div class="list">
-                <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true" ng-hide="word.dontShow">
+                <!-- <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true" ng-hide="word.dontShow">
                     <img ng-src="{{IMG}}{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
                     <h1 class="text-center" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
                     <h1 class="text-center" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
                     <button class="button button-block button-positive" ng-click="addWord(word)"><i class="icon ion-plus-circled"></i></button>
-                </a>
+                </a> -->
+                <ion-item ng-repeat="word in words" style="text-align:center;vertical-align:middle">
+                  {{word.eName}}
+                  <button class="button button-positive" ng-click="addWord(word)" style="float:right"><i class="icon ion-plus-circled"></i></button>
+                </ion-item>
             </div>
             <button type="submit" class="button button-block button-balanced" ng-click="addTheme()">Add</button>
          </div>

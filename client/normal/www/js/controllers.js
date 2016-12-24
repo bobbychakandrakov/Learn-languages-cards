@@ -336,7 +336,7 @@ angular.module('app.controllers', [])
       settingsFactory.checkDownload(id)
         .then(function(theme) {
           // body...
-          $scope.IMG = cordova.file.externalRootDirectory + '/LearnLanguageCards/';
+          $scope.IMG = cordova.file.documentsDirectory + '/LearnLanguageCards/';
           $scope.theme = theme;
           $scope.isSaving.checked = true;
           $scope.trustSrc = function(src) {
