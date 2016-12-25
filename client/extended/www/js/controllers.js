@@ -184,12 +184,16 @@ angular.module('app.controllers', [])
     }
 
     function addPackage() {
-      for (var i = 0; i < $scope.themes.length; i++) {
-        if ($scope.themes[i]._id == $scope.packageData.currentTheme) {
-          $scope.packageData.themeId.push($scope.themes[i]);
-          break;
+      if ($scope.packageData.addId.indexOf($scope.packageData.currentTheme) == -1) {
+        for (var i = 0; i < $scope.themes.length; i++) {
+          if ($scope.themes[i]._id == $scope.packageData.currentTheme) {
+            $scope.packageData.themeId.push($scope.themes[i]);
+            $scope.packageData.addId.push($scope.themes[i]._id);
+            break;
+          }
         }
       }
+
       console.log($scope.packageData);
     }
 
@@ -198,6 +202,7 @@ angular.module('app.controllers', [])
       for (var i = 0; i < $scope.packageData.themeId.length; i++) {
         if ($scope.packageData.themeId[i]._id == id) {
           $scope.packageData.themeId.splice(i, 1);
+          $scope.packageData.addId.splice(i, 1);
           break;
         }
       }

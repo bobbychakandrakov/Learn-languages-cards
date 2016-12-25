@@ -9,7 +9,7 @@
           <div class="input-label">
             Theme
           </div>
-          <select id="selectedTheme" ng-model="packageData.currentTheme" ng-change="addPackage()">
+          <select id="selectedTheme" ng-model="packageData.currentTheme">
               <option ng-repeat="theme in themes" value="{{theme._id}}">{{theme.name}}</option>
           </select>
         </label>
