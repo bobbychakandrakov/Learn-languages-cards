@@ -216,6 +216,16 @@ angular.module('app.services', [])
         deffered.reject(err);
       });
       return deffered.promise;
+    },
+    getPackage: function(id) {
+      var deffered = $q.defer();
+      $http.get(url + '/' + id)
+        .then(function(data) {
+          deffered.resolve(data.data);
+        }, function(err) {
+          deffered.reject(err);
+        });
+      return deffered.promise;
     }
   };
 }])

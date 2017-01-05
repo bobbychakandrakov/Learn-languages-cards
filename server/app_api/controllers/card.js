@@ -545,3 +545,17 @@ module.exports.deletePackage = function(req, res) {
 
 
 };
+
+module.exports.getPackageById = function(req, res) {
+
+
+    Package.findById(req.params.id, function(err, package) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(package);
+        }
+    })
+
+
+};

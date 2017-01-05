@@ -50,6 +50,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.editPackages', {
+    url: '/edit/package/:id',
+    views: {
+      'tab3': {
+        templateUrl: 'templates/edit-package.html',
+        controller: 'editPackageCtrl'
+      }
+    }
+  })
+
   .state('tabsController.theme', {
     url: '/theme/:name/:id',
     views: {

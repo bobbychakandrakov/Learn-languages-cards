@@ -450,3 +450,15 @@ angular.module('app.controllers', [])
     }
   }
 ])
+
+.controller('editPackageCtrl', ['$scope', '$stateParams', 'PackageFactory', function($scope, $stateParams, PackageFactory) {
+  var id = $stateParams.id;
+
+  PackageFactory.getPackage(id)
+    .then(function(package) {
+      console.log(package);
+      $scope.packageData = package;
+    }, function(error) {
+      console.log(error);
+    });
+}])

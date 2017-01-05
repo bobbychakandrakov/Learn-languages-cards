@@ -267,5 +267,6 @@ router.get('/packages', ctrlCard.getPackages);
 router.get('/package/theme/:packageCode', ctrlCard.getPackage)
 router.put('/package/:id', ctrlCard.updatePackage);
 router.delete('/package/:id', ctrlCard.deletePackage);
+router.get('/package/:id', ctrlCard.getPackageById);
 
 module.exports = router;

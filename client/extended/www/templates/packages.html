@@ -5,7 +5,7 @@
         Add package
       </a>
       <ion-item ng-repeat="package in packages">
-        <a class="item-icon-left" href="">
+        <a class="item-icon-left" href="#/page1/edit/package/{{package._id}}">
           {{package.name}}
           <span class="badge badge-royal">{{package.packageCode}}</span>
         </a>
