@@ -452,9 +452,9 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('editPackageCtrl', ['$scope', '$stateParams', 'PackageFactory', 'ThemeFactory', function($scope, $stateParams, PackageFactory, ThemeFactory) {
+.controller('editPackageCtrl', ['$scope', '$stateParams', 'PackageFactory', 'ThemeFactory', '$ionicPopup', '$ionicHistory', function($scope, $stateParams, PackageFactory, ThemeFactory, $ionicPopup, $ionicHistory) {
   var id = $stateParams.id;
-
+  $scope.deletePackage = deletePackage;
   PackageFactory.getPackage(id)
     .then(function(package) {
       console.log(package);
@@ -468,4 +468,21 @@ angular.module('app.controllers', [])
   }, function(err) {
     console.log(err);
   });
+
+  function deletePackage() {
+    var confirmPopup = $ionicPopup.confirm({
+      template: 'Are you sure you want to delete this package?'
+    });
+
+    confirmPopup.then(function(res) {
+      if (res) {
+        PackageFactory.deletePackage(id)
+          .then(function() {
+            $ionicHistory.goBack();
+          }, function(err) {
+            console.log(err);
+          });
+      }
+    });
+  }
 }])
