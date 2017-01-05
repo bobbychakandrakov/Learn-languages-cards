@@ -183,6 +183,7 @@ angular.module('app.services', [])
   return {
     createPackage: function(data) {
       var deffered = $q.defer();
+
       $http.post(url, data).then(function(package) {
         deffered.resolve(package);
       }, function(err) {

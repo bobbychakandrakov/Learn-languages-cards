@@ -175,6 +175,7 @@ angular.module('app.controllers', [])
 
     function createPackage() {
       if ($scope.packageData.name != '' && $scope.packageData.themeId != '') {
+        $scope.packageData.themeId = $scope.packageData.addId.join();
         PackageFactory.createPackage($scope.packageData).then(function(pack) {
           $ionicHistory.goBack();
         }, function(err) {
@@ -451,7 +452,7 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('editPackageCtrl', ['$scope', '$stateParams', 'PackageFactory', function($scope, $stateParams, PackageFactory) {
+.controller('editPackageCtrl', ['$scope', '$stateParams', 'PackageFactory', 'ThemeFactory', function($scope, $stateParams, PackageFactory, ThemeFactory) {
   var id = $stateParams.id;
 
   PackageFactory.getPackage(id)
@@ -461,4 +462,10 @@ angular.module('app.controllers', [])
     }, function(error) {
       console.log(error);
     });
+
+  ThemeFactory.getThemes().then(function(themes) {
+    $scope.themes = themes;
+  }, function(err) {
+    console.log(err);
+  });
 }])
