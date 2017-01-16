@@ -454,20 +454,78 @@ angular.module('app.controllers', [])
 
 .controller('editPackageCtrl', ['$scope', '$stateParams', 'PackageFactory', 'ThemeFactory', '$ionicPopup', '$ionicHistory', function($scope, $stateParams, PackageFactory, ThemeFactory, $ionicPopup, $ionicHistory) {
   var id = $stateParams.id;
+
+  $scope.addPackage = addPackage;
   $scope.deletePackage = deletePackage;
+  $scope.removeTheme = removeTheme;
+  $scope.updatePackage = updatePackage;
+
+  $scope.selectedThemes = [];
   PackageFactory.getPackage(id)
     .then(function(package) {
-      console.log(package);
       $scope.packageData = package;
+      $scope.packageData.addId = [];
+      console.log(package);
+      loadThemes();
     }, function(error) {
       console.log(error);
     });
 
-  ThemeFactory.getThemes().then(function(themes) {
-    $scope.themes = themes;
-  }, function(err) {
-    console.log(err);
-  });
+
+
+  function loadThemes() {
+    ThemeFactory.getThemes().then(function(themes) {
+      $scope.themes = themes;
+      var themesFromPack = $scope.packageData.themeId.split(',');
+      for (var i = 0; i < $scope.themes.length; i++) {
+        for (var j = 0; j < themesFromPack.length; j++) {
+          if (themesFromPack[j] == $scope.themes[i]._id) {
+            $scope.selectedThemes.push($scope.themes[i]);
+            $scope.packageData.addId.push($scope.themes[i]._id);
+            break;
+          }
+        }
+      }
+      console.log($scope.selectedThemes);
+    }, function(err) {
+      console.log(err);
+    });
+  }
+
+  function removeTheme(id) {
+    for (var i = 0; i < $scope.selectedThemes.length; i++) {
+      if ($scope.selectedThemes[i]._id == id) {
+        $scope.selectedThemes.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  function addPackage() {
+    if ($scope.packageData.addId.indexOf($scope.packageData.currentTheme) == -1) {
+      for (var i = 0; i < $scope.themes.length; i++) {
+        if ($scope.themes[i]._id == $scope.packageData.currentTheme) {
+          $scope.selectedThemes.push($scope.themes[i]);
+          $scope.packageData.addId.push($scope.themes[i]._id);
+          break;
+        }
+      }
+    }
+    console.log($scope.selectedThemes);
+  }
+
+  function updatePackage() {
+    console.log($scope.packageData);
+    if ($scope.packageData.name != '' && $scope.packageData.themeId != '') {
+      $scope.packageData.themeId = $scope.packageData.addId.join();
+      $scope.packageData.secretKey = 'atanasov123';
+      PackageFactory.updatePackage(id, $scope.packageData).then(function(pack) {
+        $ionicHistory.goBack();
+      }, function(err) {
+        console.log(err);
+      });
+    }
+  }
 
   function deletePackage() {
     var confirmPopup = $ionicPopup.confirm({
