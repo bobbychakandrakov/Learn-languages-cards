@@ -496,6 +496,7 @@ angular.module('app.controllers', [])
     for (var i = 0; i < $scope.selectedThemes.length; i++) {
       if ($scope.selectedThemes[i]._id == id) {
         $scope.selectedThemes.splice(i, 1);
+        $scope.packageData.addId.splice(i, 1);
         break;
       }
     }
