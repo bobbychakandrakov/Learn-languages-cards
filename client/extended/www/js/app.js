@@ -19,13 +19,21 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
 //   IMG: 'http://localhost:3333/'
 // })
 
-//Test Cloud
+//Development
 .constant('BACKEND_API', {
-  THEMES: 'https://demo-project-bobbychakandrakov.c9users.io/api/theme',
-  PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package',
-  WORDS: 'https://demo-project-bobbychakandrakov.c9users.io/api/word',
-  IMG: 'https://demo-project-bobbychakandrakov.c9users.io/'
+  THEMES: 'http://192.168.1.65:3333/api/theme',
+  PACKAGE: 'http://192.168.1.65:3333/api/package',
+  WORDS: 'http://192.168.1.65:3333/api/word',
+  IMG: 'http://192.168.1.65:3333/'
 })
+
+//Test Cloud
+// .constant('BACKEND_API', {
+//   THEMES: 'https://demo-project-bobbychakandrakov.c9users.io/api/theme',
+//   PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package',
+//   WORDS: 'https://demo-project-bobbychakandrakov.c9users.io/api/word',
+//   IMG: 'https://demo-project-bobbychakandrakov.c9users.io/'
+// })
 
 .run(function($ionicPlatform, platformService) {
   $ionicPlatform.ready(function() {

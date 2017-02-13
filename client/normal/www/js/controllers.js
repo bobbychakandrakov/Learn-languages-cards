@@ -1,9 +1,7 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', '$sce', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-  // You can include any angular dependencies as parameters for this function
-  // TIP: Access Route Parameters for your page via $stateParams.parameterName
-  function($scope, $stateParams, WordsFactory, BACKEND_API, $sce) {
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', '$sce', '$ionicActionSheet', '$ionicPopup',
+  function($scope, $stateParams, WordsFactory, BACKEND_API, $sce, $ionicActionSheet, $ionicPopup) {
     var limit = 10;
     var isPlaying = false;
 
@@ -14,6 +12,50 @@ angular.module('app.controllers', [])
     };
     $scope.playMaleVoice = playMaleVoice;
     $scope.playFemaleVoice = playFemaleVoice;
+    $scope.showActionSheet = showActionSheet;
+
+
+    function showActionSheet(word) {
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [{
+          text: 'Add'
+        }],
+        titleText: 'Add to my theme',
+        cancelText: 'Cancel',
+        cancel: function() {
+          // add cancel code..
+          hideSheet();
+        },
+        buttonClicked: function(index) {
+          $scope.data = {};
+          // An elaborate, custom popup
+          var myPopup = $ionicPopup.show({
+            template: '<ul><li>Theme1</li><li>Theme2</li><li>Theme3</li></ul>',
+            title: 'Select theme',
+            subTitle: 'Please use normal things',
+            scope: $scope,
+            buttons: [{
+              text: 'Cancel'
+            }, {
+              text: '<b>Save</b>',
+              type: 'button-positive',
+              onTap: function(e) {
+
+              }
+            }]
+          });
+
+          myPopup.then(function(res) {
+            if (res) {
+              console.log('ok')
+            }
+            console.log('Tapped!', res);
+          });
+          return true;
+        }
+      });
+    }
+
 
     function playMaleVoice(id) {
       if (isPlaying) {
@@ -168,7 +210,7 @@ angular.module('app.controllers', [])
             }
             settingsFactory.saveThemeCache($scope.themes)
               .then(function(success) {
-                alert('ok');
+                // Handle success message
               }, function(error) {
                 alert(error);
               });
