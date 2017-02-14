@@ -1,0 +1,14 @@
+<ion-view title="My themes" id="myThemes">
+  <ion-content padding="true" class="has-header">
+    <ion-list id="my-themes-list">
+      <button class="button button-block button-balanced" ng-click="addTheme()">
+              Add theme
+      </button>
+      <ul class="list">
+        <li ng-repeat="theme in themes" class="item">
+          {{theme}}
+        </li>
+    </ul>
+    </ion-list>
+  </ion-content>
+</ion-view>

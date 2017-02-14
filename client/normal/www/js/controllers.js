@@ -18,7 +18,7 @@ angular.module('app.controllers', [])
     function showActionSheet(word) {
       var hideSheet = $ionicActionSheet.show({
         buttons: [{
-          text: 'Add'
+          text: 'Add to theme'
         }],
         titleText: 'Add to my theme',
         cancelText: 'Cancel',
@@ -422,3 +422,39 @@ angular.module('app.controllers', [])
 
   }
 ])
+
+.controller('myThemesCtrl', ['$scope', '$stateParams', '$ionicPopup', function($scope, $stateParams, $ionicPopup) {
+
+  $scope.themes = [];
+  $scope.addTheme = addTheme;
+
+  function addTheme() {
+    $scope.data = {};
+
+    // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="data.themeName">',
+      title: 'Add theme',
+      subTitle: 'Please enter theme name',
+      scope: $scope,
+      buttons: [{
+        text: 'Cancel'
+      }, {
+        text: '<b>Save</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.data.themeName) {
+            //don't allow the user to close unless he enters wifi password
+            e.preventDefault();
+          } else {
+            return $scope.data.themeName;
+          }
+        }
+      }]
+    });
+
+    myPopup.then(function(res) {
+      $scope.themes.push(res);
+    });
+  }
+}])
