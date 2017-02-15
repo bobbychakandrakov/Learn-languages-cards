@@ -427,6 +427,17 @@ angular.module('app.controllers', [])
 
   $scope.themes = [];
   $scope.addTheme = addTheme;
+  $scope.removeTheme = removeTheme;
+  $scope.viewTheme = viewTheme;
+
+
+  function guid() {
+    return Math.floor((Math.random() * 10000) + 1);
+  }
+
+  function viewTheme() {
+    console.log($scope.themes);
+  }
 
   function addTheme() {
     $scope.data = {};
@@ -454,7 +465,29 @@ angular.module('app.controllers', [])
     });
 
     myPopup.then(function(res) {
-      $scope.themes.push(res);
+      var item = {
+        _id: guid(),
+        name: res
+      };
+      $scope.themes.push(item);
+      // Logic to save theme in application data folder file
+    });
+  }
+
+  function removeTheme(theme) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Removing theme',
+      template: 'Are you sure you want to remove this theme?'
+    });
+
+    confirmPopup.then(function(res) {
+      if (res) {
+        var index = $scope.themes.indexOf(theme);
+        if (index > -1) {
+          $scope.themes.splice(index, 1);
+          // Logic to remove from application data folder
+        }
+      }
     });
   }
 }])
