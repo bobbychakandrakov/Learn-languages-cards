@@ -40,6 +40,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.myTheme', {
+    url: '/mytheme/:id',
+    views: {
+      'tab2': {
+        templateUrl: 'templates/my-theme.html',
+        controller: 'myThemeCtrl'
+      }
+    }
+  })
+
   .state('tabsController.theme', {
     url: '/theme/:id',
     views: {

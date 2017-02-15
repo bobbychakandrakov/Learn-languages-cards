@@ -425,19 +425,17 @@ angular.module('app.controllers', [])
 
 .controller('myThemesCtrl', ['$scope', '$stateParams', '$ionicPopup', function($scope, $stateParams, $ionicPopup) {
 
+  var alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
   $scope.themes = [];
   $scope.addTheme = addTheme;
   $scope.removeTheme = removeTheme;
-  $scope.viewTheme = viewTheme;
 
 
   function guid() {
-    return Math.floor((Math.random() * 10000) + 1);
+    return Math.floor((Math.random() * 10000) + 1) + alphabet[Math.floor(Math.random() * 25)];
   }
 
-  function viewTheme() {
-    console.log($scope.themes);
-  }
 
   function addTheme() {
     $scope.data = {};
@@ -470,6 +468,7 @@ angular.module('app.controllers', [])
         name: res
       };
       $scope.themes.push(item);
+      console.log(item);
       // Logic to save theme in application data folder file
     });
   }
@@ -490,4 +489,8 @@ angular.module('app.controllers', [])
       }
     });
   }
+}])
+
+.controller('myThemeCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
+  $scope.name = $stateParams.id;
 }])
