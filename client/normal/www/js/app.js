@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'app.directives', 'app.services', ])
+angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'app.directives', 'app.services'])
 
 .config(function($ionicConfigProvider) {
 
@@ -29,7 +29,7 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
   PACKAGE: 'https://demo-project-bobbychakandrakov.c9users.io/api/package/'
 })
 
-.run(function($ionicPlatform, settingsFactory, platformService, folderService) {
+.run(function($ionicPlatform, settingsFactory, platformService, folderService, saveCustomThemes) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -40,17 +40,22 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
     folderService.settupAplicationFolder()
       .then(function(success) {
         console.log('settuped!');
+        saveCustomThemes.createUserFile()
+          .then(function(success) {
+            console.log('user themes settuped');
+          }, function(error) {
+            console.log(error);
+          });
       }, function(err) {
         console.log(err);
       });
-    // Reading the codes.txt and themes.txt files from application folder
 
+    // Reading the codes.txt and themes.txt files from application folder
     settingsFactory.readSettings()
       .then(function(result) {
         settingsFactory.loadThemes()
           .then(function(themes) {
             // body...
-
           }, function(err) {
             // body...
             alert(err)

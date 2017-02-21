@@ -595,6 +595,110 @@ angular.module('app.services', [])
   };
 }])
 
+.factory('saveCustomThemes', ['$q', '$cordovaFile', function($q, $cordovaFile) {
+  var userThemes = {
+    savedThemes: []
+  };
+  return {
+    createUserFile: function() {
+      // Evoke at the start of the appliction
+      var deffered = $q.defer();
+      $cordovaFile.checkFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt')
+        .then(function(success) {
+          // Read file and load themes in variable
+          $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt')
+            .then(function(data) {
+              // Modify data to JSON object and save to local variable
+              data = JSON.parse(data);
+              userThemes.savedThemes = [].concat([], data.savedThemes);
+              deffered.resolve();
+            }, function(error) {
+              deffered.reject(error);
+            });
+        }, function(error) {
+          // Create empty user themes file
+          $cordovaFile.createFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt', true)
+            .then(function(success) {
+              // Write an empty object to file
+              var transformedData = JSON.stringify(userThemes);
+              $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt', transformedData, true)
+                .then(function(success) {
+                  deffered.resolve(success);
+                }, function(err) {
+                  deffered.reject(err);
+                });
+            }, function(error) {
+              deffered.reject(error);
+            });
+        });
+      return deffered.promise;
+    },
+    saveTheme: function(theme) {
+      // Save the theme in the application folder file
+      userThemes.savedThemes.push(theme);
+      var stringifiedTheme = JSON.stringify(userThemes);
+      var deffered = $q.defer();
+      $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt', stringifiedTheme, true)
+        .then(function(success) {
+          deffered.resolve(success);
+        }, function(err) {
+          deffered.reject(err);
+        });
+      return deffered.promise;
+    },
+    deleteTheme: function(id) {
+      // Delete object by id
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt')
+        .then(function(data) {
+          // Modify data to JSON object and save to local variable
+          data = JSON.parse(data);
+          userThemes.savedThemes = [].concat([], data.savedThemes);
+          for (var i = 0; i < userThemes.savedThemes.length; i++) {
+            if (userThemes.savedThemes[i]._id == id) {
+              userThemes.savedThemes.splice(i, 1);
+              break;
+            }
+          }
+          var stringifiedTheme = JSON.stringify(userThemes);
+          $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt', stringifiedTheme, true)
+            .then(function(success) {
+              deffered.resolve(success);
+            }, function(err) {
+              deffered.reject(err);
+            });
+        }, function(error) {
+          deffered.reject(error);
+        });
+      return deffered.promise;
+    },
+    updateTheme: function(theme) {
+      // Update the whole object
+      var id = theme._id;
+      var deffered = $q.defer();
+      return deffered.promise;
+    },
+    getSavedThemes: function() {
+      // Return array with all the user created themes
+      var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt')
+        .then(function(data) {
+          // Modify data to JSON object and save to local variable
+          data = JSON.parse(data);
+          deffered.resolve(data.savedThemes);
+        }, function(error) {
+          deffered.reject(error);
+        });
+      return deffered.promise;
+    },
+    getSavedTheme: function(id) {
+      // Return an theme object with data
+      var deffered = $q.defer();
+      return deffered.promise;
+    }
+  }
+}])
+
 
 .service('BlankService', [function() {
 

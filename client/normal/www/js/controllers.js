@@ -423,7 +423,7 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('myThemesCtrl', ['$scope', '$stateParams', '$ionicPopup', function($scope, $stateParams, $ionicPopup) {
+.controller('myThemesCtrl', ['$scope', '$stateParams', '$ionicPopup', 'saveCustomThemes', function($scope, $stateParams, $ionicPopup, saveCustomThemes) {
 
   var alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -431,6 +431,8 @@ angular.module('app.controllers', [])
   $scope.addTheme = addTheme;
   $scope.removeTheme = removeTheme;
 
+
+  loadThemes();
 
   function guid() {
     return Math.floor((Math.random() * 10000) + 1) + alphabet[Math.floor(Math.random() * 25)];
@@ -453,7 +455,7 @@ angular.module('app.controllers', [])
         type: 'button-positive',
         onTap: function(e) {
           if (!$scope.data.themeName) {
-            //don't allow the user to close unless he enters wifi password
+            // Check if the name is empty and prevent from entering it
             e.preventDefault();
           } else {
             return $scope.data.themeName;
@@ -468,12 +470,27 @@ angular.module('app.controllers', [])
         name: res
       };
       $scope.themes.push(item);
-      console.log(item);
       // Logic to save theme in application data folder file
+      saveCustomThemes.saveTheme(item)
+        .then(function(success) {
+          console.log('Theme saved!');
+        }, function(error) {
+          alert('Error saving theme!');
+        });
     });
   }
 
-  function removeTheme(theme) {
+  function loadThemes() {
+    // Loading themes from file
+    saveCustomThemes.getSavedThemes()
+      .then(function(themes) {
+        $scope.themes = [].concat($scope.themes, themes);
+      }, function(error) {
+        alert(JSON.stringify(error));
+      });
+  }
+
+  function removeTheme(id) {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Removing theme',
       template: 'Are you sure you want to remove this theme?'
@@ -481,16 +498,29 @@ angular.module('app.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        var index = $scope.themes.indexOf(theme);
-        if (index > -1) {
-          $scope.themes.splice(index, 1);
-          // Logic to remove from application data folder
-        }
+        saveCustomThemes.deleteTheme(id)
+          .then(function(success) {
+            // Remove theme from array
+            for (var i = 0; i < $scope.themes.length; i++) {
+              if ($scope.themes[i]._id == id) {
+                $scope.themes.splice(i, 1);
+                break;
+              }
+            }
+          }, function(error) {
+            // Show error message
+          });
+        // var index = $scope.themes.indexOf(theme);
+        // if (index > -1) {
+        //   $scope.themes.splice(index, 1);
+        //   // Logic to remove from application data folder
+        // }
       }
     });
   }
 }])
 
 .controller('myThemeCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
+  // Change logic to get name from service which return the whole theme object and filter the fields
   $scope.name = $stateParams.id;
 }])
