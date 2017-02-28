@@ -676,6 +676,26 @@ angular.module('app.services', [])
       // Update the whole object
       var id = theme._id;
       var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt')
+        .then(function(data) {
+          // Modify data to JSON object and save to local variable
+          data = JSON.parse(data);
+          for (var i = 0; i < data.savedThemes.length; i++) {
+            if (data.savedThemes[i]._id == id) {
+              data.savedThemes[i] = theme;
+              break;
+            }
+          }
+          var stringifiedTheme = JSON.stringify(data);
+          $cordovaFile.writeFile(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt', stringifiedTheme, true)
+            .then(function(success) {
+              deffered.resolve(success);
+            }, function(err) {
+              deffered.reject(err);
+            });
+        }, function(error) {
+          deffered.reject(error);
+        });
       return deffered.promise;
     },
     getSavedThemes: function() {
@@ -694,6 +714,20 @@ angular.module('app.services', [])
     getSavedTheme: function(id) {
       // Return an theme object with data
       var deffered = $q.defer();
+      $cordovaFile.readAsText(cordova.file.externalRootDirectory + '/LearnLanguageCards', 'mythemes.txt')
+        .then(function(data) {
+          // Modify data to JSON object and save to local variable
+          var theme;
+          data = JSON.parse(data);
+          for (var i = 0; i < data.savedThemes.length; i++) {
+            if (data.savedThemes[i]._id == id) {
+              theme = data.savedThemes[i];
+            }
+          }
+          deffered.resolve(theme);
+        }, function(error) {
+          deffered.reject(error);
+        });
       return deffered.promise;
     }
   }

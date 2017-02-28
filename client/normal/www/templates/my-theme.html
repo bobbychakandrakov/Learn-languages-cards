@@ -1,7 +1,25 @@
 <ion-view title="{{name}}" id="myTheme">
   <ion-content padding="true" class="has-header">
     <ion-list id="my-theme-list">
-
+      <div class="list">
+          <a ng-repeat="word in words" class="item item-thumbnail-left" ng-init="word.show = true">
+              <img ng-src="{{IMG}}{{word.imagePath}}" alt="no image" ng-click="word.show = !word.show" />
+              <h1 class="text-center" style="white-space: normal;" ng-show="word.show" ng-click="word.show = !word.show">{{word.eName}}</h1>
+              <h1 class="text-center" style="white-space: normal;" ng-hide="word.show" ng-click="word.show = !word.show">{{word.bName}}</h1>
+              <audio ng-show="word.maleVoice.url" id="male{{word._id}}">
+                    <source ng-src="{{trustSrc(word.maleVoice.url)}}" type="{{word.maleVoice.media}}">
+             </audio>
+             <br>
+              <audio ng-show="word.femaleVoice.url" id="female{{word._id}}">
+                    <source ng-src="{{trustSrc(word.femaleVoice.url)}}" type="{{word.maleVoice.media}}">
+             </audio>
+             <div class="button-bar">
+                 <button type="button" class="button button-block button-energized" ng-show="word.maleVoice.url" ng-click="playMaleVoice(word._id)"><i class="icon ion-man"></i></button>
+                 <button type="button" class="button button-block button-royal" ng-show="word.femaleVoice.url" ng-click="playFemaleVoice(word._id)"><i class="icon ion-woman"></i></button>
+                 <button class="button button-block button-default" ng-click="showActionSheet(word, $event)"><i class="icon ion-ios-star"></i></button>
+             </div>
+          </a>
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>

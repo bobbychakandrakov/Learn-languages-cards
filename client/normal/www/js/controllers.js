@@ -1,7 +1,7 @@
 angular.module('app.controllers', [])
 
-.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', '$sce', '$ionicActionSheet', '$ionicPopup',
-  function($scope, $stateParams, WordsFactory, BACKEND_API, $sce, $ionicActionSheet, $ionicPopup) {
+.controller('wordsCtrl', ['$scope', '$stateParams', 'WordsFactory', 'BACKEND_API', '$sce', '$ionicActionSheet', '$ionicPopup','saveCustomThemes','$ionicPopover',
+  function($scope, $stateParams, WordsFactory, BACKEND_API, $sce, $ionicActionSheet, $ionicPopup,saveCustomThemes,$ionicPopover) {
     var limit = 10;
     var isPlaying = false;
 
@@ -15,7 +15,7 @@ angular.module('app.controllers', [])
     $scope.showActionSheet = showActionSheet;
 
 
-    function showActionSheet(word) {
+    function showActionSheet(word, $event) {
       var hideSheet = $ionicActionSheet.show({
         buttons: [{
           text: 'Add to theme'
@@ -28,29 +28,75 @@ angular.module('app.controllers', [])
         },
         buttonClicked: function(index) {
           $scope.data = {};
-          // An elaborate, custom popup
-          var myPopup = $ionicPopup.show({
-            template: '<ul><li>Theme1</li><li>Theme2</li><li>Theme3</li></ul>',
-            title: 'Select theme',
-            subTitle: 'Please use normal things',
-            scope: $scope,
-            buttons: [{
-              text: 'Cancel'
-            }, {
-              text: '<b>Save</b>',
-              type: 'button-positive',
-              onTap: function(e) {
 
+          saveCustomThemes.getSavedThemes()
+            .then(function (themes) {
+              // Popup with inline template
+              $scope.saveToTheme = function (index) {
+                // Saving word to theme
+                // Get theme by index from themes array
+                themes[index].words.push(word);
+                saveCustomThemes.updateTheme(themes[index])
+                  .then(function (success) {
+                    alert('Success pushing word the array!');
+                  },function (error) {
+                    alert('Error while updation theme words!');
+                  });
+                  myPopup.close();
+              };
+              var template = '<ul>';
+              for (var i = 0; i < themes.length; i++) {
+                template += '<li><button class="button button-clear button-stable" ng-click="saveToTheme(' + i + ')">' + themes[i].name + '</button></li>';
               }
-            }]
-          });
+              template +='</ul>';
+              var myPopup = $ionicPopup.show({
+                template: template,
+                title: 'Select theme',
+                subTitle: 'Please use normal things',
+                scope: $scope,
+                buttons: [{
+                  text: 'Cancel'
+                }, {
+                  text: '<b>Save</b>',
+                  type: 'button-positive',
+                  onTap: function(e) {
 
-          myPopup.then(function(res) {
-            if (res) {
-              console.log('ok')
-            }
-            console.log('Tapped!', res);
-          });
+                  }
+                }]
+              });
+
+              myPopup.then(function(res) {
+                if (res) {
+                  console.log('ok')
+                }
+                console.log('Tapped!', res);
+              });
+            },function (error) {
+              alert('Error getting saved themes');
+            });
+          // An elaborate, custom popup
+          // var myPopup = $ionicPopup.show({
+          //   template: '<ul><li>Theme1</li><li>Theme2</li><li>Theme3</li></ul>',
+          //   title: 'Select theme',
+          //   subTitle: 'Please use normal things',
+          //   scope: $scope,
+          //   buttons: [{
+          //     text: 'Cancel'
+          //   }, {
+          //     text: '<b>Save</b>',
+          //     type: 'button-positive',
+          //     onTap: function(e) {
+          //
+          //     }
+          //   }]
+          // });
+          //
+          // myPopup.then(function(res) {
+          //   if (res) {
+          //     console.log('ok')
+          //   }
+          //   console.log('Tapped!', res);
+          // });
           return true;
         }
       });
@@ -467,7 +513,8 @@ angular.module('app.controllers', [])
     myPopup.then(function(res) {
       var item = {
         _id: guid(),
-        name: res
+        name: res,
+        words:[]
       };
       $scope.themes.push(item);
       // Logic to save theme in application data folder file
@@ -520,7 +567,19 @@ angular.module('app.controllers', [])
   }
 }])
 
-.controller('myThemeCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
+.controller('myThemeCtrl', ['$scope', '$stateParams', 'saveCustomThemes','BACKEND_API','$sce',
+function($scope, $stateParams,saveCustomThemes,BACKEND_API,$sce) {
   // Change logic to get name from service which return the whole theme object and filter the fields
-  $scope.name = $stateParams.id;
+  var id = $stateParams.id;
+  $scope.IMG = BACKEND_API.IMG;
+  $scope.trustSrc = function(src) {
+    return $sce.trustAsResourceUrl($scope.IMG + src);
+  };
+  $scope.name = $stateParams.name;
+    saveCustomThemes.getSavedTheme(id)
+    .then(function (theme) {
+      $scope.words = theme.words;
+    },function (error) {
+      alert('Not found!');
+    });
 }])
