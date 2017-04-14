@@ -74,29 +74,6 @@ angular.module('app.controllers', [])
             },function (error) {
               alert('Error getting saved themes');
             });
-          // An elaborate, custom popup
-          // var myPopup = $ionicPopup.show({
-          //   template: '<ul><li>Theme1</li><li>Theme2</li><li>Theme3</li></ul>',
-          //   title: 'Select theme',
-          //   subTitle: 'Please use normal things',
-          //   scope: $scope,
-          //   buttons: [{
-          //     text: 'Cancel'
-          //   }, {
-          //     text: '<b>Save</b>',
-          //     type: 'button-positive',
-          //     onTap: function(e) {
-          //
-          //     }
-          //   }]
-          // });
-          //
-          // myPopup.then(function(res) {
-          //   if (res) {
-          //     console.log('ok')
-          //   }
-          //   console.log('Tapped!', res);
-          // });
           return true;
         }
       });
@@ -567,19 +544,47 @@ angular.module('app.controllers', [])
   }
 }])
 
-.controller('myThemeCtrl', ['$scope', '$stateParams', 'saveCustomThemes','BACKEND_API','$sce',
-function($scope, $stateParams,saveCustomThemes,BACKEND_API,$sce) {
+.controller('myThemeCtrl', ['$scope', '$stateParams', 'saveCustomThemes','BACKEND_API','$sce','$ionicPopup',
+function($scope, $stateParams,saveCustomThemes,BACKEND_API,$sce,$ionicPopup) {
   // Change logic to get name from service which return the whole theme object and filter the fields
   var id = $stateParams.id;
+  var userTheme;
   $scope.IMG = BACKEND_API.IMG;
   $scope.trustSrc = function(src) {
     return $sce.trustAsResourceUrl($scope.IMG + src);
   };
+  $scope.removeWord = removeWord;
   $scope.name = $stateParams.name;
     saveCustomThemes.getSavedTheme(id)
     .then(function (theme) {
+      userTheme = theme;
       $scope.words = theme.words;
     },function (error) {
       alert('Not found!');
     });
+
+    function removeWord(word) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Remove word',
+        template: 'Are you sure you want to remove the word ' + word.eName + ' from your theme?'
+      });
+
+      confirmPopup.then(function(res) {
+        if (res) {
+          for (var i = 0; i < $scope.words.length; i++) {
+            if ($scope.words[i]._id == word._id) {
+              $scope.words.splice(i, 1);
+              userTheme.words = $scope.words;
+              break;
+            }
+          }
+          saveCustomThemes.updateTheme(userTheme)
+            .then(function(success) {
+              alert('Removed');
+            }, function(error) {
+              alert('Something wrong!');
+            });
+        }
+      });
+    }
 }])

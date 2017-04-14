@@ -16,7 +16,7 @@
              <div class="button-bar">
                  <button type="button" class="button button-block button-energized" ng-show="word.maleVoice.url" ng-click="playMaleVoice(word._id)"><i class="icon ion-man"></i></button>
                  <button type="button" class="button button-block button-royal" ng-show="word.femaleVoice.url" ng-click="playFemaleVoice(word._id)"><i class="icon ion-woman"></i></button>
-                 <button class="button button-block button-default" ng-click="showActionSheet(word, $event)"><i class="icon ion-ios-star"></i></button>
+                 <button class="button button-block button-default" ng-click="removeWord(word, $event)"><i class="icon ion-close-round"></i></button>
              </div>
           </a>
       </div>
